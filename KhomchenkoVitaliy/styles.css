@@ -1,0 +1,63 @@
+body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #131212;
+}
+.game-container{
+    width: fit-content;
+    background-color: #520505;
+    padding: 10px;
+    border: 3px solid #7b7b7b;
+}
+.game-board{
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 2px;
+}
+.game-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.timer, .flags {
+    background-color: rgb(56, 52, 52);
+    color: red;
+    padding: 5px 10px;
+    font-size: 25px;
+    border: 2px inset #7b7b7b;
+}
+.cell{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold; 
+    width: 40px;
+    height: 40px;
+    background-color: #d3d3d3;
+    border-width: 3px;
+    border-style: solid;
+    border-color: #ffffff #7b7b7b #7b7b7b #ffffff;
+}
+.cell:active {
+    border-color: #7b7b7b #ffffff #ffffff #7b7b7b; 
+}
+.cell.open{
+    background-color: #bdbdbd;
+    border: 1px solid #7b7b7b;
+}
+.cell.mine{
+    background-color: grey;
+}
+.cell.mine.exploded{
+    background-color: black;
+}
+.cell.flag{
+    background-color: red;
+}
+.n1 { color: blue; }
+.n2 { color: green; }
+.n3 { color: rgb(139, 0, 132); }
+.n4 { color: brown; }
+.n5 { color: cyan; }
