@@ -1,0 +1,293 @@
+body{
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+}
+
+.Minesweeper{
+    width: 550px;
+    height: 760px;
+    background-color: rgba(238, 237, 236);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    border: 3px solid rgba(136, 169, 207);
+}
+
+.Navbar{
+    width: 100%;
+    height: 40px;
+    background: linear-gradient(rgba(184, 205, 232), rgba(127, 163, 206), rgba(145, 177, 215));
+    border-radius: 8px 8px 0px 0px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.WhiteText{
+    color: white;
+}
+
+.AllSvg{
+    width: 20%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.Svg{
+    margin-left: 10px;
+    margin-right: 10px;
+    color: white;
+    width: 20px;
+    height: 20px;
+}
+
+.Secondbar{    
+    width: 100%;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: left;
+}
+
+.UnderText{
+    color: black;
+    text-decoration: underline;
+    margin-left: 20px;
+    margin-top: 25px;
+}
+
+.Hr{
+    color: rgba(190, 194, 198);
+    width: 95%;
+}
+
+.CoolEmoji{
+    width: 100%;
+    height: 90px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.CoolEmojiBackground{
+    background-color: rgba(237, 236, 235);
+    width: 55px;
+    height: 55px;
+    border-radius: 12px;
+    border: 2px solid rgba(190, 194, 198);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.CoolEmojiSvg{
+    width: 45px;
+    height: 45px;
+}
+
+.BlocksInColumn{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.BlocksInRow{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+}
+
+.BlueBox{
+    margin: 1px 1px 1px 1px;
+    width: 62px;
+    height: 62px;
+    border-radius: 8px;
+    border: 2px solid rgb(148, 148, 148);
+    background: linear-gradient(rgba(154, 187, 229), rgba(132, 170, 216), rgba(124, 163, 210));
+    transition-duration: s;
+}
+
+.BlueBox:hover{
+    margin: 1px 1px 1px 1px;
+    width: 62px;
+    height: 62px;
+    border-radius: 8px;
+    border: 2px solid rgb(148, 148, 148);
+    background: linear-gradient(rgb(234, 243, 255), rgb(214, 232, 255), rgb(177, 212, 255));
+}
+
+.WhiteBox{
+    margin: 1px 1px 1px 1px;
+    width: 62px;
+    height: 62px;
+    border-radius: 8px;
+    border: 2px solid rgb(148, 148, 148);
+    background-color: white;
+}
+
+.WhiteBox:hover{
+    margin: 1px 1px 1px 1px;
+    width: 62px;
+    height: 62px;
+    border-radius: 8px;
+    border: 2px solid rgb(148, 148, 148);
+    background-color: white;
+    background: linear-gradient(rgb(234, 243, 255), rgb(214, 232, 255), rgb(177, 212, 255));
+}
+
+.BoxNumber1{
+    margin: 1px 1px 1px 1px;
+    width: 62px;
+    height: 62px;
+    border-radius: 8px;
+    border: 2px solid rgb(148, 148, 148);
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: rgba(0, 0, 255);
+    font-family: "Boldonse", system-ui;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 35px;
+}
+
+.BoxNumber1:hover{
+    margin: 1px 1px 1px 1px;
+    width: 62px;
+    height: 62px;
+    border-radius: 8px;
+    border: 2px solid rgb(148, 148, 148);
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background: linear-gradient(rgb(234, 243, 255), rgb(214, 232, 255), rgb(177, 212, 255));
+    font-family: "Boldonse", system-ui;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 35px;
+}
+
+.BoxNumber2{
+    margin: 1px 1px 1px 1px;
+    width: 62px;
+    height: 62px;
+    border-radius: 8px;
+    border: 2px solid rgb(148, 148, 148);
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: rgba(0, 160, 0);
+    font-family: "Boldonse", system-ui;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 35px;
+}
+
+.BoxNumber2:hover{
+    margin: 1px 1px 1px 1px;
+    width: 62px;
+    height: 62px;
+    border-radius: 8px;
+    border: 2px solid rgb(148, 148, 148);
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: rgba(0, 160, 0);
+    font-family: "Boldonse", system-ui;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 35px;
+    background: linear-gradient(rgb(234, 243, 255), rgb(214, 232, 255), rgb(177, 212, 255));
+}
+
+.BoxNumber3{
+    margin: 1px 1px 1px 1px;
+    width: 62px;
+    height: 62px;
+    border-radius: 8px;
+    border: 2px solid rgb(148, 148, 148);
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: rgba(255, 0, 0);
+    font-family: "Boldonse", system-ui;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 35px;
+}
+
+.BoxNumber3:hover{
+    margin: 1px 1px 1px 1px;
+    width: 62px;
+    height: 62px;
+    border-radius: 8px;
+    border: 2px solid rgb(148, 148, 148);
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: rgba(255, 0, 0);
+    font-family: "Boldonse", system-ui;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 35px;
+    background: linear-gradient(rgb(234, 243, 255), rgb(214, 232, 255), rgb(177, 212, 255));
+}
+
+.BoxFlag{
+    margin: 1px 1px 1px 1px;
+    width: 62px;
+    height: 62px;
+    border-radius: 8px;
+    border: 2px solid rgb(148, 148, 148);
+    background: linear-gradient(rgba(154, 187, 229), rgba(132, 170, 216), rgba(124, 163, 210));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.BoxFlag:hover{
+    margin: 1px 1px 1px 1px;
+    width: 62px;
+    height: 62px;
+    border-radius: 8px;
+    border: 2px solid rgb(148, 148, 148);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(rgb(234, 243, 255), rgb(214, 232, 255), rgb(177, 212, 255));
+}
+
+.BoxSvg{
+    margin: 1px 1px 1px 1px;
+    width: 55px;
+    height: 55px;
+}
+
+.SumInformation{
+    width: 100%;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
