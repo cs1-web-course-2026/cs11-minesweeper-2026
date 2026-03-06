@@ -134,14 +134,14 @@ body{
     text-shadow: 0 0 10px #ff0000, 0 0 20px #800000;
 }
 
-.n1 { color: #0088ff; text-shadow: 0 0 5px #0088ff; }
-.n2 { color: #00ff00; text-shadow: 0 0 5px #00ff00; }
-.n3 { color: #ff00ff; text-shadow: 0 0 5px #ff00ff; }
-.n4 { color: #ff4500; text-shadow: 0 0 8px #ff4500; }
-.n5 { color: #00ffff; text-shadow: 0 0 8px #00ffff; } 
-.n6 { color: #ff8c00; text-shadow: 0 0 8px #ff8c00; } 
-.n7 { color: #7fffd4; text-shadow: 0 0 8px #7fffd4; } 
-.n8 { color: #ffffff; text-shadow: 0 0 10px #ffffff; } 
+.number1 { color: #0088ff; text-shadow: 0 0 5px #0088ff; }
+.number2 { color: #00ff00; text-shadow: 0 0 5px #00ff00; }
+.number3 { color: #006eff; text-shadow: 0 0 5px #001aff; }
+.number4 { color: #b8038b; text-shadow: 0 0 8px #ff4500; }
+.number5 { color: #00ffff; text-shadow: 0 0 8px #00ffff; } 
+.number6 { color: #da841c; text-shadow: 0 0 8px #ff8c00; } 
+.number7 { color: #7fffd4; text-shadow: 0 0 8px #7fffd4; } 
+.number8 { color: #ffffff; text-shadow: 0 0 10px #ffffff; } 
 
 @media (max-width: 500px) {
     .game-board {
