@@ -1,0 +1,424 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.container {
+    background: white;
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    max-width: 600px;
+    width: 100%;
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 25px;
+    font-size: 2.5rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* ===== СТИЛІ ХЕДЕРА ===== */
+.game-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding: 20px;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    border-radius: 10px;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.header-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.header-label {
+    font-size: 0.9rem;
+    color: #555;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.timer,
+.flag-counter {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #667eea;
+    min-width: 80px;
+    text-align: center;
+}
+
+.start-btn {
+    padding: 12px 25px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+.start-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+}
+
+.start-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 10px rgba(102, 126, 234, 0.4);
+}
+
+.cell.closed:active {
+            box-shadow: inset 1px 1px 3px rgba(0, 0, 0, 0.3),
+                        inset -1px -1px 2px rgba(255, 255, 255, 0.5) !important;
+            transform: scale(0.98);
+        }
+
+        .start-btn:active {
+            transform: scale(0.98);
+        }
+
+/* ===== СТИЛІ ІГРОВОГО ПОЛЯ ===== */
+.game-field {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 4px;
+    padding: 15px;
+    background: #f0f0f0;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.cell {
+    width: calc(10% - 3.6px);
+    aspect-ratio: 1;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s ease;
+    user-select: none;
+}
+
+/* ===== ЗАКРИТА КЛІТИНКА ===== */
+.cell.closed {
+    background: linear-gradient(135deg, #e0e0e0 0%, #f5f5f5 100%);
+    border: 2px solid #999;
+    color: transparent;
+    position: relative;
+    cursor: pointer;
+    box-shadow: inset 2px 2px 5px rgba(255, 255, 255, 0.8),
+                inset -2px -2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.cell.closed:hover {
+    background: linear-gradient(135deg, #e8e8e8 0%, #ffffff 100%);
+    box-shadow: inset 2px 2px 5px rgba(255, 255, 255, 1),
+                inset -2px -2px 5px rgba(0, 0, 0, 0.15),
+                0 0 10px rgba(102, 126, 234, 0.3);
+}
+
+.cell.closed:active {
+    box-shadow: inset 1px 1px 3px rgba(0, 0, 0, 0.3),
+                inset -1px -1px 2px rgba(255, 255, 255, 0.5);
+}
+
+/* ===== ВІДКРИТА КЛІТИНКА ===== */
+.cell.revealed {
+    background: linear-gradient(135deg, #f9f9f9 0%, #e8e8e8 100%);
+    border: 1px solid #bbb;
+    box-shadow: inset 1px 1px 3px rgba(0, 0, 0, 0.1);
+    color: #333;
+}
+
+.cell.revealed:not(.mine) {
+    cursor: default;
+}
+
+/* Числа в клітинках */
+.cell.revealed:not(.mine) {
+    font-weight: bold;
+    color: #333;
+}
+
+/* Кольори для різних чисел */
+.cell.number-1 {
+    color: #0000ff;
+}
+
+.cell.number-2 {
+    color: #008000;
+}
+
+.cell.number-3 {
+    color: #ff0000;
+}
+
+.cell.number-4 {
+    color: #000080;
+}
+
+.cell.number-5 {
+    color: #800000;
+}
+
+.cell.number-6 {
+    color: #008080;
+}
+
+.cell.number-7 {
+    color: #000000;
+}
+
+.cell.number-8 {
+    color: #808080;
+}
+
+/* ===== КЛІТИНКА З МІНОЮ ===== */
+.cell.mine {
+    background: linear-gradient(135deg, #ff6b6b 0%, #ff5252 100%);
+    color: #fff;
+    border: 1px solid #d63031;
+    box-shadow: inset 1px 1px 3px rgba(255, 255, 255, 0.3),
+                inset -1px -1px 3px rgba(0, 0, 0, 0.3);
+    animation: mineReveal 0.3s ease;
+}
+
+/* Міна, на яку натиснув користувач */
+.cell.mine.clicked {
+    background: linear-gradient(135deg, #ff4444 0%, #cc0000 100%);
+    box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.4),
+                inset -2px -2px 5px rgba(255, 255, 255, 0.2),
+                0 0 15px rgba(255, 0, 0, 0.6);
+    animation: mineBurst 0.4s ease;
+}
+
+@keyframes mineReveal {
+    0% {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes mineBurst {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.15);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* ===== КЛІТИНКА З ПРАПОРЦЕМ ===== */
+.cell.flagged {
+    background: linear-gradient(135deg, #fff4a3 0%, #ffe066 100%);
+    border: 2px solid #ff9500;
+    color: #fff;
+    box-shadow: inset 2px 2px 5px rgba(255, 255, 255, 0.5),
+                inset -2px -2px 5px rgba(0, 0, 0, 0.2);
+    font-size: 1.3rem;
+}
+
+/* Прапорець на закритій клітинці */
+.cell.closed.flagged {
+    background: linear-gradient(135deg, #fff4a3 0%, #ffe066 100%);
+    border: 2px solid #ff9500;
+}
+
+.cell.closed.flagged:hover {
+    box-shadow: inset 2px 2px 5px rgba(255, 255, 255, 0.6),
+                inset -2px -2px 5px rgba(0, 0, 0, 0.15),
+                0 0 10px rgba(212, 138, 3, 0.5);
+}
+
+/* Прапорець на міні */
+.cell.flagged.mine {
+    background: linear-gradient(135deg, #ffaa00 0%, #ff8800 100%);
+    border: 2px solid #ff6600;
+    box-shadow: inset 2px 2px 5px rgba(255, 255, 255, 0.4),
+                inset -2px -2px 5px rgba(0, 0, 0, 0.3);
+}
+
+/* Прапорець на відкритій клітинці без міни */
+.cell.revealed.flagged:not(.mine) {
+    background: linear-gradient(135deg, #fff4a3 0%, #ffe066 100%);
+    border: 1px solid #ffb800;
+}
+
+.cell.flagged:hover:not(.revealed) {
+    box-shadow: inset 2px 2px 5px rgba(255, 255, 255, 0.6),
+                inset -2px -2px 5px rgba(0, 0, 0, 0.15),
+                0 0 10px rgba(255, 165, 0, 0.5);
+}
+
+/* ===== ПОВІДОМЛЕННЯ ГРИВИ ===== */
+.game-message {
+    text-align: center;
+    font-size: 1.3rem;
+    font-weight: bold;
+    padding: 15px;
+    border-radius: 8px;
+    min-height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.game-message.win {
+    background: linear-gradient(135deg, #a8ff00 0%, #76c700 100%);
+    color: #004d00;
+    box-shadow: 0 4px 15px rgba(168, 255, 0, 0.4);
+    animation: winPulse 0.5s ease;
+}
+
+.game-message.loss {
+    background: linear-gradient(135deg, #ff6b6b 0%, #ff5252 100%);
+    color: white;
+    box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+    animation: lossPulse 0.5s ease;
+}
+
+@keyframes winPulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+@keyframes lossPulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+/* ===== АДАПТИВНІСТЬ ===== */
+@media (max-width: 600px) {
+    .container {
+        padding: 20px;
+    }
+
+    h1 {
+        font-size: 1.8rem;
+        margin-bottom: 20px;
+    }
+
+    .game-header {
+        padding: 15px;
+        gap: 10px;
+    }
+
+    .timer,
+    .flag-counter {
+        font-size: 1.5rem;
+        min-width: 70px;
+    }
+
+    .header-label {
+        font-size: 0.8rem;
+    }
+
+    .start-btn {
+        padding: 10px 20px;
+        font-size: 0.95rem;
+    }
+
+    .game-field {
+        gap: 3px;
+        padding: 10px;
+    }
+
+    .cell {
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 430px){
+    .cell{
+        aspect-ratio: 1/1;
+        
+    }
+}
+
+@media (max-width: 400px) {
+    .container {
+        padding: 15px;
+    }
+
+    h1 {
+        font-size: 1.5rem;
+        margin-bottom: 15px;
+    }
+
+    .game-header {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .game-field {
+        gap: 2px;
+        padding: 8px;
+    }
+
+    .cell {
+        font-size: 0.8rem;
+    }
+
+    .timer,
+    .flag-counter {
+        font-size: 1.3rem;
+    }
+
+    .game-message {
+        font-size: 1rem;
+        padding: 10px;
+    }
+}
+
+/* ===== ДОДАТКОВІ СТИЛІ ДЛЯ СУМІСНОСТІ ===== */
+@supports not (aspect-ratio: 1) {
+    .cell {
+        width: 100%;
+        padding-bottom: 100%;
+        position: relative;
+    }
+}

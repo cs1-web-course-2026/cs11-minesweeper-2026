@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Сапер</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>🏁 САПЕР 🏁</h1>
+        
+        <div class="game-header">
+            <div class="header-item">
+                <div class="header-label">⏱️ Час</div>
+                <div class="timer">125</div>
+            </div>
+            
+            <button class="start-btn">Нова гра</button>
+            
+            <div class="header-item">
+                <div class="header-label">🚩 Прапорці</div>
+                <div class="flag-counter">7/10</div>
+            </div>
+        </div>
+
+        <div class="game-field">
+            <!-- Перший рядок -->
+            <div class="cell closed"></div>
+            <div class="cell closed"></div>
+            <div class="cell revealed number-1">1</div>
+            <div class="cell revealed">0</div>
+            <div class="cell closed"></div>
+            <div class="cell closed flagged">🚩</div>
+            <div class="cell revealed number-2">2</div>
+            <div class="cell revealed number-1">1</div>
+            <div class="cell closed"></div>
+            <div class="cell closed"></div>
+
+            <!-- Другий рядок -->
+            <div class="cell closed"></div>
+            <div class="cell revealed number-1">1</div>
+            <div class="cell revealed">0</div>
+            <div class="cell revealed">0</div>
+            <div class="cell closed"></div>
+            <div class="cell closed flagged">🚩</div>
+            <div class="cell revealed number-1">1</div>
+            <div class="cell revealed number-2">2</div>
+            <div class="cell revealed number-1">1</div>
+            <div class="cell closed"></div>
+
+            <!-- Третій рядок -->
+            <div class="cell revealed">0</div>
+            <div class="cell revealed number-1">1</div>
+            <div class="cell closed"></div>
+            <div class="cell revealed">0</div>
+            <div class="cell revealed number-1">1</div>
+            <div class="cell revealed number-1">1</div>
+            <div class="cell revealed">0</div>
+            <div class="cell closed"></div>
+            <div class="cell revealed number-2">2</div>
+            <div class="cell closed"></div>
+
+            <!-- Четвертий рядок -->
+            <div class="cell revealed">0</div>
+            <div class="cell revealed">0</div>
+            <div class="cell closed"></div>
+            <div class="cell revealed">0</div>
+            <div class="cell revealed">0</div>
+            <div class="cell revealed">0</div>
+            <div class="cell revealed">0</div>
+            <div class="cell closed"></div>
+            <div class="cell closed flagged">🚩</div>
+            <div class="cell closed"></div>
+
+            <!-- П'ятий рядок -->
+            <div class="cell revealed">0</div>
+            <div class="cell revealed number-1">1</div>
+            <div class="cell revealed number-2">2</div>
+            <div class="cell revealed number-1">1</div>
+            <div class="cell revealed">0</div>
+            <div class="cell closed"></div>
+            <div class="cell revealed number-1">1</div>
+            <div class="cell revealed number-2">2</div>
+            <div class="cell revealed number-2">2</div>
+            <div class="cell closed"></div>
+
+            <!-- Шостий рядок -->
+            <div class="cell revealed">0</div>
+            <div class="cell closed"></div>
+            <div class="cell closed flagged">🚩</div>
+            <div class="cell revealed number-1">1</div>
+            <div class="cell closed"></div>
+            <div class="cell closed"></div>
+            <div class="cell revealed number-1">1</div>
+            <div class="cell closed"></div>
+            <div class="cell revealed number-2">2</div>
+            <div class="cell closed"></div>
+
+            <!-- Сьомий рядок -->
+            <div class="cell revealed">0</div>
+            <div class="cell closed"></div>
+            <div class="cell closed flagged">🚩</div>
+            <div class="cell revealed number-2">2</div>
+            <div class="cell closed"></div>
+            <div class="cell closed"></div>
+            <div class="cell closed"></div>
+            <div class="cell revealed number-1">1</div>
+            <div class="cell closed"></div>
+            <div class="cell closed"></div>
+
+            <!-- Восьмий рядок -->
+            <div class="cell revealed">0</div>
+            <div class="cell revealed number-1">1</div>
+            <div class="cell closed flagged">🚩</div>
+            <div class="cell revealed number-2">2</div>
+            <div class="cell closed"></div>
+            <div class="cell closed"></div>
+            <div class="cell closed"></div>
+            <div class="cell revealed number-2">2</div>
+            <div class="cell closed"></div>
+            <div class="cell closed"></div>
+
+            <!-- Дев'ятий рядок -->
+            <div class="cell revealed number-1">1</div>
+            <div class="cell revealed number-2">2</div>
+            <div class="cell revealed number-1">1</div>
+            <div class="cell closed"></div>
+            <div class="cell closed"></div>
+            <div class="cell closed"></div>
+            <div class="cell closed"></div>
+            <div class="cell revealed number-1">1</div>
+            <div class="cell revealed number-1">1</div>
+            <div class="cell closed"></div>
+
+            <!-- Десятий рядок - приклади стану клітинок -->
+            <div class="cell closed"></div>
+            <div class="cell closed"></div>
+            <!-- Прапорець без міни -->
+            <div class="cell revealed flagged">🚩</div>
+            <div class="cell closed"></div>
+            <!-- Прапорець на міні -->
+            <div class="cell revealed mine flagged">🚩</div>
+            <div class="cell closed"></div>
+            <!-- Міна звичайна -->
+            <div class="cell revealed mine">💣</div>
+            <div class="cell closed"></div>
+            <!-- Міна, яку натиснув користувач -->
+            <div class="cell revealed mine clicked">💣</div>
+            <div class="cell closed"></div>
+        </div>
+
+        <div class="game-message"></div>
+    </div>
+</body>
+</html>
+
