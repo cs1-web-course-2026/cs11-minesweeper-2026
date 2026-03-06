@@ -1,1 +1,54 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neon Purple Minesweeper</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="game-container">
+        <div class="header-outer">
+            <div class="header-inner">
+                <div class="stat-group">
+                    <span class="label">MINES</span>
+                    <div class="digital-display">010</div>
+                </div>
+                
+                <button class="new-game-btn">NEW GAME</button>
+                
+                <div class="stat-group">
+                    <span class="label">TIME</span>
+                    <div class="digital-display">000</div>
+                </div>
+            </div>
+        </div>
 
+        <div class="grid-container">
+            <div class="grid" id="minefield">
+                </div>
+        </div>
+    </div>
+
+    <script>
+        const field = document.getElementById('minefield');
+        const totalCells = 64; // 8x8
+
+        for (let i = 0; i < totalCells; i++) {
+            const cell = document.createElement('div');
+            cell.classList.add('cell');
+
+            // Демонстрация разных состояний для красоты
+            if (i === 10) { cell.classList.add('flag'); cell.innerHTML = '🚩'; }
+            else if (i === 18) { cell.classList.add('open'); cell.innerHTML = '<span class="n1">1</span>'; }
+            else if (i === 19) { cell.classList.add('open'); cell.innerHTML = '<span class="n2">2</span>'; }
+            else if (i === 20) { cell.classList.add('open'); cell.innerHTML = '<span class="n3">3</span>'; }
+            else if (i === 27) { cell.classList.add('mine'); cell.innerHTML = '💣'; }
+            else if (i === 28) { cell.classList.add('exploded'); cell.innerHTML = '💥'; }
+            else if (i === 29) { cell.classList.add('wrong'); cell.innerHTML = '❌'; }
+
+            field.appendChild(cell);
+        }
+    </script>
+</body>
+</html>
