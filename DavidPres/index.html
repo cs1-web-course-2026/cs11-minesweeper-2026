@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Document</title>
+    
+</head>
+<body>
+    <div class="controls">
+    <input type="button" onclick="run(9, 9, EASY_MOD)" value="Easy">
+    <input type="button" onclick="run(14, 14, MEDIUM_MOD)" value="Medium">
+    <input type="button" onclick="run(19, 19, HARD_MOD)" value="Hard">
+    </div>
+    <div id="matrix" style="grid-template-columns: repeat(4, 1fr);">
+        
+        <div class="cell">
+            <img src="img/bomb.png" class="cell-img">
+            <img src="img/flag.png" class="mark-img">
+        </div>
+
+        <div class="cell is-flipped">
+            <img src="img/0.png" class="cell-img">
+            <img src="img/flag.png" class="mark-img">
+        </div>
+
+        <div class="cell is-marked">
+            <img src="img/bomb.png" class="cell-img">
+            <img src="img/flag.png" class="mark-img">
+        </div>
+
+        <div class="cell is-flipped">
+            <img src="img/1.png" class="cell-img">
+            <img src="img/flag.png" class="mark-img">
+        </div>
+
+        <div class="cell is-flipped">
+            <img src="img/2.png" class="cell-img">
+            <img src="img/flag.png" class="mark-img">
+        </div>
+        
+        <div class="cell is-flipped">
+            <img src="img/3.png" class="cell-img">
+            <img src="img/flag.png" class="mark-img">
+        </div>
+        
+        <div class="cell is-flipped">
+            <img src="img/4.png" class="cell-img">
+            <img src="img/flag.png" class="mark-img">
+        </div>
+        <div class="cell is-flipped">
+            <img src="img/4.png" class="cell-img">
+            <img src="img/flag.png" class="mark-img">
+        </div>
+        <div class="cell is-flipped">
+            <img src="img/5.png" class="cell-img">
+            <img src="img/flag.png" class="mark-img">
+        </div>
+        <div class="cell is-flipped">
+            <img src="img/6.png" class="cell-img">
+            <img src="img/flag.png" class="mark-img">
+        </div>
+        <div class="cell is-flipped">
+            <img src="img/7.png" class="cell-img">
+            <img src="img/flag.png" class="mark-img">
+        </div>
+         <div class="cell is-flipped">
+            <img src="img/8.png" class="cell-img">
+            <img src="img/flag.png" class="mark-img">
+        </div>
+        <div class="cell is-flipped">
+            <img src="img/0.png" class="cell-img">
+            <img src="img/flag.png" class="mark-img">
+        </div>
+        <div class="cell is-flipped">
+            <img src="img/0.png" class="cell-img">
+            <img src="img/flag.png" class="mark-img">
+        </div>
+        <div class="cell is-flipped">
+            <img src="img/0.png" class="cell-img">
+            <img src="img/flag.png" class="mark-img">
+        </div>
+        <div class="cell is-flipped">
+            <img src="img/bomb.png" class="cell-img">
+            <img src="img/flag.png" class="mark-img">
+        </div>
+       
+        </div>
+       
+    
+    </div>
+    <script src="js/script.js"></script>
+    
+</body>
+</html>
