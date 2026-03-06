@@ -1,0 +1,56 @@
+:root {
+    --bg: #0f172a;
+    --panel: #1e293b;
+    --cell: #334155;
+    --opened: #94a3b8;
+}
+
+body {
+    background-color: var(--bg);
+    display: flex; justify-content: center; align-items: center;
+    min-height: 100vh; margin: 0; font-family: sans-serif;
+}
+
+.game-wrapper {
+    background: var(--panel); padding: 20px; border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.game-header {
+    display: flex; justify-content: space-between; margin-bottom: 20px;
+}
+
+.stat-box {
+    background: #000; color: #00ff00; padding: 5px 10px;
+    font-family: monospace; font-size: 20px; border-radius: 4px;
+}
+
+.reset-btn {
+    background: #10b981; color: white; border: none;
+    padding: 8px 16px; border-radius: 6px; font-weight: bold;
+}
+
+/* Сітка та адаптивність (п. 5) */
+.grid {
+    display: grid; grid-template-columns: repeat(4, 50px); gap: 6px;
+}
+
+@media (max-width: 400px) {
+    .grid { grid-template-columns: repeat(4, 40px); }
+    .cell { width: 40px !important; height: 40px !important; }
+}
+
+.cell {
+    width: 50px; height: 50px; border-radius: 4px;
+    display: flex; align-items: center; justify-content: center; font-weight: bold;
+}
+
+.cell.closed { background: var(--cell); border-bottom: 3px solid #0f172a; }
+.cell.opened { background: var(--opened); color: #0f172a; }
+
+/* Візуалізація станів (п. 4) */
+.cell.flag::after { content: "🚩"; }
+.cell.mine::after { content: "💣"; }
+.cell.exploded { background: #ef4444 !important; }
+.cell.wrong-flag { position: relative; background: var(--opened); }
+.cell.wrong-flag::after { content: "❌"; position: absolute; color: red; font-size: 20px; }
