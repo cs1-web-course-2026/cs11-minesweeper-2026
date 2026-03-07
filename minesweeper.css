@@ -9,17 +9,16 @@ body {
 #board {
     width: 400px;
     height: 400px;
-    background-color: #bdbdbd;
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    grid-template-rows: repeat(8, 1fr);
     
+    background-color: #bdbdbd;
     border-top: 4px solid #7b7b7b;
     border-left: 4px solid #7b7b7b;
     border-bottom: 4px solid #ffffff;
     border-right: 4px solid #ffffff;
-
     margin: 20px auto;
-    display: grid;
-    grid-template-columns: repeat(8, 1fr);
-    grid-template-rows: repeat(8, 1fr);
     box-shadow: 0px 5px 15px rgba(0,0,0,0.2);
 }
 
