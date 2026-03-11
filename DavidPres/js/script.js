@@ -1,12 +1,21 @@
 let isGameStillRunning = true;
 let bombCountGlobal = 0;
 let flagsPlaced = 0;
+var arr
+const EASY_MOD = 0.12; //0/12
+const MEDIUM_MOD = 0.16;
+const HARD_MOD = 0.21;
+const BOMB = "bomb";
 
 function updateFlagCounter() {
     const counter = document.getElementById('flag-counter');
     if (!counter) return;
     const remaining = bombCountGlobal - flagsPlaced;
     counter.textContent = String(remaining);
+    if (remaining == 0 && isAllBombsRMarked()) {
+        alert('you win');
+        isGameStillRunning = false;
+    }
 }
 function openCellsAroundZero(i, j) {
 
@@ -29,6 +38,38 @@ function openCell(i, j) {
         }
     }
 }
+function revealMapAfterLose() {
+    for (let i = 0; i < arr.length; i++) {
+        for (let j = 0; j < arr[0].length; j++) {
+
+            const cell = document.querySelector(`.cell[data-row="${i}"][data-col="${j}"]`);
+
+            const val = cell.dataset.value;
+            const isMarked = cell.classList.contains('is-marked');
+
+            if (val === BOMB && !isMarked) {
+                cell.classList.add('is-flipped');
+            } else if (val !== BOMB && isMarked) {
+                cell.classList.add('was-wrongly-marked');
+            }
+        }
+    }
+
+}
+
+function isAllBombsRMarked() {
+    for (let i = 0; i < arr.length; i++) {
+        for (let j = 0; j < arr[0].length; j++) {
+            const cellElement = document.querySelector(`.cell[data-row="${i}"][data-col="${j}"]`);
+            const isMarked = cellElement.classList.contains('is-marked');
+            if (isBomb(arr, i, j) && !isMarked) return false;
+            if (!isBomb(arr, i, j) && isMarked) return false;
+        }
+    }
+    return true
+}
+
+
 // Вешаем события на родителя ОДИН РАЗ
 document.addEventListener('DOMContentLoaded', () => {
     run(9, 9, EASY_MOD);
@@ -52,17 +93,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 openCellsAroundZero(row, col);
             }
 
-            if (cell.querySelector('.cell-img').src.includes('bomb')) {
-                isGameStillRunning = false;
-                // alert('lose');
-            }
             if (cell.classList.contains('is-flipped') && val === "bomb") {
+                cell.classList.add('isExploded');
                 alert('hah, i`d win');
-                //  new Promise(resolve => setTimeout(resolve, 100)).then(() => {
-                //     run(9, 9, EASY_MOD);
-                // });
+                isGameStillRunning = false;
+                revealMapAfterLose();
+
             }
-        
+
         }
     });
     // ПРАВЫЙ КЛИК (флаг)
@@ -75,13 +113,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // If adding a flag
         if (!cell.classList.contains('is-marked')) {
-                cell.classList.add('is-marked');
-                flagsPlaced++;
-            
+            cell.classList.add('is-marked');
+            flagsPlaced++;
+
         } else {
-            
+
             cell.classList.remove('is-marked');
-             flagsPlaced--;
+            flagsPlaced--;
         }
 
         updateFlagCounter();
@@ -144,10 +182,7 @@ function wrapBomb(arr, i, j) {
     }
 }
 
-const EASY_MOD = 0.12;
-const MEDIUM_MOD = 0.16;
-const HARD_MOD = 0.21;
-const BOMB = "bomb";
+
 
 function clenup() {
     document.querySelectorAll('.cell').forEach(cell => cell.remove());
@@ -159,7 +194,7 @@ function run(rows, cols, mode = EASY_MOD) {
     var matrix = document.getElementById('matrix');
     matrix.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
 
-    var arr = fieldGeneration(rows, cols);
+    arr = fieldGeneration(rows, cols);
     var bombCount = calculateBombCount(arr, mode);
     generateBombs(arr, bombCount);
     wrapBombs(arr);
@@ -169,7 +204,6 @@ function run(rows, cols, mode = EASY_MOD) {
     flagsPlaced = 0;
     updateFlagCounter();
 
-    var oneDimensionArr = arr.flat();
 
     for (let i = 0; i < arr.length; i++) {
         for (let j = 0; j < arr[0].length; j++) {
@@ -180,16 +214,29 @@ function run(rows, cols, mode = EASY_MOD) {
             divCell.dataset.value = arr[i][j]; // Сохраняем значение (0, 1, bomb)
 
             const value = arr[i][j];
+
             const img = document.createElement('img');
             img.src = `img/${value}.png`;
             img.alt = value;
             img.classList.add('cell-img');
             divCell.appendChild(img);
 
+            if (value === BOMB) {
+                const expImg = document.createElement('img');
+                expImg.src = `img/explosion.png`; // Твоя отдельная картинка
+                expImg.classList.add('explosion-img'); // Специальный класс
+                divCell.appendChild(expImg);
+            }
+
             const imgFlag = document.createElement('img');
             imgFlag.src = "img/flag.png";
             imgFlag.classList.add('mark-img');
             divCell.appendChild(imgFlag);
+
+            const imgMissFlag = document.createElement('img');
+            imgMissFlag.src = "img/missflag.png";
+            imgMissFlag.classList.add('miss-mark-img');
+            divCell.appendChild(imgMissFlag);
 
             matrix.appendChild(divCell);
         }

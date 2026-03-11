@@ -1,21 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
     <title>Document</title>
-    
+
 </head>
+
 <body>
     <div class="controls">
         <input type="button" onclick="run(9, 9, EASY_MOD)" value="Easy">
         <input type="button" onclick="run(14, 14, MEDIUM_MOD)" value="Medium">
         <input type="button" onclick="run(19, 19, HARD_MOD)" value="Hard">
+    </div>
+
+    <div class="userPanel">
         <div class="flag-box">Flags: <span id="flag-counter">0</span></div>
         <div class="timer-box">Timer: <span id="timer">0</span></div>
     </div>
+
     <div id="matrix"></div>
+
+    <script src="js/script.js"></script>
+</body>
 
     <!-- <div id="matrix" style="grid-template-columns: repeat(4, 1fr);">
         
@@ -24,8 +33,8 @@
             <img src="img/flag.png" class="mark-img">
         </div>
     -->
-        
-   
+
+
     <script src="js/script.js"></script>
 </body>
 
