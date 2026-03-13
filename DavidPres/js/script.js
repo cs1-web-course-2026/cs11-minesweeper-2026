@@ -1,14 +1,15 @@
-let isGameStillRunning = true;
-let bombCountGlobal = 0;
-let flagsPlaced = 0;
-var arr
 const EASY_MOD = 0.12; //0/12
 const MEDIUM_MOD = 0.16;
 const HARD_MOD = 0.21;
 const BOMB = "bomb";
+let isGameStillRunning = true;
+let isFirtsClick = true;
+let bombCountGlobal = 0;
+let flagsPlaced = 0;
+let arr
 let timerInterval = null;
 let secondsPassed = 0;
-isFirtsClick = true;
+
 
 function updateFlagCounter() {
     const counter = document.getElementById('flag-counter');
@@ -21,24 +22,24 @@ function updateFlagCounter() {
         stopTimer();
     }
 }
-function openCellsAroundZero(i, j) {
+function openCellsAroundZero(row, column) {
 
-    openCell(i + 1, j + 1);
-    openCell(i + 1, j);
-    openCell(i + 1, j - 1);
-    openCell(i, j - 1);
-    openCell(i, j + 1);
-    openCell(i - 1, j - 1);
-    openCell(i - 1, j);
-    openCell(i - 1, j + 1);
+    openCell(row + 1, column + 1);
+    openCell(row + 1, column);
+    openCell(row + 1, column - 1);
+    openCell(row, column - 1);
+    openCell(row, column + 1);
+    openCell(row - 1, column - 1);
+    openCell(row - 1, column);
+    openCell(row - 1, column + 1);
 }
-function openCell(i, j) {
-    const cell = document.querySelector(`.cell[data-row="${i}"][data-col="${j}"]`);
+function openCell(row, column) {
+    const cell = document.querySelector(`.cell[data-row="${row}"][data-col="${column}"]`);
     if (cell && !cell.classList.contains('is-marked') && !cell.classList.contains('is-flipped')) {
         cell.classList.add('is-flipped');
 
         if (cell.dataset.value === "0") {
-            openCellsAroundZero(i, j);
+            openCellsAroundZero(row, column);
         }
     }
 }
@@ -76,6 +77,16 @@ function isAllBombsRMarked() {
 
 // Вешаем события на родителя ОДИН РАЗ
 document.addEventListener('DOMContentLoaded', () => {
+
+    const easyBtn = document.querySelector('.controls input[value="Easy"]');
+    const mediumBtn = document.querySelector('.controls input[value="Medium"]');
+    const hardBtn = document.querySelector('.controls input[value="Hard"]');
+
+    // 2. Вешаем на них слушатели кликов
+    easyBtn.addEventListener('click', () => run(9, 9, EASY_MOD));
+    mediumBtn.addEventListener('click', () => run(14, 14, MEDIUM_MOD));
+    hardBtn.addEventListener('click', () => run(19, 19, HARD_MOD));
+
     run(9, 9, EASY_MOD);
 
     const matrix = document.getElementById('matrix');
@@ -183,10 +194,10 @@ function wrapBombs(arr) {
     }
 }
 
-function wrapBomb(arr, i, j) {
-    if (i >= 0 && i < arr.length && j >= 0 && j < arr[0].length) {
-        if (arr[i][j] !== BOMB) {
-            arr[i][j] = arr[i][j] + 1;
+function wrapBomb(arr, row, column) {
+    if (row >= 0 && row < arr.length && column >= 0 && column < arr[0].length) {
+        if (arr[row][column] !== BOMB) {
+            arr[row][column] = arr[row][column] + 1;
         }
     }
 }
@@ -236,11 +247,11 @@ function run(rows, cols, mode = EASY_MOD) {
     resetTimer();
     isGameStillRunning = true;
     isFirtsClick = true;
-    var matrix = document.getElementById('matrix');
+    let  matrix = document.getElementById('matrix');
     matrix.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
 
     arr = fieldGeneration(rows, cols);
-    var bombCount = calculateBombCount(arr, mode);
+    let  bombCount = calculateBombCount(arr, mode);
     generateBombs(arr, bombCount);
     wrapBombs(arr);
 
@@ -279,7 +290,7 @@ function run(rows, cols, mode = EASY_MOD) {
             divCell.appendChild(imgFlag);
 
             const imgMissFlag = document.createElement('img');
-            imgMissFlag.src = "img/missflag.png";
+            imgMissFlag.src = "img/missFlag.png";
             imgMissFlag.classList.add('miss-mark-img');
             divCell.appendChild(imgMissFlag);
 
