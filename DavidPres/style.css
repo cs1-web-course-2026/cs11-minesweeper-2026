@@ -30,23 +30,27 @@ body {
 .timer-box {
     display: flex;
     align-items: center;
+    justify-content: center; /* Центрируем содержимое (слово Timer: и сами цифры) */
     gap: 15px;
     color: #ecf0f1;
     background: #e67e22;
-    /* Оранжевый цвет для отличия */
     padding: 10px 20px;
     border: 2px solid #bdc3c7;
     border-radius: 8px;
     font-weight: bold;
-    font-size: 600%;
-    /* Сделал крупным, как вы просили для флагов */
+    font-size: 400%; /* Делаем чуть меньше 600%, чтобы широкое 00:00 не вылезало за экран */
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+    min-width: 350px; /* Жестко задаем минимальную ширину. Если экран большой, блок не схлопнется */
 }
 
 #timer {
     min-width: 60px;
     text-align: center;
+        font-family: 'Courier New', Courier, monospace; /* Делаем все цифры одинаковой ширины, чтобы не было дерганий */
+    text-align: center;
 }
+
+
 
 #flag-counter {
     display: inline-block;

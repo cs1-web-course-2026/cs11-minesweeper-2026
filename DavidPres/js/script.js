@@ -6,6 +6,9 @@ const EASY_MOD = 0.12; //0/12
 const MEDIUM_MOD = 0.16;
 const HARD_MOD = 0.21;
 const BOMB = "bomb";
+let timerInterval = null;
+let secondsPassed = 0;
+isFirtsClick = true;
 
 function updateFlagCounter() {
     const counter = document.getElementById('flag-counter');
@@ -15,6 +18,7 @@ function updateFlagCounter() {
     if (remaining == 0 && isAllBombsRMarked()) {
         alert('you win');
         isGameStillRunning = false;
+        stopTimer();
     }
 }
 function openCellsAroundZero(i, j) {
@@ -78,6 +82,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ЛЕВЫЙ КЛИК (открытие)
     matrix.addEventListener('click', (e) => {
+        if (isFirtsClick) {
+            startTimer();
+            isFirtsClick = false;
+        }
 
         const cell = e.target.closest('.cell'); // Ищем, был ли клик именно по ячейке
 
@@ -95,6 +103,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (cell.classList.contains('is-flipped') && val === "bomb") {
                 cell.classList.add('isExploded');
+                stopTimer();
                 alert('hah, i`d win');
                 isGameStillRunning = false;
                 revealMapAfterLose();
@@ -181,7 +190,41 @@ function wrapBomb(arr, i, j) {
         }
     }
 }
+function updateTimerDisplay() {
+    const minutes = Math.floor(secondsPassed / 60);
+    const seconds = secondsPassed % 60;
+    // padStart(2, '0') проверяет длину строки. 
+    // Если в строке 1 символ (например, "5"), он добавляет '0' в начало -> "05".
+    // Если 2 символа ("12"), он ничего не делает. 
+    // String() нужен, потому что у обычных чисел нет метода padStart, он есть только у текста.
+    const display = String(minutes).padStart(2, '0') + ":" + String(seconds).padStart(2, '0');
+    document.getElementById('timer').textContent = display;
+}
+function resetTimer() {
+    stopTimer();
+    secondsPassed = 0;
+    updateTimerDisplay();
+}
 
+function startTimer() {
+    resetTimer();
+
+    // setInterval — встроенная команда браузера. Выполняет код внутри { } каждые 1000 миллисекунд (1 секунда).
+    // Мы сохраняем идентификатор этого цикла в переменную timerInterval.
+    timerInterval = setInterval(() => {
+        if (isGameStillRunning) {
+            secondsPassed++;
+            updateTimerDisplay();
+        } else {
+            stopTimer();
+        }
+    }, 1000); // 1000 мс = 1 секунда
+
+} function stopTimer() {
+    // clearInterval — команда браузера, которая уничтожает цикл, зная его идентификатор.
+    clearInterval(timerInterval);
+    timerInterval = null;
+}
 
 
 function clenup() {
@@ -190,7 +233,9 @@ function clenup() {
 
 function run(rows, cols, mode = EASY_MOD) {
     clenup();
+    resetTimer();
     isGameStillRunning = true;
+    isFirtsClick = true;
     var matrix = document.getElementById('matrix');
     matrix.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
 
