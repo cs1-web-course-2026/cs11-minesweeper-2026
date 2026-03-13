@@ -4,7 +4,7 @@ const gameState = {
     rows: 10,
     cols: 10,
     minesCount: 10,
-    status: 'process',
+    status: 'process',   // 'process', 'win', 'lose'
     gameTime: 0,
     timerId: null,
 };
@@ -16,7 +16,7 @@ function generateField(rows, cols, minesCount) {
         for (let j = 0; j < cols; j++){
             field[i][j] = {
                 type: 'empty',
-                state: 'closed',
+                state: 'closed',   // 'closed', 'opened', 'flagged'
                 neighborMines: 0,
             };
         }
@@ -68,37 +68,45 @@ function countNeighbourMines(field){
     return field;
 }
 
-function openCell(row, col){
+function openCell(field, gameState, row, col){
+    let rows = field.length;
+    let cols = field[0].length;
+
     if (field[row][col].state === 'opened' || field[row][col].state === 'flagged'){
-        return;
-    } else if (field[row][col].type === 'mine'){
+        return field;
+    }
+    
+    if (field[row][col].type === 'mine'){
         gameState.status = 'lose';
-        stopTimer();
+        stopTimer();  // 3rd lab delete
         console.log("GAME OVER 💀");
-        return;
-    } else {
-        field[row][col].state = 'opened'
-        if (field[row][col].neighborMines === 0){
-            for (let i = -1; i <= 1; i++){
-                for (let j = -1; j <= 1; j++){
-                    let ni = row + i;
-                    let nj = col + j;
-                    if (ni >= 0 && ni < gameState.rows && nj >= 0 && nj < gameState.cols)
-                        openCell(ni, nj);
-                }
+        return field;
+    }
+    
+    field[row][col].state = 'opened'
+
+    if (field[row][col].neighborMines === 0){
+        for (let i = -1; i <= 1; i++){
+            for (let j = -1; j <= 1; j++){
+                let ni = row + i;
+                let nj = col + j;
+                if (ni >= 0 && ni < rows && nj >= 0 && nj < cols)
+                    openCell(field, gameState, ni, nj);
             }
         }
     }
+    return field;
 }
 
-function toggleFlag(row, col){
+function toggleFlag(field, row, col){
     if (field[row][col].state === 'opened'){
-        return;
+        return field;
     } else if (field[row][col].state === 'closed'){
         field[row][col].state = 'flagged';
     } else {
         field[row][col].state = 'closed';
     }
+    return field;
 }
 
 function startTimer() {
