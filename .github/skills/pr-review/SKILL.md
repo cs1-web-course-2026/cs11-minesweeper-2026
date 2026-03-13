@@ -5,6 +5,14 @@ description: Reviews one or more pull requests in this repository using two AI r
 
 Review the pull requests listed below using two dedicated reviewer sub-agents — one running Claude Sonnet 4.6 and one running GPT-5.3-Codex — then merge their findings into a single combined GitHub review for each PR.
 
+## Important constraints
+
+- **Do NOT use `gh pr checkout` or `git checkout`.** Switching the working branch removes the `.github/agents/` files that the sub-agents depend on. All PR data is fetched via the GitHub API only.
+- **Do NOT create a `plan.md` file** or any other files in the repository. This task produces no code changes.
+- **Do NOT use SQL todo statuses or any persistent todo store.** Track progress in memory only.
+- **Do NOT stash or modify the working tree.** Read everything from the API.
+- If you are uncertain whether the worktree is dirty, run `git status` once and proceed — do not stop to ask the user unless there are uncommitted changes to tracked files that would be lost.
+
 ## Input
 
 You will receive a list of PR numbers. Examples of how a user might provide them:
@@ -13,77 +21,138 @@ You will receive a list of PR numbers. Examples of how a user might provide them
 - `Review PR #5`
 - `Review pull requests 1, 2, 3`
 
-Parse all PR numbers from the user's message and store them as a list. Process each PR **sequentially** (finish one before starting the next).
+Parse all PR numbers from the user's message and store them as a list. Process each PR **sequentially** (finish one completely before starting the next).
 
-## Process per PR
+## One-time setup (run once before processing any PRs)
 
-Repeat the following steps for **each PR number** in the list:
+Discover `owner` and `repo` from the remote URL:
 
-### Step 1 — Checkout and discover remote
+```bash
+git remote get-url origin
+```
 
-Follow Steps 1–2 of `.github/prompts/review-pr.prompt.md`:
+Extract `owner` and `repo` from the URL (e.g. `https://github.com/owner/repo.git` → `owner`, `repo`).
+
+Fetch the latest remote refs (no checkout):
 
 ```bash
 git fetch origin
-gh pr checkout {pr_number}
-git pull origin
-git remote -v
 ```
 
-Extract `owner` and `repo` from the remote URL.
+## Process per PR
 
-### Step 2 — Fetch PR metadata and diff
+> **Strict sequencing rule:** Complete every step for the current PR — including posting the review and verifying inline comments — before moving to the next PR. Do NOT start the next PR while any step of the current one is still pending.
 
-In parallel, fetch:
+Repeat the following steps for **each PR number** in the list, one PR at a time:
 
-- PR details (title, author, head SHA, base branch) via `gh api /repos/{owner}/{repo}/pulls/{pr_number}`
-- Full unified diff via `gh api /repos/{owner}/{repo}/pulls/{pr_number} --header "Accept: application/vnd.github.v3.diff"`
-- Changed files list via `gh api /repos/{owner}/{repo}/pulls/{pr_number}/files`
+### Step 1 — Fetch PR metadata and diff
 
-### Step 3 — Run Claude Sonnet 4.6 reviewer sub-agent
+Fetch all three in parallel:
 
-Invoke the `pr-reviewer-claude` sub-agent, passing:
+```bash
+gh api /repos/{owner}/{repo}/pulls/{pr_number}
+gh api /repos/{owner}/{repo}/pulls/{pr_number} --header "Accept: application/vnd.github.v3.diff"
+gh api /repos/{owner}/{repo}/pulls/{pr_number}/files
+```
 
-- The PR number
-- The unified diff text
-- The head SHA
+Record: `head_sha`, PR title, author login, base branch, and the full unified diff text.
 
-Wait for it to return its JSON findings (list of issues labelled `[Claude Sonnet 4.6]`).
+### Step 2 — Run Claude Sonnet 4.6 reviewer sub-agent
 
-### Step 4 — Run GPT-5.3-Codex reviewer sub-agent
+**Wait for Step 1 to finish before starting this step.**
 
-Invoke the `pr-reviewer-codex` sub-agent, passing:
+Invoke the `pr-reviewer-claude` sub-agent passing the PR number, unified diff text, head SHA, owner, and repo.
 
-- The PR number
-- The unified diff text
-- The head SHA
+**Wait for the sub-agent to return its full JSON response before proceeding to Step 3.**
 
-Wait for it to return its JSON findings (list of issues labelled `[GPT-5.3-Codex]`).
+### Step 3 — Run GPT-5.3-Codex reviewer sub-agent
 
-### Step 5 — Merge findings
+**Wait for Step 2 to finish before starting this step.**
 
-Combine the two issue lists. Deduplicate issues that point to the exact same file and line — keep both labels if two reviewers independently raised the same issue. Determine the combined `event`:
+Invoke the `pr-reviewer-codex` sub-agent passing the same PR number, unified diff text, head SHA, owner, and repo.
+
+**Wait for the sub-agent to return its full JSON response before proceeding to Step 4.**
+
+### Step 4 — Merge findings
+
+Combine both issue lists from Steps 2 and 3. Deduplicate issues that point to the exact same `path` and `line` — keep both model labels if two reviewers independently raised the same issue.
+
+Determine the combined `event`:
 
 - `REQUEST_CHANGES` if either reviewer returned `REQUEST_CHANGES`
 - `COMMENT` if both returned `COMMENT`
 - `APPROVE` only if both returned `APPROVE`
 
-### Step 6 — Build and post the combined review
+### Step 5 — Build the review payload
 
-Build the review payload following the format in Step 5 of `.github/prompts/review-pr.prompt.md`.
+Build a JSON payload with this exact structure:
 
-In the overview body, include a `### Reviewers` section listing both models used:
+```json
+{
+  "commit_id": "<head_sha>",
+  "body": "<overview body — see format below>",
+  "event": "<combined event from Step 4>",
+  "comments": [
+    {
+      "path": "<issue.path — file path exactly as it appears in the diff>",
+      "line": <issue.line — line number in the new file (right side)>,
+      "side": "RIGHT",
+      "body": "<formatted inline comment body — see format below>"
+    }
+  ]
+}
+```
+
+**Overview body format:**
 
 ```markdown
+## [AI Generated] Code Review
+
+> This review was generated by GitHub Copilot using two AI models.
+
 ### Reviewers
 
 - 🤖 Claude Sonnet 4.6
 - 🤖 GPT-5.3-Codex
+
+### Summary
+
+<one paragraph describing what the PR does and overall quality>
+
+<one bullet per issue, e.g.:>
+
+- 🔴 **Critical — <title>:** <one-line description> <model label>
+- 🟡 **Medium — <title>:** <one-line description> <model label>
+
+Please address the critical and high issues before requesting re-review.
 ```
 
-Mark the entire review body and all inline comments as `[AI Generated]`.
+**Inline comment body format — build one comment per issue:**
 
-Post via:
+````markdown
+🔴 **[AI Generated] <Category> — <Short title>**
+
+<One paragraph explaining the problem, referencing the exact code.>
+
+```lang
+// Fix:
+<corrected snippet — omit this block if issue.fix is null>
+```
+
+<u>_Flagged by: [Model Label(s)] — e.g. `[Claude Sonnet 4.6]` or `[Claude Sonnet 4.6] [GPT-5.3-Codex]` if both models raised this issue_</u>
+````
+
+````
+
+Map severity emoji: `critical` → 🔴, `high` → 🟠, `medium` → 🟡.
+
+Only include issues that have a valid `path` and `line` value in the `comments` array. Issues without a specific file/line location go into the overview body only.
+
+### Step 6 — Post the review
+
+**Wait for Step 5 to finish before posting.**
+
+Write the payload to `/tmp/review_payload_{pr_number}.json`, then post:
 
 ```bash
 gh api \
@@ -91,9 +160,18 @@ gh api \
   -H "Accept: application/vnd.github+json" \
   /repos/{owner}/{repo}/pulls/{pr_number}/reviews \
   --input /tmp/review_payload_{pr_number}.json
+````
+
+Record the `id` field from the response as `review_id`.
+
+Verify inline comments were attached:
+
+```bash
+gh api /repos/{owner}/{repo}/pulls/{pr_number}/reviews/{review_id}/comments \
+  | python3 -c "import sys,json; d=json.load(sys.stdin); print(f'Inline comments posted: {len(d)}')"
 ```
 
-Verify inline comments were attached as described in Step 6 of `.github/prompts/review-pr.prompt.md`.
+**Only after Step 6 completes successfully, move to the next PR.**
 
 ## Final report
 
