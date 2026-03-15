@@ -14,7 +14,6 @@
 
 .grid {
     display: grid;
-    /* ИСПРАВЛЕНО: Теперь ширина подстраивается под JS переменную */
     grid-template-columns: repeat(var(--cols, 8), 50px); 
     gap: 8px;
     background-color: #222;
