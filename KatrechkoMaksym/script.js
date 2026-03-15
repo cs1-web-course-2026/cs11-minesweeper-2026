@@ -1,8 +1,25 @@
+const GAME_STATUS = {
+    PROCESS: 'process',
+    LOSE: 'lose',
+    WIN: 'win'
+};
+
+const CELL_TYPE = {
+    EMPTY: 'empty',
+    MINE: 'mine'
+};
+
+const CELL_STATE = {
+    CLOSED: 'closed',
+    OPENED: 'opened',
+    FLAGGED: 'flagged'
+};
+
 const gameState = {
     rows: 8,
     cols: 8,
     minesCount: 10,
-    status: 'process',
+    status: GAME_STATUS.PROCESS,
     gameTime: 0,
     timerId: null,
     field: []
@@ -12,26 +29,33 @@ const fieldElement = document.getElementById('minefield');
 const timerDisplay = document.getElementById('timer');
 const mineDisplay = document.getElementById('mine-count');
 
+if (fieldElement) {
+    fieldElement.style.setProperty('--cols', gameState.cols);
+}
+
 function initGame() {
-    gameState.status = 'process';
+    gameState.status = GAME_STATUS.PROCESS;
     gameState.gameTime = 0;
     clearInterval(gameState.timerId);
-    
-    // Генерація поля
+
+    if (timerDisplay) timerDisplay.textContent = '000';
+    if (mineDisplay) mineDisplay.textContent = String(gameState.minesCount).padStart(3, '0');
+
     gameState.field = Array.from({ length: gameState.rows }, () =>
         Array.from({ length: gameState.cols }, () => ({
-            type: 'empty', state: 'closed', neighborMines: 0
+            type: CELL_TYPE.EMPTY,
+            state: CELL_STATE.CLOSED,
+            neighborMines: 0
         }))
     );
 
-    // Розстановка мін
-    let placed = 0;
-    while (placed < gameState.minesCount) {
-        let r = Math.floor(Math.random() * gameState.rows);
-        let c = Math.floor(Math.random() * gameState.cols);
-        if (gameState.field[r][c].type !== 'mine') {
-            gameState.field[r][c].type = 'mine';
-            placed++;
+    let minesPlaced = 0;
+    while (minesPlaced < gameState.minesCount) {
+        const row = Math.floor(Math.random() * gameState.rows);
+        const col = Math.floor(Math.random() * gameState.cols);
+        if (gameState.field[row][col].type !== CELL_TYPE.MINE) {
+            gameState.field[row][col].type = CELL_TYPE.MINE;
+            minesPlaced++;
         }
     }
 
@@ -41,88 +65,115 @@ function initGame() {
 }
 
 function calculateNeighbors() {
-    for (let r = 0; r < gameState.rows; r++) {
-        for (let c = 0; c < gameState.cols; c++) {
-            if (gameState.field[r][c].type === 'mine') continue;
-            let count = 0;
+    for (let row = 0; row < gameState.rows; row++) {
+        for (let col = 0; col < gameState.cols; col++) {
+            if (gameState.field[row][col].type === CELL_TYPE.MINE) continue;
+
+            let minesAround = 0;
             for (let i = -1; i <= 1; i++) {
                 for (let j = -1; j <= 1; j++) {
-                    let nr = r + i, nc = c + j;
-                    if (nr >= 0 && nr < gameState.rows && nc >= 0 && nc < gameState.cols) {
-                        if (gameState.field[nr][nc].type === 'mine') count++;
+                    const neighborRow = row + i;
+                    const neighborCol = col + j;
+                    if (
+                        neighborRow >= 0 && neighborRow < gameState.rows &&
+                        neighborCol >= 0 && neighborCol < gameState.cols
+                    ) {
+                        if (gameState.field[neighborRow][neighborCol].type === CELL_TYPE.MINE) {
+                            minesAround++;
+                        }
                     }
                 }
             }
-            gameState.field[r][c].neighborMines = count;
+            gameState.field[row][col].neighborMines = minesAround;
         }
     }
 }
 
 function render() {
+    if (!fieldElement) return;
     fieldElement.innerHTML = '';
-    gameState.field.forEach((row, r) => {
-        row.forEach((cell, c) => {
-            const div = document.createElement('div');
-            div.classList.add('cell');
-            if (cell.state === 'opened') {
-                div.classList.add('open');
-                if (cell.type === 'mine') {
-                    div.innerHTML = '💣';
-                    if (gameState.status === 'lose') div.classList.add('exploded');
+
+    gameState.field.forEach((rowArray, rowIndex) => {
+        rowArray.forEach((cell, colIndex) => {
+            const cellDiv = document.createElement('div');
+            cellDiv.classList.add('cell');
+
+            if (cell.state === CELL_STATE.OPENED) {
+                cellDiv.classList.add('open');
+                if (cell.type === CELL_TYPE.MINE) {
+                    cellDiv.innerHTML = '💣';
+                    if (gameState.status === GAME_STATUS.LOSE) cellDiv.classList.add('exploded');
                 } else if (cell.neighborMines > 0) {
-                    div.innerHTML = `<span class="n${cell.neighborMines}">${cell.neighborMines}</span>`;
+                    cellDiv.innerHTML = `<span class="n${cell.neighborMines}">${cell.neighborMines}</span>`;
                 }
-            } else if (cell.state === 'flagged') {
-                div.innerHTML = '🚩';
+            } else if (cell.state === CELL_STATE.FLAGGED) {
+                cellDiv.innerHTML = '🚩';
             }
 
-            div.onclick = () => openCell(r, c);
-            div.oncontextmenu = (e) => { e.preventDefault(); toggleFlag(r, c); };
-            fieldElement.appendChild(div);
+            cellDiv.onclick = () => {
+                openCell(rowIndex, colIndex);
+                render();
+            };
+            cellDiv.oncontextmenu = (e) => {
+                e.preventDefault();
+                toggleFlag(rowIndex, colIndex);
+                render();
+            };
+            fieldElement.appendChild(cellDiv);
         });
     });
 }
 
-function openCell(r, c) {
-    if (gameState.status !== 'process') return;
-    const cell = gameState.field[r][c];
-    if (cell.state !== 'closed') return;
+function openCell(row, col) {
+    if (gameState.status !== GAME_STATUS.PROCESS) return;
+    const cell = gameState.field[row][col];
+    if (cell.state !== CELL_STATE.CLOSED) return;
 
-    if (cell.type === 'mine') {
-        gameState.status = 'lose';
+    cell.state = CELL_STATE.OPENED;
+
+    if (cell.type === CELL_TYPE.MINE) {
+        gameState.status = GAME_STATUS.LOSE;
         clearInterval(gameState.timerId);
         revealMines();
-    } else {
-        cell.state = 'opened';
-        if (cell.neighborMines === 0) {
-            for (let i = -1; i <= 1; i++) {
-                for (let j = -1; j <= 1; j++) {
-                    let nr = r + i, nc = c + j;
-                    if (nr >= 0 && nr < gameState.rows && nc >= 0 && nc < gameState.cols) openCell(nr, nc);
+    } else if (cell.neighborMines === 0) {
+        for (let i = -1; i <= 1; i++) {
+            for (let j = -1; j <= 1; j++) {
+                const nRow = row + i;
+                const nCol = col + j;
+                if (nRow >= 0 && nRow < gameState.rows && nCol >= 0 && nCol < gameState.cols) {
+                    openCell(nRow, nCol);
                 }
             }
         }
     }
-    render();
 }
 
-function toggleFlag(r, c) {
-    const cell = gameState.field[r][c];
-    if (cell.state === 'opened') return;
-    cell.state = cell.state === 'flagged' ? 'closed' : 'flagged';
-    render();
+function toggleFlag(row, col) {
+    if (gameState.status !== GAME_STATUS.PROCESS) return;
+    const cell = gameState.field[row][col];
+    if (cell.state === CELL_STATE.OPENED) return;
+
+    cell.state = cell.state === CELL_STATE.FLAGGED ? CELL_STATE.CLOSED : CELL_STATE.FLAGGED;
 }
 
 function revealMines() {
-    gameState.field.forEach(row => row.forEach(c => { if(c.type === 'mine') c.state = 'opened'; }));
+    gameState.field.forEach(row => 
+        row.forEach(cell => {
+            if (cell.type === CELL_TYPE.MINE) cell.state = CELL_STATE.OPENED;
+        })
+    );
 }
 
 function startTimer() {
     gameState.timerId = setInterval(() => {
         gameState.gameTime++;
-        timerDisplay.innerText = String(gameState.gameTime).padStart(3, '0');
+        if (timerDisplay) {
+            timerDisplay.textContent = String(gameState.gameTime).padStart(3, '0');
+        }
     }, 1000);
 }
 
-document.querySelector('.new-game-btn').onclick = initGame;
+const newGameBtn = document.querySelector('.new-game-btn');
+if (newGameBtn) newGameBtn.onclick = initGame;
+
 initGame();
