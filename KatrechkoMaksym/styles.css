@@ -51,9 +51,9 @@ body {
 }
 
 .grid {
-    display: grid;
-    grid-template-columns: repeat(8, 50px);
-    gap: 8px;
+  display: grid;
+  grid-template-columns: repeat(var(--cols, 8), 50px); 
+  gap: 8px;
 }
 
 .cell {
