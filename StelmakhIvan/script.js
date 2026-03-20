@@ -3,15 +3,33 @@ const gameFieldElement = document.querySelector('.game-field');
 const timerElement = document.querySelector('.timer');
 const flagCounterElement = document.querySelector('.flag-counter');
 const messageElement = document.querySelector('.game-message');
-const startBtn = document.querySelector('.start-btn');
+const startButton = document.querySelector('.start-btn');
 
 // стан гри
+const CELL_STATE = {
+  OPEN: 'open',
+  CLOSED: 'closed',
+  FLAGGED: 'flagged',
+};
+
+const GAME_STATUS = {
+  IDLE: 'idle',
+  PLAYING: 'playing',
+  WON: 'won',
+  LOST: 'lost',
+};
+
+const CELL_CONTENT = {
+  MINE: 'mine',
+  EMPTY: 'empty',
+};
+
 const gameState = {
   rows: 10,
   cols: 10,
   minesCount: 15,
   flagsPlaced: 0,
-  status: 'process',
+  status: GAME_STATUS.PLAYING,
   gameTime: 0,
   timerId: null,
 };
@@ -20,7 +38,7 @@ const gameState = {
 let field = [];
 
 function initGame() {
-  gameState.status = 'process';
+  gameState.status = GAME_STATUS.PLAYING;
   gameState.flagsPlaced = 0;
 
   flagCounterElement.textContent = `0/${gameState.minesCount}`;
@@ -28,7 +46,7 @@ function initGame() {
   messageElement.className = 'game-message';
   field = generateField(gameState.rows, gameState.cols, gameState.minesCount);
 
-  countNeighbourMines();
+  countNeighbourMines(field);
   renderBoard();
   startTimer();
 }
@@ -43,7 +61,7 @@ function startTimer() {
   }
 
   gameState.timerId = setInterval(() => {
-    if (gameState.status === 'process') {
+    if (gameState.status === GAME_STATUS.PLAYING) {
       gameState.gameTime++;
       timerElement.textContent = gameState.gameTime;
     }
@@ -51,7 +69,7 @@ function startTimer() {
 }
 
 // розстановка мін
-function generateField(rows, cols, neighborCounter) {
+function generateField(rows, cols, minesCount) {
   let minesArray = [];
 
   for (let r = 0; r < rows; r++) {
@@ -67,12 +85,12 @@ function generateField(rows, cols, neighborCounter) {
   }
 
   let minesPlaced = 0;
-  while (minesPlaced < neighborCounter) {
-    let randRow = Math.floor(Math.random() * rows);
-    let randCol = Math.floor(Math.random() * cols);
+  while (minesPlaced < minesCount) {
+    const randomRow = Math.floor(Math.random() * rows);
+    const randomCol = Math.floor(Math.random() * cols);
 
-    if (minesArray[randRow][randCol].type !== 'mine') {
-      minesArray[randRow][randCol].type = 'mine';
+    if (minesArray[randomRow][randomCol].type !== 'mine') {
+      minesArray[randomRow][randomCol].type = 'mine';
       minesPlaced++;
     }
   }
@@ -81,49 +99,47 @@ function generateField(rows, cols, neighborCounter) {
 
 // підрахунок сусідів для кожної клітинки
 function countNeighbourMines() {
-  for (let r = 0; r < gameState.rows; r++) {
-    for (let c = 0; c < gameState.cols; c++) {
-      if (field[r][c].type === 'mine') {
-        continue;
-      }
+  for (let row = 0; row < gameState.rows; row++) {
+    for (let col = 0; col < gameState.cols; col++) {
+      if (field[row][col].type === CELL_CONTENT.MINE) continue;
+      let neighbourCount = 0;
 
-      let neighborCounter = 0;
-
-      for (let i = -1; i <= 1; i++) {
-        for (let j = -1; j <= 1; j++) {
-          let neighborRow = r + i;
-          let neighborCol = c + j;
+      for (let directionalRow = -1; directionalRow <= 1; directionalRow++) {
+        for (let directionalCol = -1; directionalCol <= 1; directionalCol++) {
+          const neighbourRow = row + directionalRow;
+          const neighbourCol = col + directionalCol;
 
           if (
-            neighborRow >= 0 &&
-            neighborRow < gameState.rows &&
-            neighborCol >= 0 &&
-            neighborCol < gameState.cols
+            neighbourRow >= 0 &&
+            neighbourRow < gameState.rows &&
+            neighbourCol >= 0 &&
+            neighbourCol < gameState.cols &&
+            field[neighbourRow][neighbourCol].type === CELL_CONTENT.MINE
           ) {
-            if (field[neighborRow][neighborCol].type === 'mine') {
-              neighborCounter++;
-            }
+            neighbourCount++;
           }
         }
       }
-      field[r][c].neighborMines = neighborCounter;
+
+      field[row][col].neighborMines = neighbourCount;
     }
   }
 }
 
 // логіка взаємодії
-function openCell(row, col) {
-  if (gameState.status !== 'process') return;
+function openCell(row, col, isRootCall = true) {
+  if (gameState.status !== GAME_STATUS.PLAYING) return;
   if (row < 0 || row >= gameState.rows || col < 0 || col >= gameState.cols)
     return;
 
   const cell = field[row][col];
-  if (cell.state === 'opened' || cell.state === 'flagged') return;
+  if (cell.state === CELL_STATE.OPEN || cell.state === CELL_STATE.FLAGGED)
+    return;
 
-  cell.state = 'opened';
+  cell.state = CELL_STATE.OPEN;
 
-  if (cell.type === 'mine') {
-    gameState.status = 'lose';
+  if (cell.type === CELL_CONTENT.MINE) {
+    gameState.status = GAME_STATUS.LOST;
 
     clearInterval(gameState.timerId);
 
@@ -136,53 +152,55 @@ function openCell(row, col) {
       for (let c = 0; c < gameState.cols; c++) {
         const currentCell = field[r][c];
 
-        if (currentCell.type === 'mine' && currentCell.state !== 'flagged') {
-          currentCell.state = 'opened';
-        } else if (
-          currentCell.type !== 'mine' &&
-          currentCell.state === 'flagged'
+        if (
+          currentCell.type === CELL_CONTENT.MINE &&
+          currentCell.state !== CELL_STATE.FLAGGED
         ) {
-          currentCell.state = 'opened';
+          currentCell.state = CELL_STATE.OPEN;
+        } else if (
+          currentCell.type !== CELL_CONTENT.MINE &&
+          currentCell.state === CELL_STATE.FLAGGED
+        ) {
+          currentCell.state = CELL_STATE.OPEN;
           currentCell.wrongFlag = true;
         }
       }
     }
 
-    renderBoard();
+    if (isRootCall) renderBoard();
     return;
   }
 
   if (cell.neighborMines === 0) {
-    for (let i = -1; i <= 1; i++) {
-      for (let j = -1; j <= 1; j++) {
-        if (i === 0 && j === 0) continue;
-        openCell(row + i, col + j);
+    for (let directionalRow = -1; directionalRow <= 1; directionalRow++) {
+      for (let directionalCol = -1; directionalCol <= 1; directionalCol++) {
+        if (directionalRow === 0 && directionalCol === 0) continue;
+        openCell(row + directionalRow, col + directionalCol);
       }
     }
   }
 
-  if (gameState.status === 'process') {
+  if (isRootCall) {
     checkWin();
+    renderBoard();
   }
-
-  renderBoard();
 }
 
 // прапорці
 function toggleFlag(row, col) {
-  if (gameState.status !== 'process') return;
+  if (gameState.status !== GAME_STATUS.PLAYING) return;
 
   const cell = field[row][col];
 
-  if (cell.state === 'opened') return;
+  if (cell.state === CELL_STATE.OPEN) return;
 
-  if (cell.state === 'closed') {
+  if (cell.state === CELL_STATE.CLOSED) {
     if (gameState.flagsPlaced >= gameState.minesCount) return;
 
-    cell.state = 'flagged';
+    cell.state = CELL_STATE.FLAGGED;
     gameState.flagsPlaced++;
-  } else if (cell.state === 'flagged') {
-    cell.state = 'closed';
+  } else if (cell.state === CELL_STATE.FLAGGED) {
+    cell.state = CELL_STATE.CLOSED;
     gameState.flagsPlaced--;
   }
 
@@ -199,48 +217,48 @@ function renderBoard() {
     for (let c = 0; c < gameState.cols; c++) {
       const cellData = field[r][c];
 
-      const cellEl = document.createElement('div');
-      cellEl.classList.add('cell');
+      const cellElement = document.createElement('div');
+      cellElement.classList.add('cell');
 
-      if (cellData.state === 'closed') {
-        cellEl.classList.add('closed');
-      } else if (cellData.state === 'flagged') {
-        cellEl.classList.add('closed', 'flagged');
-        cellEl.textContent = '🚩';
+      if (cellData.state === CELL_STATE.CLOSED) {
+        cellElement.classList.add('closed');
+      } else if (cellData.state === CELL_STATE.FLAGGED) {
+        cellElement.classList.add('closed', 'flagged');
+        cellElement.textContent = '🚩';
 
         if (gameState.status === 'lose' && cellData.type === 'mine') {
-          cellEl.classList.add('mine');
+          cellElement.classList.add('mine');
         }
-      } else if (cellData.state === 'opened') {
-        cellEl.classList.add('revealed');
+      } else if (cellData.state === CELL_STATE.OPEN) {
+        cellElement.classList.add('revealed');
 
         if (cellData.wrongFlag) {
-          cellEl.classList.add('flagged');
-          cellEl.textContent = '❌';
+          cellElement.classList.add('flagged');
+          cellElement.textContent = '❌';
         }
 
         if (cellData.type === 'mine') {
-          cellEl.classList.add('mine');
-          cellEl.textContent = '💣';
+          cellElement.classList.add('mine');
+          cellElement.textContent = '💣';
 
           if (cellData.isClickedMine) {
-            cellEl.classList.add('clicked');
+            cellElement.classList.add('clicked');
           }
         } else if (cellData.neighborMines > 0) {
-          cellEl.classList.add(`number-${cellData.neighborMines}`);
-          cellEl.textContent = cellData.neighborMines;
+          cellElement.classList.add(`number-${cellData.neighborMines}`);
+          cellElement.textContent = cellData.neighborMines;
         }
       }
 
-      cellEl.addEventListener('click', () => {
+      cellElement.addEventListener('click', () => {
         openCell(r, c);
       });
 
-      cellEl.addEventListener('contextmenu', (e) => {
+      cellElement.addEventListener('contextmenu', (e) => {
         e.preventDefault();
         toggleFlag(r, c);
       });
-      gameFieldElement.appendChild(cellEl);
+      gameFieldElement.appendChild(cellElement);
     }
   }
 }
@@ -251,7 +269,7 @@ function checkWin() {
 
   for (let r = 0; r < gameState.rows; r++) {
     for (let c = 0; c < gameState.cols; c++) {
-      if (field[r][c].state === 'opened') {
+      if (field[r][c].state === CELL_STATE.OPEN) {
         openedCellsCount++;
       }
     }
@@ -260,7 +278,7 @@ function checkWin() {
   const totalSafeCells = gameState.rows * gameState.cols - gameState.minesCount;
 
   if (openedCellsCount === totalSafeCells) {
-    gameState.status = 'win';
+    gameState.status = GAME_STATUS.WON;
 
     clearInterval(gameState.timerId);
 
@@ -287,5 +305,5 @@ document.querySelector('.close-overlay-btn').addEventListener('click', () => {
 });
 
 // Запуск гри
-startBtn.addEventListener('click', initGame);
+startButton.addEventListener('click', initGame);
 document.addEventListener('DOMContentLoaded', initGame);
