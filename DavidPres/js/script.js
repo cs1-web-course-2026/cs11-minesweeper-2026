@@ -11,6 +11,7 @@ let timerInterval = null;
 let secondsPassed = 0;
 
 
+
 function updateFlagCounter() {
     const counter = document.getElementById('flag-counter');
     if (!counter) return;
@@ -44,10 +45,10 @@ function openCell(row, column) {
     }
 }
 function revealMapAfterLose() {
-    for (let i = 0; i < arr.length; i++) {
-        for (let j = 0; j < arr[0].length; j++) {
+    for (let row = 0; row < arr.length; row++) {
+        for (let col = 0; col < arr[0].length; col++) {
 
-            const cell = document.querySelector(`.cell[data-row="${i}"][data-col="${j}"]`);
+            const cell = document.querySelector(`.cell[data-row="${row}"][data-col="${col}"]`);
 
             const val = cell.dataset.value;
             const isMarked = cell.classList.contains('is-marked');
@@ -63,12 +64,12 @@ function revealMapAfterLose() {
 }
 
 function isAllBombsRMarked() {
-    for (let i = 0; i < arr.length; i++) {
-        for (let j = 0; j < arr[0].length; j++) {
-            const cellElement = document.querySelector(`.cell[data-row="${i}"][data-col="${j}"]`);
+    for (let row = 0; row < arr.length; row++) {
+        for (let col = 0; col < arr[0].length; col++) {
+            const cellElement = document.querySelector(`.cell[data-row="${row}"][data-col="${col}"]`);
             const isMarked = cellElement.classList.contains('is-marked');
-            if (isBomb(arr, i, j) && !isMarked) return false;
-            if (!isBomb(arr, i, j) && isMarked) return false;
+            if (isBomb(arr, row, col) && !isMarked) return false;
+            if (!isBomb(arr, row, col) && isMarked) return false;
         }
     }
     return true
@@ -164,31 +165,31 @@ function generateBombs(arr, bombCount) {
 }
 
 function generateBomb(arr) {
-    const i = Math.floor(Math.random() * arr.length);
-    const j = Math.floor(Math.random() * arr[0].length);
-    if (arr[i][j] === BOMB) {
+    const row = Math.floor(Math.random() * arr.length);
+    const col = Math.floor(Math.random() * arr[0].length);
+    if (arr[row][col] === BOMB) {
         generateBomb(arr);
     } else {
-        arr[i][j] = BOMB;
+        arr[row][col] = BOMB;
     }
 }
 
-function isBomb(arr, i, j) {
-    return BOMB === arr[i][j];
+function isBomb(arr, row, col) {
+    return BOMB === arr[row][col];
 }
 
 function wrapBombs(arr) {
-    for (let i = 0; i < arr.length; i++) {
-        for (let j = 0; j < arr[0].length; j++) {
-            if (isBomb(arr, i, j)) {
-                wrapBomb(arr, i + 1, j + 1);
-                wrapBomb(arr, i + 1, j);
-                wrapBomb(arr, i + 1, j - 1);
-                wrapBomb(arr, i, j - 1);
-                wrapBomb(arr, i, j + 1);
-                wrapBomb(arr, i - 1, j - 1);
-                wrapBomb(arr, i - 1, j);
-                wrapBomb(arr, i - 1, j + 1);
+    for (let row = 0; row < arr.length;row++) {
+        for (let col = 0; col < arr[0].length; col++) {
+            if (isBomb(arr, row, col)) {
+                wrapBomb(arr,row + 1, col + 1);
+                wrapBomb(arr,row + 1, col);
+                wrapBomb(arr,row + 1, col - 1);
+                wrapBomb(arr,row, col - 1);
+                wrapBomb(arr,row, col + 1);
+                wrapBomb(arr,row - 1, col - 1);
+                wrapBomb(arr,row - 1, col);
+                wrapBomb(arr,row - 1, col + 1);
             }
         }
     }
@@ -261,15 +262,15 @@ function run(rows, cols, mode = EASY_MOD) {
     updateFlagCounter();
 
 
-    for (let i = 0; i < arr.length; i++) {
-        for (let j = 0; j < arr[0].length; j++) {
+    for (let row = 0; row < arr.length; row++) {
+        for (let col = 0; col < arr[0].length; col++) {
             const divCell = document.createElement('div');
             divCell.classList.add('cell');
-            divCell.dataset.row = i;
-            divCell.dataset.col = j;
-            divCell.dataset.value = arr[i][j]; // Сохраняем значение (0, 1, bomb)
+            divCell.dataset.row = row;
+            divCell.dataset.col = col;
+            divCell.dataset.value = arr[row][col]; // Сохраняем значение (0, 1, bomb)
 
-            const value = arr[i][j];
+            const value = arr[row][col];
 
             const img = document.createElement('img');
             img.src = `img/${value}.png`;
