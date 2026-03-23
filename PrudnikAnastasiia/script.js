@@ -172,14 +172,16 @@ function checkWin() {
 function endGame(result) {
     gameState.status = result;
     stopTimer();
-    if (result === 'lose') {
-        alert('Ви відкрили міну! Гра програна!')
-    }
-    else if (result === 'win') {
-        alert('Ви виграли!')
-    }
-    initGame();
-    render();
+    setTimeout(() => {
+        if (result === 'lose') {
+            alert('Ви відкрили міну! Гра програна!')
+        }
+        else if (result === 'win') {
+            alert('Ви виграли!')
+        }
+        initGame();
+        render();
+    }, 100);
 }
 
 function initGame() {
