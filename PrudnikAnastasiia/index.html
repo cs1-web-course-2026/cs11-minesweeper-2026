@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minesweeper</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="https://www.rw-designer.com/icon-image/3078-256x256x32.png">
+</head>
+<body class="body">
+    <div class="main-div">
+        <!-- фон -->
+        <div class="head">
+            <!-- верх -->
+             <p class="head-text">Minesweeper</p>
+        </div>
+             <div class="info">
+                <div class="time-count">
+                    <div class="time-num-left">
+                        <!-- цифри зліва -->
+                    </div>
+                    <div class="emoji">
+                        <img src="https://media.tenor.com/JC_6pC5dhw8AAAAe/minesweeperplus-minesweeper.png" alt="Minesweeper Emoji">
+                        <!-- смайлик -->
+                    </div>
+                    <div class="time-num-right">
+                        <!-- цифри справа -->
+                    </div>
+                </div>
+                <div class="time-count">
+                    <span class="flag-count">Кількість прапорців: 16</span>
+                    <button class="button">Start</button>
+                </div>
+             </div>
+        
+        <div class="game">
+            <!-- тіло гри -->
+             <div class="cell-row">
+                <div class="empty-cell"><p class="num-cell">1</p></div>
+                <div class="empty-cell"><p class="num-cell">3</p></div>
+                <div class="empty-cell"></div>
+                <div class="bomb-cell" aria-label="mine"></div>
+                <div class="flag-cell" aria-label="flag"></div>
+                <div class="empty-cell"><p class="num-cell">1</p></div>
+                <div class="empty-cell"><p class="num-cell">2</p></div>
+                <div class="empty-cell"></div>
+                <div class="bomb-cell" aria-label="mine"></div>
+                <div class="flag-cell" aria-label="flag"></div>
+            </div>
+
+            <div class="cell-row">
+                <div class="empty-cell"></div>
+                <div class="empty-cell"><p class="num-cell">2</p></div>
+                <div class="empty-cell"></div>
+                <div class="flag-cell" aria-label="flag"></div>
+                <div class="bomb-cell" aria-label="mine"></div>
+                <div class="bomb-cell" aria-label="mine"></div>
+                <div class="empty-cell"><p class="num-cell">3</p></div>
+                <div class="empty-cell"><p class="num-cell">2</p></div>
+                <div class="empty-cell"></div>
+                <div class="flag-cell" aria-label="flag"></div>
+            </div>
+
+            <div class="cell-row">
+                <div class="flag-cell" aria-label="flag"></div>
+                <div class="bomb-cell" aria-label="mine"></div>
+                <div class="empty-cell"><p class="num-cell">3</p></div>
+                <div class="empty-cell"></div>
+                <div class="empty-cell"></div>
+                <div class="flag-cell" aria-label="flag"></div>
+                <div class="empty-cell"><p class="num-cell">2</p></div>
+                <div class="empty-cell"></div>
+                <div class="bomb-cell" aria-label="mine"></div>
+                <div class="empty-cell"></div>
+             </div>
+
+            <div class="cell-row">
+                <div class="empty-cell"><p class="num-cell">2</p></div>
+                <div class="empty-cell"><p class="num-cell">2</p></div>
+                <div class="empty-cell"></div>
+                <div class="bomb-cell" aria-label="mine"></div>
+                <div class="empty-cell"></div>
+                <div class="bomb-cell" aria-label="mine"></div>
+                <div class="flag-cell" aria-label="flag"></div>
+                <div class="empty-cell"><p class="num-cell">1</p></div>
+                <div class="empty-cell"><p class="num-cell">2</p></div>
+                <div class="flag-cell" aria-label="flag"></div>
+             </div>
+
+             <div class="cell-row">
+                <div class="empty-cell"></div>
+                <div class="bomb-cell" aria-label="mine"></div>
+                <div class="empty-cell"></div>
+                <div class="flag-cell" aria-label="flag"></div>
+                <div class="bomb-cell" aria-label="mine"></div>
+                <div class="empty-cell"><p class="num-cell">3</p></div>
+                <div class="empty-cell"></div>
+                <div class="empty-cell"></div>
+                <div class="flag-cell" aria-label="flag"></div>
+                <div class="empty-cell"><p class="num-cell">2</p></div>
+             </div>
+
+             <div class="cell-row">
+                <div class="empty-cell"><p class="num-cell">3</p></div>
+                <div class="empty-cell"><p class="num-cell">3</p></div>
+                <div class="empty-cell"><p class="num-cell">1</p></div>
+                <div class="empty-cell"><p class="num-cell">2</p></div>
+                <div class="empty-cell"></div>
+                <div class="bomb-cell" aria-label="mine"></div>
+                <div class="flag-cell" aria-label="flag"></div>
+                <div class="empty-cell"><p class="num-cell">1</p></div>
+                <div class="empty-cell"><p class="num-cell">2</p></div>
+                <div class="empty-cell"></div>
+             </div>
+
+             <div class="cell-row">
+                <div class="empty-cell"></div>
+                <div class="empty-cell"><p class="num-cell">2</p></div>
+                <div class="empty-cell"></div>
+                <div class="empty-cell"><p class="num-cell">2</p></div>
+                <div class="empty-cell"></div>
+                <div class="bomb-cell" aria-label="mine"></div>
+                <div class="flag-cell" aria-label="flag"></div>
+                <div class="empty-cell"><p class="num-cell">1</p></div>
+                <div class="flag-cell" aria-label="flag"></div>
+                <div class="empty-cell"><p class="num-cell">2</p></div>
+             </div>
+
+             <div class="cell-row">
+                <div class="bomb-cell" aria-label="mine"></div>
+                <div class="empty-cell"></div>
+                <div class="empty-cell"><p class="num-cell">1</p></div>
+                <div class="empty-cell"><p class="num-cell">2</p></div>
+                <div class="empty-cell"></div>
+                <div class="empty-cell"><p class="num-cell">1</p></div>
+                <div class="empty-cell"><p class="num-cell">2</p></div>
+                <div class="empty-cell"></div>
+                <div class="empty-cell"><p class="num-cell">2</p></div>
+                <div class="empty-cell"></div>
+             </div>
+
+            <div class="cell-row">
+                <div class="empty-cell"></div>
+                <div class="bomb-cell" aria-label="mine"></div>
+                <div class="empty-cell"><p class="num-cell">3</p></div>
+                <div class="empty-cell"></div>
+                <div class="empty-cell"><p class="num-cell">1</p></div>
+                <div class="flag-cell" aria-label="flag"></div>
+                <div class="empty-cell"><p class="num-cell">1</p></div>
+                <div class="empty-cell"><p class="num-cell">3</p></div>
+                <div class="empty-cell"></div>
+                <div class="empty-cell"></div>
+             </div>
+
+             <div class="cell-row">
+                <div class="empty-cell"></div>
+                <div class="empty-cell"><p class="num-cell">2</p></div>
+                <div class="empty-cell"><p class="num-cell">2</p></div>
+                <div class="empty-cell"></div>
+                <div class="empty-cell"></div>
+                <div class="bomb-cell" aria-label="mine"></div>
+                <div class="flag-cell" aria-label="flag"></div>
+                <div class="empty-cell"><p class="num-cell">1</p></div>
+                <div class="flag-cell" aria-label="flag"></div>
+                <div class="empty-cell"><p class="num-cell">2</p></div>
+             </div>
+
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
