@@ -546,11 +546,84 @@
 </body>
 </html>
             <div class="SumInformation">
-                <p><b>Flags: 1/10</b></p>
-                <p><b>Time: 00:01:44</b></p>
+                <p><b>Flags: <span id="flags-used">0</span>/<span id="flags-total">10</span></b></p>
+                <p><b>Time: <span id="time-elapsed">00:00:00</span></b></p>
             </div>
         
     </div>
 
+<script>
+  const TIME_DISPLAY_ELEMENT_ID = 'time-elapsed';
+  const FLAG_USED_ELEMENT_ID = 'flags-used';
+  const FLAG_TOTAL_ELEMENT_ID = 'flags-total';
+
+  let elapsedSeconds = 0;
+  let timerIntervalId = null;
+
+  function formatElapsedTime(totalSeconds) {
+    const secondsInHour = 3600;
+    const secondsInMinute = 60;
+
+    const hours = Math.floor(totalSeconds / secondsInHour);
+    const remainingSecondsAfterHours = totalSeconds % secondsInHour;
+    const minutes = Math.floor(remainingSecondsAfterHours / secondsInMinute);
+    const seconds = remainingSecondsAfterHours % secondsInMinute;
+
+    const paddedHours = String(hours).padStart(2, '0');
+    const paddedMinutes = String(minutes).padStart(2, '0');
+    const paddedSeconds = String(seconds).padStart(2, '0');
+
+    return paddedHours + ':' + paddedMinutes + ':' + paddedSeconds;
+  }
+
+  function updateTimerDisplay() {
+    const timeDisplayElement = document.getElementById(TIME_DISPLAY_ELEMENT_ID);
+
+    if (!timeDisplayElement) {
+      return;
+    }
+
+    timeDisplayElement.textContent = formatElapsedTime(elapsedSeconds);
+  }
+
+  function startGameTimer() {
+    if (timerIntervalId !== null) {
+      return;
+    }
+
+    timerIntervalId = window.setInterval(function handleTimerTick() {
+      elapsedSeconds += 1;
+
+      updateTimerDisplay();
+    }, 1000);
+  }
+
+  function updateFlagInformation(usedFlagsCount, totalFlagsCount) {
+    const usedFlagsElement = document.getElementById(FLAG_USED_ELEMENT_ID);
+    const totalFlagsElement = document.getElementById(FLAG_TOTAL_ELEMENT_ID);
+
+    if (usedFlagsElement) {
+      usedFlagsElement.textContent = String(usedFlagsCount);
+    }
+
+    if (totalFlagsElement) {
+      totalFlagsElement.textContent = String(totalFlagsCount);
+    }
+  }
+
+  window.addEventListener('DOMContentLoaded', function handleContentLoaded() {
+    updateTimerDisplay();
+
+    const totalFlagsElement = document.getElementById(FLAG_TOTAL_ELEMENT_ID);
+
+    if (totalFlagsElement && !totalFlagsElement.textContent) {
+      totalFlagsElement.textContent = '10';
+    }
+
+    startGameTimer();
+
+    window.updateFlagInformation = updateFlagInformation;
+  });
+</script>
 </body>
 </html>
