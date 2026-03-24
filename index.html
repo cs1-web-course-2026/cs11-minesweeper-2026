@@ -102,43 +102,449 @@
                     <div class="BoxNumber1"><b>1</b></div>
                 </div>
 
-                <div class="BlocksInRow">
-                    <div class="BlueBox"></div>
-                    <div class="BoxNumber1"><b>1</b></div>
-                    <div class="WhiteBox"></div>
-                    <div class="WhiteBox"></div>
-                    <div class="WhiteBox"></div>
-                    <div class="WhiteBox"></div>
-                    <div class="WhiteBox"></div>
-                    <div class="WhiteBox"></div>
-                </div>
-
-                <div class="BlocksInRow">
-                    <div class="BlueBox"></div>
-                    <div class="BoxNumber3"><b>3</b></div>
-                    <div class="BoxNumber3"><b>3</b></div>
-                    <div class="BoxNumber2"><b>2</b></div>
-                    <div class="BoxNumber1"><b>1</b></div>
-                    <div class="WhiteBox"></div>
-                    <div class="WhiteBox"></div>
-                    <div class="WhiteBox"></div>
-                </div>
-
-                <div class="BlocksInRow">
-                    <div class="BlueBox"></div>
-                    <div class="BlueBox"></div>
-                    <div class="BlueBox"></div>
-                    <div class="BlueBox"></div>
-                    <div class="BoxNumber1"><b>1</b></div>
-                    <div class="WhiteBox"></div>
-                    <div class="WhiteBox"></div>
-                    <div class="WhiteBox"></div>
-                </div>
+                <div id="gameBoard" class="BlocksInColumn"></div>
 
             </div>
 
 
 
+            <div class="SumInformation">
+                <p><b>Flags: <span id="flagsUsed">0</span>/<span id="totalMines">10</span></b></p>
+                <p><b>Time: <span id="elapsedTime">00:00:00</span></b></p>
+            </div>
+        
+    </div>
+
+<script>
+  const CELL_STATE = {
+    OPEN: 'open',
+    CLOSED: 'closed',
+    FLAGGED: 'flagged',
+  };
+
+  const GAME_STATUS = {
+    IDLE: 'idle',
+    PLAYING: 'playing',
+    WON: 'won',
+    LOST: 'lost',
+  };
+
+  const CELL_CONTENT = {
+    MINE: 'mine',
+    EMPTY: 'empty',
+  };
+
+  const BOARD_CONFIG = {
+    ROW_COUNT: 8,
+    COLUMN_COUNT: 8,
+    MINE_COUNT: 10,
+  };
+
+  const DIRECTIONS = [
+    [-1, -1], [-1, 0], [-1, 1],
+    [0, -1],           [0, 1],
+    [1, -1],  [1, 0],  [1, 1],
+  ];
+
+  let board = [];
+  let gameStatus = GAME_STATUS.IDLE;
+  let flagsPlacedCount = 0;
+  let revealedSafeCellsCount = 0;
+  let timerIntervalId = null;
+  let elapsedSeconds = 0;
+
+  function initializeGame() {
+    const gameBoardElement = document.getElementById('gameBoard');
+
+    if (!gameBoardElement) {
+      return;
+    }
+
+    gameBoardElement.innerHTML = '';
+
+    board = createEmptyBoard(
+      BOARD_CONFIG.ROW_COUNT,
+      BOARD_CONFIG.COLUMN_COUNT
+    );
+
+    placeMinesRandomly(board, BOARD_CONFIG.MINE_COUNT);
+    calculateAllAdjacentMineCounts(board);
+
+    gameStatus = GAME_STATUS.PLAYING;
+    flagsPlacedCount = 0;
+    revealedSafeCellsCount = 0;
+    elapsedSeconds = 0;
+    resetTimer();
+    startTimer();
+
+    updateFlagsDisplay();
+    updateTimeDisplay();
+    renderBoard(board, gameBoardElement);
+  }
+
+  function createEmptyBoard(rowCount, columnCount) {
+    const newBoard = [];
+
+    for (let row = 0; row < rowCount; row++) {
+      const boardRow = [];
+
+      for (let col = 0; col < columnCount; col++) {
+        boardRow.push({
+          hasMine: false,
+          adjacentMineCount: 0,
+          state: CELL_STATE.CLOSED,
+          content: CELL_CONTENT.EMPTY,
+          element: null,
+        });
+      }
+
+      newBoard.push(boardRow);
+    }
+
+    return newBoard;
+  }
+
+  function placeMinesRandomly(currentBoard, mineCount) {
+    const totalCells = BOARD_CONFIG.ROW_COUNT * BOARD_CONFIG.COLUMN_COUNT;
+
+    if (mineCount >= totalCells) {
+      return;
+    }
+
+    let placedMinesCount = 0;
+
+    while (placedMinesCount < mineCount) {
+      const randomIndex = Math.floor(Math.random() * totalCells);
+      const row = Math.floor(randomIndex / BOARD_CONFIG.COLUMN_COUNT);
+      const col = randomIndex % BOARD_CONFIG.COLUMN_COUNT;
+      const cell = currentBoard[row][col];
+
+      if (!cell.hasMine) {
+        cell.hasMine = true;
+        cell.content = CELL_CONTENT.MINE;
+        placedMinesCount++;
+      }
+    }
+  }
+
+  function calculateAllAdjacentMineCounts(currentBoard) {
+    for (let row = 0; row < BOARD_CONFIG.ROW_COUNT; row++) {
+      for (let col = 0; col < BOARD_CONFIG.COLUMN_COUNT; col++) {
+        const cell = currentBoard[row][col];
+
+        if (cell.hasMine) {
+          continue;
+        }
+
+        const mineCount = countAdjacentMines(currentBoard, row, col);
+        cell.adjacentMineCount = mineCount;
+      }
+    }
+  }
+
+  function countAdjacentMines(currentBoard, row, col) {
+    let mineCount = 0;
+
+    for (const direction of DIRECTIONS) {
+      const directionalRow = direction[0];
+      const directionalCol = direction[1];
+      const neighbourRow = row + directionalRow;
+      const neighbourCol = col + directionalCol;
+
+      if (!isInBounds(currentBoard, neighbourRow, neighbourCol)) {
+        continue;
+      }
+
+      if (currentBoard[neighbourRow][neighbourCol].hasMine) {
+        mineCount++;
+      }
+    }
+
+    return mineCount;
+  }
+
+  function isInBounds(currentBoard, row, col) {
+    return (
+      row >= 0 &&
+      row < currentBoard.length &&
+      col >= 0 &&
+      col < currentBoard[0].length
+    );
+  }
+
+  function renderBoard(currentBoard, gameBoardElement) {
+    for (let row = 0; row < BOARD_CONFIG.ROW_COUNT; row++) {
+      const rowElement = document.createElement('div');
+      rowElement.className = 'BlocksInRow';
+
+      for (let col = 0; col < BOARD_CONFIG.COLUMN_COUNT; col++) {
+        const cellElement = document.createElement('div');
+        cellElement.className = 'BlueBox';
+
+        cellElement.dataset.row = String(row);
+        cellElement.dataset.col = String(col);
+
+        cellElement.addEventListener('click', function handleLeftClick(event) {
+          event.preventDefault();
+          handleCellLeftClick(row, col);
+        });
+
+        cellElement.addEventListener('contextmenu', function handleRightClick(event) {
+          event.preventDefault();
+          handleCellRightClick(row, col);
+        });
+
+        rowElement.appendChild(cellElement);
+        currentBoard[row][col].element = cellElement;
+      }
+
+      gameBoardElement.appendChild(rowElement);
+    }
+  }
+
+  function handleCellLeftClick(row, col) {
+    if (gameStatus !== GAME_STATUS.PLAYING) {
+      return;
+    }
+
+    const cell = board[row][col];
+
+    if (cell.state === CELL_STATE.OPEN || cell.state === CELL_STATE.FLAGGED) {
+      return;
+    }
+
+    if (cell.hasMine) {
+      revealMine(cell);
+      endGame(false);
+
+      return;
+    }
+
+    revealSafeCell(row, col);
+    checkWinCondition();
+  }
+
+  function handleCellRightClick(row, col) {
+    if (gameStatus !== GAME_STATUS.PLAYING) {
+      return;
+    }
+
+    const cell = board[row][col];
+
+    if (cell.state === CELL_STATE.OPEN) {
+      return;
+    }
+
+    if (cell.state === CELL_STATE.FLAGGED) {
+      cell.state = CELL_STATE.CLOSED;
+      flagsPlacedCount--;
+      updateCellAppearance(cell, row, col);
+    } else {
+      if (flagsPlacedCount >= BOARD_CONFIG.MINE_COUNT) {
+        return;
+      }
+
+      cell.state = CELL_STATE.FLAGGED;
+      flagsPlacedCount++;
+      updateCellAppearance(cell, row, col);
+    }
+
+    updateFlagsDisplay();
+  }
+
+  function revealMine(cell) {
+    cell.state = CELL_STATE.OPEN;
+
+    if (cell.element) {
+      cell.element.className = 'BlueBox';
+      cell.element.textContent = '💣';
+    }
+  }
+
+  function revealSafeCell(row, col) {
+    const cell = board[row][col];
+
+    if (cell.state !== CELL_STATE.CLOSED) {
+      return;
+    }
+
+    cell.state = CELL_STATE.OPEN;
+    revealedSafeCellsCount++;
+    updateCellAppearance(cell, row, col);
+
+    if (cell.adjacentMineCount === 0) {
+      for (const direction of DIRECTIONS) {
+        const directionalRow = direction[0];
+        const directionalCol = direction[1];
+        const neighbourRow = row + directionalRow;
+        const neighbourCol = col + directionalCol;
+
+        if (!isInBounds(board, neighbourRow, neighbourCol)) {
+          continue;
+        }
+
+        const neighbourCell = board[neighbourRow][neighbourCol];
+
+        if (!neighbourCell.hasMine && neighbourCell.state === CELL_STATE.CLOSED) {
+          revealSafeCell(neighbourRow, neighbourCol);
+        }
+      }
+    }
+  }
+
+  function updateCellAppearance(cell, row, col) {
+    if (!cell.element) {
+      return;
+    }
+
+    if (cell.state === CELL_STATE.CLOSED) {
+      cell.element.className = 'BlueBox';
+      cell.element.textContent = '';
+
+      return;
+    }
+
+    if (cell.state === CELL_STATE.FLAGGED) {
+      cell.element.className = 'BlueBox';
+      cell.element.textContent = '🚩';
+
+      return;
+    }
+
+    if (cell.hasMine) {
+      cell.element.className = 'BlueBox';
+      cell.element.textContent = '💣';
+
+      return;
+    }
+
+    if (cell.adjacentMineCount === 0) {
+      cell.element.className = 'WhiteBox';
+      cell.element.textContent = '';
+
+      return;
+    }
+
+    const mineCount = cell.adjacentMineCount;
+    const numberClassName = getNumberClassName(mineCount);
+
+    cell.element.className = numberClassName;
+    cell.element.textContent = String(mineCount);
+  }
+
+  function getNumberClassName(mineCount) {
+    if (mineCount === 1) {
+      return 'BoxNumber1';
+    }
+
+    if (mineCount === 2) {
+      return 'BoxNumber2';
+    }
+
+    if (mineCount === 3) {
+      return 'BoxNumber3';
+    }
+
+    return 'BoxNumber1';
+  }
+
+  function checkWinCondition() {
+    const totalSafeCells =
+      BOARD_CONFIG.ROW_COUNT * BOARD_CONFIG.COLUMN_COUNT -
+      BOARD_CONFIG.MINE_COUNT;
+
+    if (revealedSafeCellsCount >= totalSafeCells && gameStatus === GAME_STATUS.PLAYING) {
+      endGame(true);
+    }
+  }
+
+  function endGame(isWin) {
+    if (gameStatus !== GAME_STATUS.PLAYING) {
+      return;
+    }
+
+    gameStatus = isWin ? GAME_STATUS.WON : GAME_STATUS.LOST;
+    stopTimer();
+
+    if (!isWin) {
+      revealAllMines();
+    }
+  }
+
+  function revealAllMines() {
+    for (let row = 0; row < BOARD_CONFIG.ROW_COUNT; row++) {
+      for (let col = 0; col < BOARD_CONFIG.COLUMN_COUNT; col++) {
+        const cell = board[row][col];
+
+        if (cell.hasMine) {
+          cell.state = CELL_STATE.OPEN;
+          updateCellAppearance(cell, row, col);
+        }
+      }
+    }
+  }
+
+  function startTimer() {
+    stopTimer();
+
+    timerIntervalId = window.setInterval(function handleTimerTick() {
+      elapsedSeconds++;
+      updateTimeDisplay();
+    }, 1000);
+  }
+
+  function stopTimer() {
+    if (timerIntervalId !== null) {
+      window.clearInterval(timerIntervalId);
+      timerIntervalId = null;
+    }
+  }
+
+  function resetTimer() {
+    stopTimer();
+    elapsedSeconds = 0;
+    updateTimeDisplay();
+  }
+
+  function updateFlagsDisplay() {
+    const flagsUsedElement = document.getElementById('flagsUsed');
+    const totalMinesElement = document.getElementById('totalMines');
+
+    if (flagsUsedElement) {
+      flagsUsedElement.textContent = String(flagsPlacedCount);
+    }
+
+    if (totalMinesElement) {
+      totalMinesElement.textContent = String(BOARD_CONFIG.MINE_COUNT);
+    }
+  }
+
+  function updateTimeDisplay() {
+    const elapsedTimeElement = document.getElementById('elapsedTime');
+
+    if (!elapsedTimeElement) {
+      return;
+    }
+
+    const hours = Math.floor(elapsedSeconds / 3600);
+    const minutes = Math.floor((elapsedSeconds % 3600) / 60);
+    const seconds = elapsedSeconds % 60;
+
+    const hoursString = String(hours).padStart(2, '0');
+    const minutesString = String(minutes).padStart(2, '0');
+    const secondsString = String(seconds).padStart(2, '0');
+
+    elapsedTimeElement.textContent =
+      hoursString + ':' + minutesString + ':' + secondsString;
+  }
+
+  window.addEventListener('load', function handleWindowLoad() {
+    initializeGame();
+  });
+</script>
+
+</body>
+</html>
             <div class="SumInformation">
                 <p><b>Flags: 1/10</b></p>
                 <p><b>Time: 00:01:44</b></p>
