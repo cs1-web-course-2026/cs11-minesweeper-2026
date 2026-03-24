@@ -1,0 +1,208 @@
+body {
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    background-color: #f0f4f8;
+}
+
+.Minesweeper {
+    width: 550px;
+    height: 760px;
+    background-color: rgba(238, 237, 236);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    border: 3px solid rgba(136, 169, 207);
+}
+
+.Navbar {
+    width: 100%;
+    height: 40px;
+    background: linear-gradient(rgba(184, 205, 232), rgba(127, 163, 206), rgba(145, 177, 215));
+    border-radius: 8px 8px 0px 0px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.WhiteText {
+    color: white;
+}
+
+.AllSvg {
+    width: 20%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.Svg {
+    margin-left: 10px;
+    margin-right: 10px;
+    color: white;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+.Secondbar {
+    width: 100%;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: left;
+}
+
+.UnderText {
+    color: black;
+    text-decoration: underline;
+    margin-left: 20px;
+    margin-top: 25px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.Hr {
+    color: rgba(190, 194, 198);
+    width: 95%;
+}
+
+.CoolEmoji {
+    width: 100%;
+    height: 90px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.CoolEmojiBackground {
+    background-color: rgba(237, 236, 235);
+    width: 55px;
+    height: 55px;
+    border-radius: 12px;
+    border: 2px solid rgba(190, 194, 198);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.CoolEmojiBackground:hover {
+    background-color: rgba(220, 220, 220);
+}
+
+.CoolEmojiSvg {
+    width: 45px;
+    height: 45px;
+}
+
+.BlocksInColumn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.BlocksInRow {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+}
+
+.BlueBox {
+    margin: 1px;
+    width: 62px;
+    height: 62px;
+    border-radius: 8px;
+    border: 2px solid rgb(148, 148, 148);
+    background: linear-gradient(rgba(154, 187, 229), rgba(132, 170, 216), rgba(124, 163, 210));
+    transition-duration: 0.3s;
+    cursor: pointer;
+}
+
+.BlueBox:hover {
+    background: linear-gradient(rgb(234, 243, 255), rgb(214, 232, 255), rgb(177, 212, 255));
+}
+
+.WhiteBox {
+    margin: 1px;
+    width: 62px;
+    height: 62px;
+    border-radius: 8px;
+    border: 2px solid rgb(148, 148, 148);
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.BoxNumber1, .BoxNumber2, .BoxNumber3,
+.BoxNumber4, .BoxNumber5, .BoxNumber6,
+.BoxNumber7, .BoxNumber8 {
+    margin: 1px;
+    width: 62px;
+    height: 62px;
+    border-radius: 8px;
+    border: 2px solid rgb(148, 148, 148);
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-family: "Boldonse", system-ui;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 30px;
+}
+
+.BoxNumber1 { color: rgba(0, 0, 255); }
+.BoxNumber2 { color: rgba(0, 160, 0); }
+.BoxNumber3 { color: rgba(255, 0, 0); }
+.BoxNumber4 { color: rgba(0, 0, 128); }
+.BoxNumber5 { color: rgba(128, 0, 0); }
+.BoxNumber6 { color: rgba(0, 128, 128); }
+.BoxNumber7 { color: rgba(0, 0, 0); }
+.BoxNumber8 { color: rgba(128, 128, 128); }
+
+.BoxFlag {
+    margin: 1px;
+    width: 62px;
+    height: 62px;
+    border-radius: 8px;
+    border: 2px solid rgb(148, 148, 148);
+    background: linear-gradient(rgba(154, 187, 229), rgba(132, 170, 216), rgba(124, 163, 210));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 28px;
+}
+
+.BoxFlag:hover {
+    background: linear-gradient(rgb(234, 243, 255), rgb(214, 232, 255), rgb(177, 212, 255));
+}
+
+.SumInformation {
+    width: 100%;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    font-family: sans-serif;
+}
+
+.mine-cell {
+    background-color: #ff4d4d !important;
+    font-size: 28px;
+}
+
+.win-cell {
+    background-color: #90ee90 !important;
+}
