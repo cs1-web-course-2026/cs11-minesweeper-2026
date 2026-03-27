@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minesweeper</title>
+    <link rel="stylesheet" href="styles.css">
+    <link class="Icon" rel="icon" href="https://www.rw-designer.com/icon-image/3078-256x256x32.png">
+</head>
+<body class="Body">
+    <div class="Maindiv">
+        <!-- фон -->
+        <div class="Head">
+            <!-- верх -->
+             <p class="HeadText">Minesweeper</p>
+        </div>
+             <div class="Info">
+                <div class="TimeCount">
+                    <div class="TimeNumLeft">
+                        <!-- цифри зліва -->
+                    </div>
+                    <div class="Emoji">
+                        <img src="https://media.tenor.com/JC_6pC5dhw8AAAAe/minesweeperplus-minesweeper.png" alt="Minesweeper Emoji">
+                        <!-- смайлик -->
+                    </div>
+                    <div class="TimeNumRight">
+                        <!-- цифри справа -->
+                    </div>
+                </div>
+                <div class="TimeCount">
+                    <span class="FlagCount">Кількість прапорців: 16</span>
+                    <button class="Button">Start</button>
+                </div>
+             </div>
+        
+        <div class="Game">
+            <!-- тіло гри -->
+             <div class="CellRow">
+                <div class="EmptyCell"><p class="NumCell">1</p></div>
+                <div class="EmptyCell"><p class="NumCell">3</p></div>
+                <div class="EmptyCell"></div>
+                <div class="BombCell"></div>
+                <div class="FlagCell"></div>
+                <div class="EmptyCell"><p class="NumCell">1</p></div>
+                <div class="EmptyCell"><p class="NumCell">2</p></div>
+                <div class="EmptyCell"></div>
+                <div class="BombCell"></div>
+                <div class="FlagCell"></div>
+             </div>
+
+             <div class="CellRow">
+                <div class="EmptyCell"></div>
+                <div class="EmptyCell"><p class="NumCell">2</p></div>
+                <div class="EmptyCell"></div>
+                <div class="FlagCell"></div>
+                <div class="BombCell"></div>
+                <div class="BombCell"></div>
+                <div class="EmptyCell"><p class="NumCell">3</p></div>
+                <div class="EmptyCell"><p class="NumCell">2</p></div>
+                <div class="EmptyCell"></div>
+                <div class="FlagCell"></div>
+             </div>
+
+             <div class="CellRow">
+                <div class="FlagCell"></div>
+                <div class="BombCell"></div>
+                <div class="EmptyCell"><p class="NumCell">3</p></div>
+                <div class="EmptyCell"></div>
+                <div class="EmptyCell"></div>
+                <div class="FlagCell"></div>
+                <div class="EmptyCell"><p class="NumCell">2</p></div>
+                <div class="EmptyCell"></div>
+                <div class="BombCell"></div>
+                <div class="EmptyCell"></div>
+             </div>
+
+            <div class="CellRow">
+                <div class="EmptyCell"><p class="NumCell">2</p></div>
+                <div class="EmptyCell"><p class="NumCell">2</p></div>
+                <div class="EmptyCell"></div>
+                <div class="BombCell"></div>
+                <div class="EmptyCell"></div>
+                <div class="BombCell"></div>
+                <div class="FlagCell"></div>
+                <div class="EmptyCell"><p class="NumCell">1</p></div>
+                <div class="EmptyCell"><p class="NumCell">2</p></div>
+                <div class="FlagCell"></div>
+             </div>
+
+             <div class="CellRow">
+                <div class="EmptyCell"></div>
+                <div class="BombCell"></div>
+                <div class="EmptyCell"></div>
+                <div class="FlagCell"></div>
+                <div class="BombCell"></div>
+                <div class="EmptyCell"><p class="NumCell">3</p></div>
+                <div class="EmptyCell"></div>
+                <div class="EmptyCell"></div>
+                <div class="FlagCell"></div>
+                <div class="EmptyCell"><p class="NumCell">2</p></div>
+             </div>
+
+             <div class="CellRow">
+                <div class="EmptyCell"><p class="NumCell">3</p></div>
+                <div class="EmptyCell"><p class="NumCell">3</p></div>
+                <div class="EmptyCell"><p class="NumCell">1</p></div>
+                <div class="EmptyCell"><p class="NumCell">2</p></div>
+                <div class="EmptyCell"></div>
+                <div class="BombCell"></div>
+                <div class="FlagCell"></div>
+                <div class="EmptyCell"><p class="NumCell">1</p></div>
+                <div class="EmptyCell"><p class="NumCell">2</p></div>
+                <div class="EmptyCell"></div>
+             </div>
+
+             <div class="CellRow">
+                <div class="EmptyCell"></div>
+                <div class="EmptyCell"><p class="NumCell">2</p></div>
+                <div class="EmptyCell"></div>
+                <div class="EmptyCell"><p class="NumCell">2</p></div>
+                <div class="EmptyCell"></div>
+                <div class="BombCell"></div>
+                <div class="FlagCell"></div>
+                <div class="EmptyCell"><p class="NumCell">1</p></div>
+                <div class="FlagCell"></div>
+                <div class="EmptyCell"><p class="NumCell">2</p></div>
+             </div>
+
+             <div class="CellRow">
+                <div class="BombCell"></div>
+                <div class="EmptyCell"></div>
+                <div class="EmptyCell"><p class="NumCell">1</p></div>
+                <div class="EmptyCell"><p class="NumCell">2</p></div>
+                <div class="EmptyCell"></div>
+                <div class="EmptyCell"><p class="NumCell">1</p></div>
+                <div class="EmptyCell"><p class="NumCell">2</p></div>
+                <div class="EmptyCell"></div>
+                <div class="EmptyCell"><p class="NumCell">2</p></div>
+                <div class="EmptyCell"></div>
+             </div>
+
+            <div class="CellRow">
+                <div class="EmptyCell"></div>
+                <div class="BombCell"></div>
+                <div class="EmptyCell"><p class="NumCell">3</p></div>
+                <div class="EmptyCell"></div>
+                <div class="EmptyCell"><p class="NumCell">1</p></div>
+                <div class="FlagCell"></div>
+                <div class="EmptyCell"><p class="NumCell">1</p></div>
+                <div class="EmptyCell"><p class="NumCell">3</p></div>
+                <div class="EmptyCell"></div>
+                <div class="EmptyCell"></div>
+             </div>
+
+             <div class="CellRow">
+                <div class="EmptyCell"></div>
+                <div class="EmptyCell"><p class="NumCell">2</p></div>
+                <div class="EmptyCell"><p class="NumCell">2</p></div>
+                <div class="EmptyCell"></div>
+                <div class="EmptyCell"></div>
+                <div class="BombCell"></div>
+                <div class="FlagCell"></div>
+                <div class="EmptyCell"><p class="NumCell">1</p></div>
+                <div class="FlagCell"></div>
+                <div class="EmptyCell"><p class="NumCell">2</p></div>
+             </div>
+
+        </div>
+    </div>
+</body>
+</html>
