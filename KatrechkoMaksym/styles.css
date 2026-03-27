@@ -1,0 +1,50 @@
+:root {
+    --btn-green: #4ade80;
+    --neon-orange: #ff4d00;
+}
+
+.game-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    font-family: sans-serif;
+    color: white;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(var(--cols, 8), 50px); 
+    gap: 8px;
+    background-color: #222;
+    padding: 10px;
+    border-radius: 12px;
+}
+
+.cell {
+    width: 50px;
+    height: 50px;
+    background-color: #444466;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    font-weight: bold;
+    box-shadow: 0 4px 0 #c71288;
+    user-select: none;
+}
+
+.cell.open {
+    background-color: #c71288;
+    box-shadow: inset 2px 2px 5px rgba(0,0,0,0.5);
+}
+
+.cell.exploded {
+    background-color: var(--neon-orange);
+    box-shadow: 0 0 20px rgba(255, 77, 0, 0.6);
+}
+
+.n1 { color: #4ade80; }
+.n2 { color: #facc15; }
+.n3 { color: #f87171; }
