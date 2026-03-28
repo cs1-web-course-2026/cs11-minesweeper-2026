@@ -1,0 +1,317 @@
+<!doctype html>
+<html lang="uk">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Сапер · Minesweeper</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="game-container">
+      <!-- Хедер гри -->
+      <div class="header">
+        <div class="counter">
+          <span>💣</span>
+          <span id="minesCount">010</span>
+        </div>
+
+        <button class="new-game" id="newGameBtn">😊</button>
+
+        <div class="counter">
+          <span>⏱️</span>
+          <span id="timer">000</span>
+        </div>
+      </div>
+
+      <!-- Ігрове поле -->
+      <div class="board" id="board"></div>
+
+      <!-- Вибір складності -->
+      <div class="difficulty">
+        <button class="active" data-diff="easy">Легкий</button>
+        <button data-diff="hard">Складний</button>
+      </div>
+    </div>
+
+    <script>
+      // ========== ЗМІННІ ГРИ ==========
+      let rows = 11;
+      let cols = 11;
+      let totalMines = 13;
+      let board = [];
+      let gameOver = false;
+      let gameWon = false;
+      let firstClick = true;
+      let flagsPlaced = 0;
+      let cellsRevealed = 0;
+      let timerInterval = null;
+      let seconds = 0;
+
+      // Отримуємо елементи
+      const boardElement = document.getElementById('board');
+      const minesCountElement = document.getElementById('minesCount');
+      const timerElement = document.getElementById('timer');
+      const newGameBtn = document.getElementById('newGameBtn');
+
+      // ========== ФУНКЦІЇ ГРИ ==========
+
+      function initGame() {
+        gameOver = false;
+        gameWon = false;
+        firstClick = true;
+        flagsPlaced = 0;
+        cellsRevealed = 0;
+        seconds = 0;
+
+        if (timerInterval) {
+          clearInterval(timerInterval);
+          timerInterval = null;
+        }
+
+        updateMinesCount();
+        timerElement.textContent = '000';
+
+        createEmptyBoard();
+        renderBoard();
+      }
+
+      function createEmptyBoard() {
+        board = [];
+        for (let i = 0; i < rows; i++) {
+          board[i] = [];
+          for (let j = 0; j < cols; j++) {
+            board[i][j] = {
+              mine: false,
+              revealed: false,
+              flagged: false,
+              neighborMines: 0,
+            };
+          }
+        }
+      }
+
+      function placeMines(firstRow, firstCol) {
+        let minesPlaced = 0;
+        while (minesPlaced < totalMines) {
+          let row = Math.floor(Math.random() * rows);
+          let col = Math.floor(Math.random() * cols);
+
+          if (
+            !board[row][col].mine &&
+            (Math.abs(row - firstRow) > 1 || Math.abs(col - firstCol) > 1)
+          ) {
+            board[row][col].mine = true;
+            minesPlaced++;
+          }
+        }
+        calculateNeighbors();
+      }
+
+      function calculateNeighbors() {
+        for (let i = 0; i < rows; i++) {
+          for (let j = 0; j < cols; j++) {
+            if (board[i][j].mine) continue;
+
+            let count = 0;
+            for (let di = -1; di <= 1; di++) {
+              for (let dj = -1; dj <= 1; dj++) {
+                let ni = i + di;
+                let nj = j + dj;
+                if (
+                  ni >= 0 &&
+                  ni < rows &&
+                  nj >= 0 &&
+                  nj < cols &&
+                  board[ni][nj].mine
+                ) {
+                  count++;
+                }
+              }
+            }
+            board[i][j].neighborMines = count;
+          }
+        }
+      }
+
+      function handleCellClick(row, col) {
+        if (gameOver || gameWon) return;
+        if (board[row][col].revealed) return;
+        if (board[row][col].flagged) return;
+
+        if (firstClick) {
+          firstClick = false;
+          placeMines(row, col);
+          startTimer();
+        }
+
+        if (board[row][col].mine) {
+          gameOver = true;
+          board[row][col].revealed = true;
+          revealAllMines();
+          stopTimer();
+          renderBoard();
+          setTimeout(() => alert('💥 Ви програли!'), 50);
+          return;
+        }
+
+        revealCell(row, col);
+        checkWin();
+        renderBoard();
+      }
+
+      function handleRightClick(event, row, col) {
+        event.preventDefault();
+
+        if (gameOver || gameWon) return;
+        if (board[row][col].revealed) return;
+
+        if (!board[row][col].flagged) {
+          if (flagsPlaced < totalMines) {
+            board[row][col].flagged = true;
+            flagsPlaced++;
+          }
+        } else {
+          board[row][col].flagged = false;
+          flagsPlaced--;
+        }
+
+        updateMinesCount();
+        renderBoard();
+        checkWin();
+      }
+
+      function revealCell(row, col) {
+        if (row < 0 || row >= rows || col < 0 || col >= cols) return;
+        if (board[row][col].revealed) return;
+        if (board[row][col].flagged) return;
+
+        board[row][col].revealed = true;
+        cellsRevealed++;
+
+        if (board[row][col].neighborMines === 0 && !board[row][col].mine) {
+          for (let di = -1; di <= 1; di++) {
+            for (let dj = -1; dj <= 1; dj++) {
+              if (di === 0 && dj === 0) continue;
+              revealCell(row + di, col + dj);
+            }
+          }
+        }
+      }
+
+      function revealAllMines() {
+        for (let i = 0; i < rows; i++) {
+          for (let j = 0; j < cols; j++) {
+            if (board[i][j].mine) {
+              board[i][j].revealed = true;
+            }
+          }
+        }
+      }
+
+      function checkWin() {
+        let correctFlags = 0;
+        let revealedSafe = 0;
+
+        for (let i = 0; i < rows; i++) {
+          for (let j = 0; j < cols; j++) {
+            if (board[i][j].mine && board[i][j].flagged) {
+              correctFlags++;
+            }
+            if (!board[i][j].mine && board[i][j].revealed) {
+              revealedSafe++;
+            }
+          }
+        }
+
+        if (
+          correctFlags === totalMines ||
+          revealedSafe === rows * cols - totalMines
+        ) {
+          gameWon = true;
+          stopTimer();
+          setTimeout(() => alert('🎉 Перемога!'), 50);
+          renderBoard();
+        }
+      }
+
+      function updateMinesCount() {
+        let remaining = totalMines - flagsPlaced;
+        minesCountElement.textContent = String(remaining).padStart(3, '0');
+      }
+
+      function startTimer() {
+        if (timerInterval) clearInterval(timerInterval);
+        timerInterval = setInterval(() => {
+          seconds++;
+          timerElement.textContent = String(seconds).padStart(3, '0');
+        }, 1000);
+      }
+
+      function stopTimer() {
+        if (timerInterval) {
+          clearInterval(timerInterval);
+          timerInterval = null;
+        }
+      }
+
+      function renderBoard() {
+        boardElement.innerHTML = '';
+        boardElement.style.gridTemplateColumns = `repeat(${cols}, 45px)`;
+
+        for (let i = 0; i < rows; i++) {
+          for (let j = 0; j < cols; j++) {
+            const cell = document.createElement('div');
+            cell.className = 'cell';
+
+            if (board[i][j].revealed) {
+              cell.classList.add('open');
+              if (board[i][j].mine) {
+                cell.classList.add('mine');
+                cell.textContent = '💣';
+              } else if (board[i][j].neighborMines > 0) {
+                cell.textContent = board[i][j].neighborMines;
+                cell.setAttribute('data-number', board[i][j].neighborMines);
+              }
+            } else {
+              cell.classList.add('closed');
+              if (board[i][j].flagged) {
+                cell.classList.add('flag');
+                cell.textContent = '🚩';
+              }
+            }
+
+            cell.addEventListener('click', () => handleCellClick(i, j));
+            cell.addEventListener('contextmenu', (e) =>
+              handleRightClick(e, i, j),
+            );
+
+            boardElement.appendChild(cell);
+          }
+        }
+      }
+
+      function setDifficulty(newRows, newCols, newMines) {
+        rows = newRows;
+        cols = newCols;
+        totalMines = newMines;
+        initGame();
+      }
+
+      // Обробка кнопок складності
+      document.querySelectorAll('.difficulty button').forEach((btn, index) => {
+        btn.addEventListener('click', () => {
+          document
+            .querySelectorAll('.difficulty button')
+            .forEach((b) => b.classList.remove('active'));
+          btn.classList.add('active');
+
+          if (index === 0) setDifficulty(11, 11, 13);
+          else setDifficulty(16, 16, 40);
+        });
+      });
+
+      newGameBtn.addEventListener('click', initGame);
+      window.onload = initGame;
+    </script>
+  </body>
+</html>
