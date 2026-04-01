@@ -106,7 +106,7 @@ body{
     flex-direction: row;
 }
 
-.BlueBox{
+.blue-box{
     margin: 1px 1px 1px 1px;
     width: 62px;
     height: 62px;
@@ -116,7 +116,7 @@ body{
     transition-duration: s;
 }
 
-.BlueBox:hover{
+.blue-box:hover{
     margin: 1px 1px 1px 1px;
     width: 62px;
     height: 62px;
@@ -125,7 +125,7 @@ body{
     background: linear-gradient(rgb(234, 243, 255), rgb(214, 232, 255), rgb(177, 212, 255));
 }
 
-.WhiteBox{
+.white-box{
     margin: 1px 1px 1px 1px;
     width: 62px;
     height: 62px;
@@ -134,7 +134,7 @@ body{
     background-color: white;
 }
 
-.WhiteBox:hover{
+.white-box:hover{
     margin: 1px 1px 1px 1px;
     width: 62px;
     height: 62px;
@@ -144,7 +144,7 @@ body{
     background: linear-gradient(rgb(234, 243, 255), rgb(214, 232, 255), rgb(177, 212, 255));
 }
 
-.BoxNumber1{
+.box-number-1{
     margin: 1px 1px 1px 1px;
     width: 62px;
     height: 62px;
@@ -162,7 +162,7 @@ body{
     font-size: 35px;
 }
 
-.BoxNumber1:hover{
+.box-number-1:hover{
     margin: 1px 1px 1px 1px;
     width: 62px;
     height: 62px;
@@ -180,7 +180,7 @@ body{
     font-size: 35px;
 }
 
-.BoxNumber2{
+.box-number-2{
     margin: 1px 1px 1px 1px;
     width: 62px;
     height: 62px;
@@ -198,7 +198,7 @@ body{
     font-size: 35px;
 }
 
-.BoxNumber2:hover{
+.box-number-2:hover{
     margin: 1px 1px 1px 1px;
     width: 62px;
     height: 62px;
@@ -217,7 +217,7 @@ body{
     background: linear-gradient(rgb(234, 243, 255), rgb(214, 232, 255), rgb(177, 212, 255));
 }
 
-.BoxNumber3{
+.box-number-3{
     margin: 1px 1px 1px 1px;
     width: 62px;
     height: 62px;
@@ -235,7 +235,7 @@ body{
     font-size: 35px;
 }
 
-.BoxNumber3:hover{
+.box-number-3:hover{
     margin: 1px 1px 1px 1px;
     width: 62px;
     height: 62px;
