@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Minesweeper</title>
+        <link rel="stylesheet" href="minesweeper.css">
+    </head>
+
+    <body>
+        <h1>⏳ Time: <span id="timer-display">0</span></h1>
+        <h1>💣 Mines: <span id="mines-count">0</span></h1>
+    
+    <div id="board">
+    <div></div> <div></div> <div></div> <div></div> <div></div> <div></div> <div></div> <div></div>
+    
+    <div></div> <div class="tile-clicked x1">1</div> <div class="tile-clicked x1">1</div> <div class="tile-clicked x1">1</div> <div></div> <div></div> <div></div> <div></div>
+    
+    <div></div> <div class="tile-clicked x1">1</div> <div class="tile-clicked"></div> <div class="tile-clicked x2">2</div> <div class="tile-clicked x1">1</div> <div class="tile-clicked x1">1</div> <div></div> <div></div>
+    
+    <div></div> <div class="tile-clicked x2">2</div> <div class="tile-clicked x1">1</div> <div class="tile-clicked x3">3</div> <div class="tile-clicked" style="background-color: red;">💣</div> <div class="tile-clicked x2">2</div> <div></div> <div></div>
+    
+    <div></div> <div>🚩</div> <div></div> <div class="tile-clicked x2">2</div> <div class="tile-clicked x3">3</div> <div class="tile-clicked x2">2</div> <div></div> <div></div>
+    
+    <div></div> <div></div> <div></div> <div class="tile-clicked x1">1</div> <div class="tile-clicked x1">1</div> <div class="tile-clicked x1">1</div> <div></div> <div></div>
+    
+    <div></div> <div></div> <div>🚩</div> <div></div> <div></div> <div></div> <div></div> <div></div>
+    
+    <div></div> <div></div> <div></div> <div></div> <div></div> <div></div> <div></div> <div></div>
+</div>
+    
+    <br>
+        <button id="flag-button">🚩</button>
+    </body>
+</html>
