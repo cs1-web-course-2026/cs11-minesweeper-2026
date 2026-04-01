@@ -151,10 +151,6 @@ body{
     font-size: 35px;
 }
 
-.box-number-1:hover{
-    background: linear-gradient(rgb(234, 243, 255), rgb(214, 232, 255), rgb(177, 212, 255));
-}
-
 .box-number-2{
     margin: 1px 1px 1px 1px;
     width: 62px;
@@ -171,10 +167,6 @@ body{
     font-weight: 400;
     font-style: normal;
     font-size: 35px;
-}
-
-.box-number-2:hover{
-    background: linear-gradient(rgb(234, 243, 255), rgb(214, 232, 255), rgb(177, 212, 255));
 }
 
 .box-number-3{
@@ -195,6 +187,8 @@ body{
     font-size: 35px;
 }
 
+.box-number-1:hover,
+.box-number-2:hover,
 .box-number-3:hover{
     background: linear-gradient(rgb(234, 243, 255), rgb(214, 232, 255), rgb(177, 212, 255));
 }
