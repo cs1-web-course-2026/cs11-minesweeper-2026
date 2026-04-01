@@ -8,7 +8,7 @@ body {
     background-color: #f0f4f8;
 }
 
-.Minesweeper {
+.minesweeper {
     width: 550px;
     height: 760px;
     background-color: rgba(238, 237, 236);
@@ -20,7 +20,7 @@ body {
     border: 3px solid rgba(136, 169, 207);
 }
 
-.Navbar {
+.navbar {
     width: 100%;
     height: 40px;
     background: linear-gradient(rgba(184, 205, 232), rgba(127, 163, 206), rgba(145, 177, 215));
@@ -30,18 +30,18 @@ body {
     justify-content: space-between;
 }
 
-.WhiteText {
+.white-text {
     color: white;
 }
 
-.AllSvg {
+.all-svg {
     width: 20%;
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
 
-.Svg {
+.svg {
     margin-left: 10px;
     margin-right: 10px;
     color: white;
@@ -50,7 +50,7 @@ body {
     cursor: pointer;
 }
 
-.Secondbar {
+.secondbar {
     width: 100%;
     height: 20px;
     display: flex;
@@ -58,7 +58,7 @@ body {
     justify-content: left;
 }
 
-.UnderText {
+.under-text {
     color: black;
     text-decoration: underline;
     margin-left: 20px;
@@ -67,12 +67,12 @@ body {
     font-size: 14px;
 }
 
-.Hr {
+.hr {
     color: rgba(190, 194, 198);
     width: 95%;
 }
 
-.CoolEmoji {
+.cool-emoji {
     width: 100%;
     height: 90px;
     display: flex;
@@ -80,7 +80,7 @@ body {
     justify-content: center;
 }
 
-.CoolEmojiBackground {
+.cool-emoji-background {
     background-color: rgba(237, 236, 235);
     width: 55px;
     height: 55px;
@@ -93,30 +93,30 @@ body {
     transition: 0.2s;
 }
 
-.CoolEmojiBackground:hover {
+.cool-emoji-background:hover {
     background-color: rgba(220, 220, 220);
 }
 
-.CoolEmojiSvg {
+.cool-emoji-svg {
     width: 45px;
     height: 45px;
 }
 
-.BlocksInColumn {
+.blocks-in-column {
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
 }
 
-.BlocksInRow {
+.blocks-in-row {
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: row;
 }
 
-.BlueBox {
+.blue-box {
     margin: 1px;
     width: 62px;
     height: 62px;
@@ -127,11 +127,11 @@ body {
     cursor: pointer;
 }
 
-.BlueBox:hover {
+.blue-box:hover {
     background: linear-gradient(rgb(234, 243, 255), rgb(214, 232, 255), rgb(177, 212, 255));
 }
 
-.WhiteBox {
+.white-box {
     margin: 1px;
     width: 62px;
     height: 62px;
@@ -143,9 +143,9 @@ body {
     justify-content: center;
 }
 
-.BoxNumber1, .BoxNumber2, .BoxNumber3,
-.BoxNumber4, .BoxNumber5, .BoxNumber6,
-.BoxNumber7, .BoxNumber8 {
+.box-number-1, .box-number-2, .box-number-3,
+.box-number-4, .box-number-5, .box-number-6,
+.box-number-7, .box-number-8 {
     margin: 1px;
     width: 62px;
     height: 62px;
@@ -162,16 +162,16 @@ body {
     font-size: 30px;
 }
 
-.BoxNumber1 { color: rgba(0, 0, 255); }
-.BoxNumber2 { color: rgba(0, 160, 0); }
-.BoxNumber3 { color: rgba(255, 0, 0); }
-.BoxNumber4 { color: rgba(0, 0, 128); }
-.BoxNumber5 { color: rgba(128, 0, 0); }
-.BoxNumber6 { color: rgba(0, 128, 128); }
-.BoxNumber7 { color: rgba(0, 0, 0); }
-.BoxNumber8 { color: rgba(128, 128, 128); }
+.box-number-1 { color: rgba(0, 0, 255); }
+.box-number-2 { color: rgba(0, 160, 0); }
+.box-number-3 { color: rgba(255, 0, 0); }
+.box-number-4 { color: rgba(0, 0, 128); }
+.box-number-5 { color: rgba(128, 0, 0); }
+.box-number-6 { color: rgba(0, 128, 128); }
+.box-number-7 { color: rgba(0, 0, 0); }
+.box-number-8 { color: rgba(128, 128, 128); }
 
-.BoxFlag {
+.box-flag {
     margin: 1px;
     width: 62px;
     height: 62px;
@@ -185,11 +185,11 @@ body {
     font-size: 28px;
 }
 
-.BoxFlag:hover {
+.box-flag:hover {
     background: linear-gradient(rgb(234, 243, 255), rgb(214, 232, 255), rgb(177, 212, 255));
 }
 
-.SumInformation {
+.sum-information {
     width: 100%;
     height: 60px;
     display: flex;
