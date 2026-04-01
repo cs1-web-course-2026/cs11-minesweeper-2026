@@ -1,20 +1,20 @@
 
-const GAME_STATUS = {
+const CELL_STATE = Object.freeze({
+  OPENED: 'opened',
+  CLOSED: 'closed',
+  FLAGGED: 'flagged',
+});
+
+const GAME_STATUS = Object.freeze({
   PROCESS: 'process',
   WIN: 'win',
   LOSE: 'lose',
-};
+});
 
-const CELL_STATE = {
-	OPENED: 'opened',
-	CLOSED: 'closed',
-	FLAGGED: 'flagged',
-};
-
-const CELL_CONTENT = {
-	MINE: 'mine',
-	EMPTY: 'empty',
-};
+const CELL_CONTENT = Object.freeze({
+  MINE: 'mine',
+  EMPTY: 'empty',
+});
 
 const gameState = {
 	rows: 10,
@@ -23,6 +23,7 @@ const gameState = {
 	status: GAME_STATUS.PROCESS,
 	gameTime: 0,
 	timerId: null,
+  openedCellsCount: 0
 };
 
 function generateField(rows, cols, minesCount) {
@@ -85,20 +86,9 @@ function countNeighbourMines(field){
 }
 
 function checkWinCondition(field, minesCount) {
-  let rows = field.length;
-  let cols = field[0].length;
-  let safeCellsCount = rows * cols - minesCount;
-  let openedCellsCount = 0;
-
-  for (let r = 0; r < rows; r++) {
-      for (let c = 0; c < cols; c++) {
-          if (field[r][c].state === CELL_STATE.OPENED) {
-              openedCellsCount++;
-          }
-      }
-  }
+  const safeCellsCount = gameState.rows * gameState.cols - minesCount;
   // Повертаємо логічне значення (true, якщо виграли)
-  return openedCellsCount === safeCellsCount;
+  return gameState.openedCellsCount === safeCellsCount;
 }
 
 function revealCell(field, row, col){
@@ -110,6 +100,7 @@ function revealCell(field, row, col){
   }
   
   field[row][col].state = CELL_STATE.OPENED;
+  gameState.openedCellsCount++;
 
   if (field[row][col].type === CELL_CONTENT.MINE){
       return { field: field, hitMine: true };
@@ -174,6 +165,7 @@ function initGame() {
   gameState.status = GAME_STATUS.PROCESS;
   gameState.gameTime = 0;
   gameState.timerId = null;
+  gameState.openedCellsCount = 0;
   timerElement.textContent = '000';
   field = generateField(gameState.rows, gameState.cols, gameState.minesCount);
   countNeighbourMines(field);
