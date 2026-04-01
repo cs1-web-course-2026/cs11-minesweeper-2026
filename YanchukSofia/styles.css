@@ -117,11 +117,6 @@ body{
 }
 
 .blue-box:hover{
-    margin: 1px 1px 1px 1px;
-    width: 62px;
-    height: 62px;
-    border-radius: 8px;
-    border: 2px solid rgb(148, 148, 148);
     background: linear-gradient(rgb(234, 243, 255), rgb(214, 232, 255), rgb(177, 212, 255));
 }
 
@@ -135,12 +130,6 @@ body{
 }
 
 .white-box:hover{
-    margin: 1px 1px 1px 1px;
-    width: 62px;
-    height: 62px;
-    border-radius: 8px;
-    border: 2px solid rgb(148, 148, 148);
-    background-color: white;
     background: linear-gradient(rgb(234, 243, 255), rgb(214, 232, 255), rgb(177, 212, 255));
 }
 
@@ -163,21 +152,7 @@ body{
 }
 
 .box-number-1:hover{
-    margin: 1px 1px 1px 1px;
-    width: 62px;
-    height: 62px;
-    border-radius: 8px;
-    border: 2px solid rgb(148, 148, 148);
-    background-color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
     background: linear-gradient(rgb(234, 243, 255), rgb(214, 232, 255), rgb(177, 212, 255));
-    font-family: "Boldonse", system-ui;
-    font-weight: 400;
-    font-style: normal;
-    font-size: 35px;
 }
 
 .box-number-2{
@@ -199,21 +174,6 @@ body{
 }
 
 .box-number-2:hover{
-    margin: 1px 1px 1px 1px;
-    width: 62px;
-    height: 62px;
-    border-radius: 8px;
-    border: 2px solid rgb(148, 148, 148);
-    background-color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    color: rgba(0, 160, 0);
-    font-family: "Boldonse", system-ui;
-    font-weight: 400;
-    font-style: normal;
-    font-size: 35px;
     background: linear-gradient(rgb(234, 243, 255), rgb(214, 232, 255), rgb(177, 212, 255));
 }
 
@@ -236,21 +196,6 @@ body{
 }
 
 .box-number-3:hover{
-    margin: 1px 1px 1px 1px;
-    width: 62px;
-    height: 62px;
-    border-radius: 8px;
-    border: 2px solid rgb(148, 148, 148);
-    background-color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    color: rgba(255, 0, 0);
-    font-family: "Boldonse", system-ui;
-    font-weight: 400;
-    font-style: normal;
-    font-size: 35px;
     background: linear-gradient(rgb(234, 243, 255), rgb(214, 232, 255), rgb(177, 212, 255));
 }
 
@@ -267,14 +212,6 @@ body{
 }
 
 .box-flag:hover{
-    margin: 1px 1px 1px 1px;
-    width: 62px;
-    height: 62px;
-    border-radius: 8px;
-    border: 2px solid rgb(148, 148, 148);
-    display: flex;
-    align-items: center;
-    justify-content: center;
     background: linear-gradient(rgb(234, 243, 255), rgb(214, 232, 255), rgb(177, 212, 255));
 }
 
