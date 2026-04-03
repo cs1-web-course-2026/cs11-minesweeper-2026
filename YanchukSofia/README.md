@@ -1,0 +1,1 @@
+Lab 1: Static Minesweeper layout using HTML and CSS
