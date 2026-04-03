@@ -23,7 +23,8 @@ const gameState = {
 	status: GAME_STATUS.PROCESS,
 	gameTime: 0,
 	timerId: null,
-  openedCellsCount: 0
+  openedCellsCount: 0,
+  field: []
 };
 
 function generateField(rows, cols, minesCount) {
@@ -85,10 +86,10 @@ function countNeighbourMines(field){
   return field;
 }
 
-function checkWinCondition(field, minesCount) {
-  const safeCellsCount = gameState.rows * gameState.cols - minesCount;
+function checkWinCondition(openedCellsCount, rows, cols, minesCount) {
+  const safeCellsCount = rows * cols - minesCount;
   // Повертаємо логічне значення (true, якщо виграли)
-  return gameState.openedCellsCount === safeCellsCount;
+  return openedCellsCount === safeCellsCount;
 }
 
 function revealCell(field, row, col){
@@ -99,43 +100,50 @@ function revealCell(field, row, col){
       return { field: field, hitMine: false };
   }
   
+  if (field[row][col].type === CELL_CONTENT.MINE){
+    field[row][col].state = CELL_STATE.OPENED;
+    return { field: field, hitMine: true };
+}
+
   field[row][col].state = CELL_STATE.OPENED;
   gameState.openedCellsCount++;
 
-  if (field[row][col].type === CELL_CONTENT.MINE){
-      return { field: field, hitMine: true };
-  }
-
   if (field[row][col].neighborMines === 0){
-    for (let directionalRow = -1; directionalRow <= 1; directionalRow++){
-        for (let directionalCol = -1; directionalCol <= 1; directionalCol++){
-            if (directionalRow === 0 && directionalCol === 0) continue; 
-            const neighbourRow = row + directionalRow;
-            const neighbourCol = col + directionalCol;
-            // 4,4 | 4,5 | 4,6
-            // 5,4 | (5,5) | 5,6
-            // 6,4 | 6,5 | 6,6
-            if (neighbourRow >= 0 && neighbourRow < rows &&
-                neighbourCol >= 0 && neighbourCol < cols) {
-                let result = revealCell(field, neighbourRow, neighbourCol);
-                field = result.field;
-            }
-        }
-    }
+    field = revealEmptyNeighbors(field, row, col);
   }
 
   return { field: field, hitMine: false };
 }
 
+function revealEmptyNeighbors(field, row, col) {
+  let rows = field.length;
+  let cols = field[0].length;
+
+  for (let directionalRow = -1; directionalRow <= 1; directionalRow++){
+      for (let directionalCol = -1; directionalCol <= 1; directionalCol++){
+          if (directionalRow === 0 && directionalCol === 0) continue; 
+          const neighbourRow = row + directionalRow;
+          const neighbourCol = col + directionalCol;
+                      // 4,4 | 4,5 | 4,6
+                      // 5,4 | (5,5) | 5,6
+                      // 6,4 | 6,5 | 6,6
+          if (neighbourRow >= 0 && neighbourRow < rows && neighbourCol >= 0 && neighbourCol < cols) {
+              let result = revealCell(field, neighbourRow, neighbourCol);
+              field = result.field;
+          }
+      }
+  }
+  return field;
+}
+
 function toggleFlag(field, row, col){
 	if (field[row][col].state === CELL_STATE.OPENED){
-			return field;
+			return;
 	} else if (field[row][col].state === CELL_STATE.CLOSED){
 			field[row][col].state = CELL_STATE.FLAGGED;
 	} else {
 			field[row][col].state = CELL_STATE.CLOSED;
 	}
-	return field;
 }
 
 function startTimer() {
@@ -159,16 +167,20 @@ const timerElement = document.querySelector('.timer');
 
 restartBtnElement.addEventListener('click', initGame);
 
-let field = []; // global
-
 function initGame() {
+  stopTimer();
   gameState.status = GAME_STATUS.PROCESS;
   gameState.gameTime = 0;
   gameState.timerId = null;
   gameState.openedCellsCount = 0;
   timerElement.textContent = '000';
-  field = generateField(gameState.rows, gameState.cols, gameState.minesCount);
-  countNeighbourMines(field);
+
+  const msgElement = document.getElementById('game-message');
+  msgElement.textContent = '';
+  msgElement.className = '';
+
+  gameState.field = generateField(gameState.rows, gameState.cols, gameState.minesCount);
+  countNeighbourMines(gameState.field);
   renderBoard();
   startTimer();
 }
@@ -179,10 +191,26 @@ function renderBoard() {
   
   for (let row = 0; row < gameState.rows; row++){
     for (let col = 0; col < gameState.cols; col++){
-      const cellData = field[row][col];
-      const cellElement = document.createElement('div');
+      const cellData = gameState.field[row][col];
+      const cellElement = document.createElement('button');
+      cellElement.type = 'button';
       cellElement.classList.add('cell');
 
+      // Screen Reader
+      let label = `Row ${row + 1}, column ${col + 1}, `;
+      if (cellData.state === CELL_STATE.FLAGGED) {
+        label += 'flagged';
+      } else if (cellData.state === CELL_STATE.OPENED) {
+        label += cellData.type === CELL_CONTENT.MINE
+          ? 'mine'
+          : cellData.neighborMines > 0
+            ? `opened, ${cellData.neighborMines} adjacent mines`
+            : 'opened, empty';
+      } else {
+        label += 'closed';
+      }
+      cellElement.setAttribute('aria-label', label);
+      //
       if (cellData.state === CELL_STATE.OPENED){
         cellElement.classList.add('open');
 
@@ -213,18 +241,29 @@ function renderBoard() {
 
 function handleCellClick(row, col){
   if (gameState.status !== GAME_STATUS.PROCESS) return;
-  const result = revealCell(field, row, col);
-  field = result.field;
+  const result = revealCell(gameState.field, row, col);
+  gameState.field = result.field;
+
+  const msgElement = document.getElementById('game-message');
 
   if (result.hitMine){
     gameState.status = GAME_STATUS.LOSE;
+    msgElement.textContent = '💥 Game over! You hit a mine.';
+    msgElement.className = 'message-loss';
     stopTimer();
     renderBoard();
     return;
   }
 
-  if (checkWinCondition(field, gameState.minesCount)){
+  if (checkWinCondition(
+    gameState.openedCellsCount, 
+    gameState.rows, 
+    gameState.cols, 
+    gameState.minesCount
+  )) {
     gameState.status = GAME_STATUS.WIN;
+    msgElement.textContent = '🎉 You won!';
+    msgElement.className = 'message-win';
     stopTimer();
     renderBoard();
     return;
@@ -235,8 +274,7 @@ function handleCellClick(row, col){
 
 function handleRightClick(row, col){
   if (gameState.status !== GAME_STATUS.PROCESS) return;
-  const result = toggleFlag(field, row, col);
-  field = result;
+  toggleFlag(gameState.field, row, col);
   renderBoard();
 }
 
