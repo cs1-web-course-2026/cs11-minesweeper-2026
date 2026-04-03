@@ -10,8 +10,8 @@ body {
     width: 400px;
     height: 400px;
     display: grid;
-    grid-template-columns: repeat(8, 1fr);
-    grid-template-rows: repeat(8, 1fr);
+    grid-template-columns: repeat(10, 1fr);
+    grid-template-rows: repeat(10, 1fr);
     
     background-color: #bdbdbd;
     border-top: 4px solid #7b7b7b;
@@ -32,7 +32,6 @@ body {
     border-bottom: 3px solid #7b7b7b;
     border-right: 3px solid #7b7b7b;
 
-    /* text */
     font-size: 25px;
     display: flex;
     justify-content: center;
@@ -46,9 +45,10 @@ body {
     background-color: #d1d1d1;
 }
 
-.tile-clicked {
-    background-color: #bdbdbd !important;
-    border: 1px solid #7b7b7b !important;
+#board div.tile-clicked {
+    background-color: #bdbdbd;
+    border: 1px solid #7b7b7b; 
+    cursor: default;
 }
 
 .x1 {
@@ -83,24 +83,24 @@ body {
     color: gray;
 }
 
-#flag-button {
-    width: 100px;
-    height: 50px;
-    font-size: 30px;
-    background-color: lightgray;
-    border-top: 3px solid #ffffff;
-    border-left: 3px solid #ffffff;
-    border-bottom: 3px solid #7b7b7b;
-    border-right: 3px solid #7b7b7b;
-
-    cursor: pointer;
-    margin-bottom: 20px;
-    border-radius: 5px;
+#new-game-button {
+  width: 150px;
+  height: 50px;
+  font-size: 20px;
+  font-weight: bold;
+  background-color: lightgray;
+  border-top: 3px solid #ffffff;
+  border-left: 3px solid #ffffff;
+  border-bottom: 3px solid #7b7b7b;
+  border-right: 3px solid #7b7b7b;
+  cursor: pointer;
+  border-radius: 5px;
+  margin-top: 10px;
 }
 
-#flag-button:active {
-    border-top: 3px solid #7b7b7b;
-    border-left: 3px solid #7b7b7b;
-    border-bottom: 3px solid #ffffff;
-    border-right: 3px solid #ffffff;
+#new-game-button:active {
+  border-top: 3px solid #7b7b7b;
+  border-left: 3px solid #7b7b7b;
+  border-bottom: 3px solid #ffffff;
+  border-right: 3px solid #ffffff;
 }
