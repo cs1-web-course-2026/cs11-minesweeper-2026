@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Сапер · Minesweeper</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <main class="game-container">
+        <header class="header">
+            <div class="counter">
+                <span>💣</span>
+                <span id="minesCount">010</span>
+            </div>
+            
+            <button type="button" class="new-game" id="newGameBtn" aria-label="New game">😊</button>
+            
+            <div class="counter">
+                <span>⏱️</span>
+                <span id="timer">000</span>
+            </div>
+        </header>
+
+        <div class="board" id="board">
+            <!-- Рядок 1 -->
+            <button type="button" class="cell closed" aria-label="Row 1, column 1, closed"></button>
+            <button type="button" class="cell closed" aria-label="Row 1, column 2, closed"></button>
+            <button type="button" class="cell closed" aria-label="Row 1, column 3, closed"></button>
+            <button type="button" class="cell closed" aria-label="Row 1, column 4, closed"></button>
+            <button type="button" class="cell closed" aria-label="Row 1, column 5, closed"></button>
+            <button type="button" class="cell closed" aria-label="Row 1, column 6, closed"></button>
+            <button type="button" class="cell closed" aria-label="Row 1, column 7, closed"></button>
+            <button type="button" class="cell closed" aria-label="Row 1, column 8, closed"></button>
+            <button type="button" class="cell closed" aria-label="Row 1, column 9, closed"></button>
+            <button type="button" class="cell closed" aria-label="Row 1, column 10, closed"></button>
+            
+            <!-- Рядок 2 -->
+            <button type="button" class="cell open" data-number="1" aria-label="Row 2, column 1, opened, 1 mine">1</button>
+            <button type="button" class="cell flag" aria-label="Row 2, column 2, flagged">🚩</button>
+            <button type="button" class="cell mine" aria-label="Row 2, column 3, mine">💣</button>
+            <button type="button" class="cell closed" aria-label="Row 2, column 4, closed"></button>
+            <button type="button" class="cell closed" aria-label="Row 2, column 5, closed"></button>
+            <button type="button" class="cell closed" aria-label="Row 2, column 6, closed"></button>
+            <button type="button" class="cell closed" aria-label="Row 2, column 7, closed"></button>
+            <button type="button" class="cell closed" aria-label="Row 2, column 8, closed"></button>
+            <button type="button" class="cell closed" aria-label="Row 2, column 9, closed"></button>
+            <button type="button" class="cell closed" aria-label="Row 2, column 10, closed"></button>
+            
+            <!-- Рядок 3 -->
+            <button type="button" class="cell closed" aria-label="Row 3, column 1, closed"></button>
+            <button type="button" class="cell closed" aria-label="Row 3, column 2, closed"></button>
+            <button type="button" class="cell closed" aria-label="Row 3, column 3, closed"></button>
+            <button type="button" class="cell closed" aria-label="Row 3, column 4, closed"></button>
+            <button type="button" class="cell closed" aria-label="Row 3, column 5, closed"></button>
+            <button type="button" class="cell closed" aria-label="Row 3, column 6, closed"></button>
+            <button type="button" class="cell closed" aria-label="Row 3, column 7, closed"></button>
+            <button type="button" class="cell closed" aria-label="Row 3, column 8, closed"></button>
+            <button type="button" class="cell closed" aria-label="Row 3, column 9, closed"></button>
+            <button type="button" class="cell closed" aria-label="Row 3, column 10, closed"></button>
+            
+            <!-- Додайте решту рядків (4-10) аналогічно -->
+        </div>
+
+        <p id="game-message" role="status" aria-live="polite" class="game-message"></p>
+
+        <div class="difficulty">
+            <button type="button" class="active" data-diff="easy">Легкий (10x10)</button>
+            <button type="button" data-diff="hard">Складний (16x16)</button>
+        </div>
+    </main>
+</body>
+</html>
