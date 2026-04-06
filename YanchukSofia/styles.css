@@ -1,0 +1,224 @@
+body{
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+}
+
+.minesweeper{
+    width: 550px;
+    height: 760px;
+    background-color: rgba(238, 237, 236);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    border: 3px solid rgba(136, 169, 207);
+}
+
+.navbar{
+    width: 100%;
+    height: 40px;
+    background: linear-gradient(rgba(184, 205, 232), rgba(127, 163, 206), rgba(145, 177, 215));
+    border-radius: 8px 8px 0px 0px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.white-text{
+    color: white;
+}
+
+.all-svg{
+    width: 20%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.svg{
+    margin-left: 10px;
+    margin-right: 10px;
+    color: white;
+    width: 20px;
+    height: 20px;
+}
+
+.secondbar{    
+    width: 100%;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: left;
+}
+
+.under-text{
+    color: black;
+    text-decoration: underline;
+    margin-left: 20px;
+    margin-top: 25px;
+}
+
+.hr{
+    color: rgba(190, 194, 198);
+    width: 95%;
+}
+
+.cool-emoji{
+    width: 100%;
+    height: 90px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cool-emoji-background{
+    background-color: rgba(237, 236, 235);
+    width: 55px;
+    height: 55px;
+    border-radius: 12px;
+    border: 2px solid rgba(190, 194, 198);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cool-emoji-svg{
+    width: 45px;
+    height: 45px;
+}
+
+.blocks-in-column{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.blocks-in-row{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+}
+
+.blue-box{
+    margin: 1px 1px 1px 1px;
+    width: 62px;
+    height: 62px;
+    border-radius: 8px;
+    border: 2px solid rgb(148, 148, 148);
+    background: linear-gradient(rgba(154, 187, 229), rgba(132, 170, 216), rgba(124, 163, 210));
+    transition-duration: 0.3s;
+}
+
+.blue-box:hover{
+    background: linear-gradient(rgb(234, 243, 255), rgb(214, 232, 255), rgb(177, 212, 255));
+}
+
+.white-box{
+    margin: 1px 1px 1px 1px;
+    width: 62px;
+    height: 62px;
+    border-radius: 8px;
+    border: 2px solid rgb(148, 148, 148);
+    background-color: white;
+}
+
+.white-box:hover{
+    background: linear-gradient(rgb(234, 243, 255), rgb(214, 232, 255), rgb(177, 212, 255));
+}
+
+.box-number-1{
+    margin: 1px 1px 1px 1px;
+    width: 62px;
+    height: 62px;
+    border-radius: 8px;
+    border: 2px solid rgb(148, 148, 148);
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: rgba(0, 0, 255);
+    font-family: "Boldonse", system-ui;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 35px;
+}
+
+.box-number-2{
+    margin: 1px 1px 1px 1px;
+    width: 62px;
+    height: 62px;
+    border-radius: 8px;
+    border: 2px solid rgb(148, 148, 148);
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: rgba(0, 160, 0);
+    font-family: "Boldonse", system-ui;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 35px;
+}
+
+.box-number-3{
+    margin: 1px 1px 1px 1px;
+    width: 62px;
+    height: 62px;
+    border-radius: 8px;
+    border: 2px solid rgb(148, 148, 148);
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: rgba(255, 0, 0);
+    font-family: "Boldonse", system-ui;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 35px;
+}
+
+.box-number-1:hover,
+.box-number-2:hover,
+.box-number-3:hover{
+    background: linear-gradient(rgb(234, 243, 255), rgb(214, 232, 255), rgb(177, 212, 255));
+}
+
+.box-flag{
+    margin: 1px 1px 1px 1px;
+    width: 62px;
+    height: 62px;
+    border-radius: 8px;
+    border: 2px solid rgb(148, 148, 148);
+    background: linear-gradient(rgba(154, 187, 229), rgba(132, 170, 216), rgba(124, 163, 210));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.box-flag:hover{
+    background: linear-gradient(rgb(234, 243, 255), rgb(214, 232, 255), rgb(177, 212, 255));
+}
+
+.box-svg{
+    margin: 1px 1px 1px 1px;
+    width: 55px;
+    height: 55px;
+}
+
+.sum-information{
+    width: 100%;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
