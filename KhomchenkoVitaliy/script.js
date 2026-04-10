@@ -164,6 +164,7 @@ const boardElement = document.querySelector('.game-board');
 const flagsElement = document.querySelector('.flags');
 const restartBtnElement = document.querySelector('.restart-btn');
 const timerElement = document.querySelector('.timer');
+const msgElement = document.getElementById('game-message');
 
 restartBtnElement.addEventListener('click', initGame);
 
@@ -175,7 +176,6 @@ function initGame() {
   gameState.openedCellsCount = 0;
   timerElement.textContent = '000';
 
-  const msgElement = document.getElementById('game-message');
   msgElement.textContent = '';
   msgElement.className = '';
 
@@ -225,7 +225,6 @@ function renderBoard() {
         flagsPlaced++;
       }
 
-
       cellElement.addEventListener('click', () => handleCellClick(row, col));
       cellElement.addEventListener('contextmenu', (e) => {
         e.preventDefault();
@@ -243,8 +242,6 @@ function handleCellClick(row, col){
   if (gameState.status !== GAME_STATUS.PROCESS) return;
   const result = revealCell(gameState.field, row, col);
   gameState.field = result.field;
-
-  const msgElement = document.getElementById('game-message');
 
   if (result.hitMine){
     gameState.status = GAME_STATUS.LOSE;
@@ -277,6 +274,5 @@ function handleRightClick(row, col){
   toggleFlag(gameState.field, row, col);
   renderBoard();
 }
-
 
 initGame();
