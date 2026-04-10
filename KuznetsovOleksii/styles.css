@@ -1,102 +1,116 @@
-body{
-    background:#1e1e1e;
-    font-family:Arial;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    height:100vh;
-    }
-    
-    .game{
-    background:#c0c0c0;
-    padding:10px;
-    border:4px solid #777;
-    }
-    
-    .game-header{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    background:#bdbdbd;
-    padding:10px;
-    margin-bottom:10px;
-    }
-    
-    .counter,
-    .timer{
-    background:black;
-    color:red;
-    font-size:24px;
-    padding:5px 10px;
-    font-family:monospace;
-    }
-    
-    .restart{
-    font-size:22px;
-    padding:5px 10px;
-    cursor:pointer;
-    }
-    
-    .field{
-    display:grid;
-    grid-template-columns:repeat(8,40px);
-    gap:2px;
-    }
-    
-    .cell{
-    width:40px;
-    height:40px;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    font-weight:bold;
-    font-size:18px;
-    }
-    
-    .closed{
-    background:#9e9e9e;
-    border:3px solid #fff;
-    cursor:pointer;
-    }
-    
-    .open{
-    background:#d6d6d6;
-    border:1px solid #999;
-    }
-    
-    .flag{
-    position:relative;
-    }
-    
-    .flag::after{
-    content:"🚩";
-    font-size:18px;
-    }
-    
-    .mine{
-    background:#d6d6d6;
-    position:relative;
-    }
-    
-    .mine::after{
-    content:"💣";
-    font-size:18px;
-    }
-    
-    .clicked{
-    background:red;
-    }
-    
-    @media (max-width:600px){
-    
-    .field{
-    grid-template-columns:repeat(8,30px);
-    }
-    
-    .cell{
-    width:30px;
-    height:30px;
-    font-size:14px;
-    }
-    
-    }
+:root {
+  /* Размеры ячеек */
+  --cell-size: 40px;
+  --cell-size-mobile: 30px;
+  
+  /* Шрифты и размеры текста */
+  --font-main: Arial, sans-serif;
+  --font-size-cell: 18px;
+  --font-size-counter: 24px;
+  --font-size-restart: 22px;
+  
+  /* Цветовая палитра */
+  --color-body-bg: #1e1e1e;
+  --color-board-bg: #c0c0c0;
+  --color-header-bg: #bdbdbd;
+  --color-closed: #9e9e9e;
+  --color-open: #d6d6d6;
+  --color-text-red: red;
+  --color-text-black: black;
+  
+  /* Границы и рамки */
+  --border-main: 4px solid #777;
+  --border-cell-light: #fff;
+  --border-cell-dark: #999;
+}
+
+body {
+  background: var(--color-body-bg);
+  font-family: var(--font-main);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
+.game {
+  background: var(--color-board-bg);
+  padding: 10px;
+  border: var(--border-main);
+}
+
+.game-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--color-header-bg);
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.counter,
+.timer {
+  background: var(--color-text-black);
+  color: var(--color-text-red);
+  font-size: var(--font-size-counter);
+  padding: 5px 10px;
+  font-family: monospace;
+}
+
+.restart {
+  font-size: var(--font-size-restart);
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.field {
+  display: grid;
+  grid-template-columns: repeat(8, var(--cell-size));
+  gap: 2px;
+}
+
+.cell {
+  width: var(--cell-size);
+  height: var(--cell-size);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  font-size: var(--font-size-cell);
+}
+
+.closed {
+  background: var(--color-closed);
+  border: 3px solid var(--border-cell-light);
+  cursor: pointer;
+}
+
+.open {
+  background: var(--color-open);
+  border: 1px solid var(--border-cell-dark);
+}
+
+.flag::after {
+  content: "🚩";
+}
+
+.mine::after {
+  content: "💣";
+}
+
+.clicked {
+  background: var(--color-text-red);
+}
+
+@media (max-width: 600px) {
+  .field {
+    grid-template-columns: repeat(8, var(--cell-size-mobile));
+  }
+
+  .cell {
+    width: var(--cell-size-mobile);
+    height: var(--cell-size-mobile);
+    font-size: 14px;
+  }
+}
