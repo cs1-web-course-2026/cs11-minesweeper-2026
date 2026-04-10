@@ -93,9 +93,6 @@ function checkWinCondition(openedCellsCount, rows, cols, minesCount) {
 }
 
 function revealCell(field, row, col){
-  let rows = field.length;
-  let cols = field[0].length;
-
   if (field[row][col].state === CELL_STATE.OPENED || field[row][col].state === CELL_STATE.FLAGGED){
       return { field: field, hitMine: false };
   }
