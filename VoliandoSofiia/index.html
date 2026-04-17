@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Сапер · Minesweeper</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="header">
+        <div class="counter">
+            <span>💣</span>
+            <span class="counter-value" id="minesCount">012</span>
+        </div>
+        
+        <button type="button" class="new-game" id="newGameBtn" aria-label="New game">😊</button>
+        
+        <div class="counter">
+            <span>⏱️</span>
+            <span class="counter-value" id="timer">000</span>
+        </div>
+    </header>
+
+    <main class="game-container">
+        <div class="board" id="board"></div>
+
+        <p id="game-message" role="status" aria-live="polite" class="game-message"></p>
+
+        <div class="difficulty">
+            <button type="button" class="active" data-diff="easy">Легкий (10x10)</button>
+            <button type="button" data-diff="hard">Складний (16x16)</button>
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
