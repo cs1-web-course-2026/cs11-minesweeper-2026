@@ -60,6 +60,7 @@ body {
 .grid {
     display: grid;
     grid-template-columns: repeat(4, 40px);
+    width: fit-content; 
     border: 3px solid;
     border-color: gray white white gray;
     background-color: #7d7d7d;
