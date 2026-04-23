@@ -10,7 +10,7 @@ body{
     background: rgba(20, 0, 0, 0.9);
     border: 2px solid #600;
     border-radius: 15px;
-    padding: 30px;
+    padding: 25px;
     box-shadow: 0 0 20px #400, inset 0 0 15px #000;
     position: relative;
     overflow: hidden;
@@ -45,6 +45,32 @@ body{
     border: 2px solid #ff0000; 
     border-radius: 12px 12px 0 0;
     box-shadow: 0 0 20px rgba(255, 0, 0, 0.4), inset 0 0 10px rgba(255, 0, 0, 0.2);
+}
+
+#game-message {
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-align: center;
+  margin: 0 auto 15px; 
+  padding: 8px 20px;
+  border-radius: 8px;
+  min-height: 25px;
+}
+
+#game-message:empty {
+    display: none;
+}
+
+.message-loss {
+  color: #ff4d4d;
+  background-color: rgba(255, 77, 77, 0.1);
+  border: 1px solid #ff4d4d;
+}
+
+.message-win {
+  color: #4CAF50;
+  background-color: rgba(76, 175, 80, 0.1);
+  border: 1px solid #4CAF50;
 }
 
 .timer, .flags {
@@ -87,6 +113,17 @@ body{
     cursor: pointer;
     width: 40px;
     height: 40px;
+    
+    /* 2. Повне скидання стилів кнопки */
+    appearance: none;
+    outline: none;
+    margin: 0;
+    padding: 0;
+    font-family: inherit;
+    font-size: 1rem;
+    color: inherit;
+
+    box-sizing: content-box;
 }
 
 .cell:active {
