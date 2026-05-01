@@ -2,19 +2,21 @@
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Minesweeper</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="game">
+    <main class="game">
         <header class="game-header">
-            <div class="counter">🚩 10</div>
-            <button class="restart">🙂</button>
+            <div class="counter">🚩 010</div>
+            <button class="restart" type="button">🙂</button>
             <div class="timer">000</div>
         </header>
 
-        <div class="field"></div>
-    </div>
+        <div class="field" role="grid"></div>
+        <p id="game-message" role="status" aria-live="polite" class="visually-hidden"></p>
+    </main>
 
     <script src="script.js"></script>
 </body>
