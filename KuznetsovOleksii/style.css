@@ -13,7 +13,6 @@ body {
     padding: 10px;
     border: 4px solid #777;
     user-select: none;
-    
 }
 
 .game-header {
@@ -45,6 +44,8 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    border: 2px outset #eee;
+    background: #bdbdbd;
 }
 
 .field {
@@ -63,6 +64,8 @@ body {
     align-items: center;
     font-weight: bold;
     font-size: 20px;
+    padding: 0;
+    border: none;
 }
 
 .closed {
@@ -101,6 +104,17 @@ body {
 .cell[data-number="3"] { color: red; }
 .cell[data-number="4"] { color: darkblue; }
 .cell[data-number="5"] { color: brown; }
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}
 
 @media (max-width: 600px) {
     .field {
