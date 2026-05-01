@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Minesweeper</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="style.css">
     <link class="Icon" rel="icon" href="https://www.rw-designer.com/icon-image/3078-256x256x32.png">
 </head>
 <body class="Body">
@@ -12,7 +12,7 @@
         <!-- фон -->
         <div class="Head">
             <!-- верх -->
-             <p class="HeadText">Minesweeper</p>
+             <h1 class="HeadText">Minesweeper</h1>
         </div>
              <div class="Info">
                 <div class="TimeCount">
@@ -27,6 +27,7 @@
                         <!-- цифри справа -->
                     </div>
                 </div>
+                <p id="GameMessage" class="GameMessage" role="status" aria-live="polite"></p>
                 <div class="TimeCount">
                     <span class="FlagCount">Кількість прапорців: 16</span>
                     <button class="Button">Start</button>
@@ -164,8 +165,8 @@
                 <div class="FlagCell"></div>
                 <div class="EmptyCell"><p class="NumCell">2</p></div>
              </div>
-
         </div>
     </div>
+    <script src="script.js"></script>
 </body>
 </html>
