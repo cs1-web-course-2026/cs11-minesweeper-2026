@@ -3,19 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Сапер</title>
+    <title>Minesweeper</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <main class="game-container">
-        <header class="game-header">
-            <div class="counter">010</div>
-            <button class="smile-btn" aria-label="Почати нову гру">😊</button>
-            <div class="timer">000</div>
-        </header>
+    <div class="game-container">
+        <div class="header">
+            <div class="counter" id="flags-count">015</div>
+            <button class="smile-btn" id="smile-btn">🙂</button>
+            <div class="counter" id="timer">000</div>
+        </div>
 
-         <section class="grid" id="board" aria-label="Ігрове поле"></section>
-    </main>
+        <p id="game-message" role="status" aria-live="polite"></p>
+
+        <div class="grid" id="grid">
+
+        </div>
+    </div>
+
     <script src="script.js"></script>
 </body>
 </html>
