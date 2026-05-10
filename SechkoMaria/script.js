@@ -1,4 +1,3 @@
-
 const CELL_STATE = { CLOSED: 'closed', OPENED: 'opened', FLAGGED: 'flagged' };
 const CELL_CONTENT = { MINE: 'mine', EMPTY: 'empty' };
 const GAME_STATUS = { PLAYING: 'playing', WON: 'won', LOST: 'lost' };
@@ -14,6 +13,7 @@ const gameState = {
   field: []
 };
 
+// 2. Логіка генерації
 function generateField(rows, cols, minesCount) {
   gameState.field = [];
   gameState.flagsUsed = 0;
@@ -60,6 +60,7 @@ function countNeighbourMines(field, rows, cols) {
   }
 }
 
+// 3. Інтеграція з DOM (Рендеринг та UI)
 const gridElement = document.getElementById('grid');
 const timerElement = document.getElementById('timer');
 const flagsElement = document.getElementById('flags-count');
@@ -84,13 +85,16 @@ function showMessage(msg) {
 }
 
 function renderBoard() {
-  gridElement.innerHTML = ''; // Очищаємо поле
+  gridElement.innerHTML = ''; 
   for (let row = 0; row < gameState.rows; row++) {
     for (let col = 0; col < gameState.cols; col++) {
       const btn = document.createElement('button');
+      btn.type = 'button';
       btn.classList.add('cell');
       btn.dataset.row = row;
       btn.dataset.col = col;
+      // Базовий підпис для скрінрідера
+      btn.setAttribute('aria-label', `Рядок ${row + 1}, колонка ${col + 1}, закрита`);
       gridElement.appendChild(btn);
     }
   }
@@ -104,35 +108,46 @@ function updateBoard() {
       const cellData = gameState.field[row][col];
       const btn = cells[index];
 
-      btn.className = 'cell';
+      btn.className = 'cell'; 
       btn.textContent = '';
       btn.removeAttribute('data-mines');
+
+      let stateLabel = 'закрита';
 
       if (cellData.state === CELL_STATE.OPENED) {
         btn.classList.add('opened');
         if (cellData.type === CELL_CONTENT.MINE) {
           btn.classList.add('mine');
           btn.textContent = '💣';
+          stateLabel = 'міна';
         } else if (cellData.neighborMines > 0) {
           btn.textContent = cellData.neighborMines;
           btn.dataset.mines = cellData.neighborMines;
+          stateLabel = `відкрита, ${cellData.neighborMines} мін навколо`;
+        } else {
+          stateLabel = 'відкрита, порожня';
         }
       } else if (cellData.state === CELL_STATE.FLAGGED) {
         btn.classList.add('flagged');
         btn.textContent = '🚩';
+        stateLabel = 'з прапорцем';
       }
+      
+      // Оновлюємо aria-label
+      btn.setAttribute('aria-label', `Рядок ${row + 1}, колонка ${col + 1}, ${stateLabel}`);
       index++;
     }
   }
 }
 
+// 4. Event Handling
 function openCell(row, col) {
   if (!isInside(row, col, gameState.rows, gameState.cols)) return;
   const cell = gameState.field[row][col];
   
   if (cell.state !== CELL_STATE.CLOSED || gameState.status !== GAME_STATUS.PLAYING) return;
 
-  if (gameState.gameTime === 0 && !gameState.timerId) startTimer(); // Запускаємо таймер при першому кліку
+  if (gameState.gameTime === 0 && !gameState.timerId) startTimer();
 
   cell.state = CELL_STATE.OPENED;
 
@@ -201,6 +216,7 @@ function startTimer() {
   }, 1000);
 }
 
+// 5. Event Listeners
 gridElement.addEventListener('click', (e) => {
   const btn = e.target.closest('.cell');
   if (!btn) return;
@@ -220,6 +236,7 @@ gridElement.addEventListener('contextmenu', (e) => {
 
 smileBtn.addEventListener('click', initGame);
 
+// 6. Ініціалізація
 function initGame() {
   clearInterval(gameState.timerId);
   gameState.status = GAME_STATUS.PLAYING;
