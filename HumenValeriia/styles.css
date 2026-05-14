@@ -1,0 +1,107 @@
+:root {
+  --board-columns: 9;
+  --cell-size: 30px;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f0f0f0;
+  margin: 0;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.game-container {
+  background-color: #bdbdbd;
+  padding: 10px;
+  border: 3px solid #ffffff;
+  border-right-color: #7b7b7b;
+  border-bottom-color: #7b7b7b;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.game-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 10px;
+  border: 3px solid #7b7b7b;
+  border-right-color: #ffffff;
+  border-bottom-color: #ffffff;
+  margin-bottom: 10px;
+}
+
+.status-item {
+  background-color: #000;
+  color: #ff0000;
+  font-size: 24px;
+  padding: 2px 8px;
+  min-width: 50px;
+  text-align: center;
+}
+
+.reset-button {
+  font-size: 24px;
+  cursor: pointer;
+  background-color: #bdbdbd;
+  border: 2px solid #ffffff;
+  border-right-color: #7b7b7b;
+  border-bottom-color: #7b7b7b;
+  padding: 2px 5px;
+}
+
+.game-board {
+  display: grid;
+  grid-template-columns: repeat(var(--board-columns), var(--cell-size));
+  grid-template-rows: repeat(var(--board-columns), var(--cell-size));
+  gap: 2px;
+  border: 3px solid #7b7b7b;
+  border-right-color: #ffffff;
+  border-bottom-color: #ffffff;
+}
+
+.cell {
+  width: var(--cell-size);
+  height: var(--cell-size);
+  background-color: #bdbdbd;
+  border: 3px solid #ffffff;
+  border-right-color: #7b7b7b;
+  border-bottom-color: #7b7b7b;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  box-sizing: border-box;
+  user-select: none; 
+}
+
+
+.cell.cell--open {
+  border: 1px solid #7b7b7b;
+  background-color: #d1d1d1;
+  cursor: default;
+}
+
+
+.color-1 { color: blue; }
+.color-2 { color: green; }
+.color-3 { color: red; }
+.color-4 { color: rgb(200, 10, 188); }
+
+.cell--mine-exploded {
+  background-color: #ff0000;
+  border: 1px solid #7b7b7b;
+}
+
+@media (max-width: 400px) {
+  :root {
+    --cell-size: 25px;
+  }
+  .cell {
+    font-size: 14px;
+  }
+}
