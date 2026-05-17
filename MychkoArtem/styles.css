@@ -1,0 +1,227 @@
+:root {
+    --bg-body: #0f172a;        /* Дуже темний синій (фон сторінки) */
+    --bg-board: #1e293b;       /* Темний фон дошки */
+    --cell-closed: #334155;    /* Колір закритої клітинки */
+    --cell-hover: #475569;     /* Колір при наведенні */
+    --cell-open: #0b1120;      /* Колір відкритої клітинки (втиснутої) */
+    --accent-color: #3b82f6;   /* Синій акцент (рамки) */
+    --text-main: #f8fafc;      /* Білий текст */
+    --danger: #ef4444;         /* Червоний для мін */
+    
+    /* Кольори для цифр */
+    --num-1: #38bdf8;          /* Блакитний */
+    --num-2: #34d399;          /* Смарагдовий */
+    --num-3: #f87171;          /* Червонуватий */
+    --num-4: #c084fc;          /* Фіолетовий */
+}
+
+/* =========================================
+   БАЗОВІ НАЛАШТУВАННЯ
+   ========================================= */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--bg-body);
+    color: var(--text-main);
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* =========================================
+   КОНТЕЙНЕР ГРИ
+   ========================================= */
+.game-container {
+    background-color: var(--bg-board);
+    padding: 24px;
+    border-radius: 16px;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* =========================================
+   ХЕДЕР (Таймер, кнопка, бомби)
+   ========================================= */
+.game-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--cell-open);
+    padding: 12px 20px;
+    border-radius: 12px;
+    margin-bottom: 24px;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Сучасний дисплей для цифр */
+.display {
+    background-color: #000;
+    color: var(--accent-color);
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 28px;
+    font-weight: bold;
+    padding: 6px 12px;
+    border-radius: 8px;
+    letter-spacing: 2px;
+    box-shadow: inset 0 0 10px rgba(59, 130, 246, 0.2);
+    text-shadow: 0 0 8px rgba(59, 130, 246, 0.5);
+}
+
+/* Кнопка рестарту */
+.btn-restart {
+    background-color: var(--cell-closed);
+    border: none;
+    color: var(--text-main);
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+}
+
+.btn-restart:hover {
+    background-color: var(--cell-hover);
+    transform: translateY(-2px);
+}
+
+.btn-restart:active {
+    transform: translateY(1px);
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.4);
+}
+
+/* =========================================
+   ІГРОВЕ ПОЛЕ (Grid)
+   ========================================= */
+.game-board {
+    display: grid;
+    grid-template-columns: repeat(var(--cols, 10), minmax(25px, 40px));
+    grid-template-rows: repeat(var(--rows, 10), minmax(25px, 40px));
+    gap: 3px;
+    max-width: 100%;
+    justify-content: center;
+}
+
+/* =========================================
+   КЛІТИНКИ
+   ========================================= */
+.cell {
+    width: 100%;
+    height: 100%;
+    background-color: var(--cell-closed);
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+    font-weight: 800;
+    transition: background-color 0.15s ease, transform 0.1s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); 
+    color: var(--text-main);
+}
+
+.cell:hover:not(.cell--open) {
+    background-color: var(--cell-hover);
+}
+
+/* Стан: Відкрита клітинка */
+.cell--open {
+    background-color: var(--cell-open);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5); /* Втиснутий ефект */
+    cursor: default;
+}
+
+/* Кольори цифр (через data-value) */
+.cell--open[data-value="1"] { color: var(--num-1); }
+.cell--open[data-value="2"] { color: var(--num-2); }
+.cell--open[data-value="3"] { color: var(--num-3); }
+.cell--open[data-value="4"] { color: var(--num-4); text-shadow: 0 0 8px rgba(192, 132, 252, 0.4); }
+
+/* Стан: Міна (коли користувач підірвався) */
+.cell--exploded {
+    background-color: var(--danger);
+    box-shadow: 0 0 15px var(--danger);
+    animation: pulse 1.5s infinite;
+}
+
+/* Стан: Відкрита міна (інші міни на полі) */
+.cell--mine-revealed {
+    background-color: var(--cell-open);
+}
+
+/* Анімація для підірваної міни */
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+    70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+}
+
+/* Іконки SVG всередині кнопок */
+.cell svg {
+    width: 22px;
+    height: 22px;
+    pointer-events: none;
+}
+
+/* ========================================== */
+/* МОДАЛЬНЕ ВІКНО (Кастомний Alert) */
+/* ========================================== */
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex; justify-content: center; align-items: center;
+    z-index: 1000;
+    backdrop-filter: blur(4px);
+}
+
+.modal-content {
+    background: var(--bg-board, #1e293b);
+    padding: 30px;
+    border-radius: 12px;
+    text-align: center;
+    color: white;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    font-family: sans-serif;
+}
+
+.modal-content--win {
+    border: 2px solid #34d399; /* Зелена рамка для перемоги */
+}
+
+.modal-content--lose {
+    border: 2px solid #ef4444; /* Червона рамка для поразки */
+}
+
+.modal-content h2 {
+    margin-top: 0;
+    margin-bottom: 15px;
+}
+
+.btn-modal {
+    margin-top: 15px;
+    padding: 10px 20px;
+    background: var(--accent-color, #3b82f6);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: opacity 0.2s;
+}
+
+.btn-modal:hover {
+    opacity: 0.9;
+}
