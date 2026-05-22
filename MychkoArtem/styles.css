@@ -13,6 +13,10 @@
     --num-2: #34d399;          /* Смарагдовий */
     --num-3: #f87171;          /* Червонуватий */
     --num-4: #c084fc;          /* Фіолетовий */
+
+    /* РОЗМІРИ ПОЛЯ */
+    --board-columns: 10;
+    --board-rows: 10;
 }
 
 /* =========================================
@@ -105,8 +109,8 @@ body {
    ========================================= */
 .game-board {
     display: grid;
-    grid-template-columns: repeat(10, minmax(25px, 40px));
-    grid-template-rows: repeat(10, minmax(25px, 40px));
+    grid-template-columns: repeat(var(--board-columns), minmax(25px, 40px));
+    grid-template-rows: repeat(var(--board-rows), minmax(25px, 40px));
     gap: 3px;
     max-width: 100%;
     justify-content: center;
