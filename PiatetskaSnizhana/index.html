@@ -9,32 +9,14 @@
 <body>
     <div class="game-container">
         <div class="header">
-            <div class="display flags-count">010</div>
-            <button class="start-btn">😃</button>
-            <div class="display timer">000</div>
+            <div class="display" id="flags-count">015</div>
+            <button class="start-btn" id="start-btn">😃</button>
+            <div class="display" id="timer">000</div>
         </div>
 
-        <div class="board">
-            <div class="cell"></div>
-            <div class="cell revealed"></div>
-            <div class="cell revealed text-blue">1</div>
-            <div class="cell revealed text-green">2</div>
-            
-            <div class="cell flag">🚩</div>
-            <div class="cell revealed false-flag">🚩</div>
-            
-            <div class="cell revealed mine">💣</div>
-            <div class="cell revealed mine exploded">💣</div>
-            
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-        </div>
+        <div class="board" id="board"></div>
     </div>
+    
+    <script src="script.js"></script>
 </body>
 </html>
