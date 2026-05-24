@@ -9,7 +9,6 @@ body {
     font-family: Arial, sans-serif;
 }
 
-/* Головний контейнер гри (схожий на класичний Сапер) */
 .game-container {
     background-color: #bdbdbd;
     padding: 15px;
