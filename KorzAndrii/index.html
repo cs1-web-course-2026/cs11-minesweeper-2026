@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Minesweeper</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="game-wrapper">
+    <header class="game-header">
+      <div class="header-info">
+        <div class="info-block">
+          <span class="info-label">💣</span>
+          <span class="info-value" id="mines-count">15</span>
+        </div>
+        <button class="btn-start" id="btn-start">Нова гра</button>
+        <div class="info-block">
+          <span class="info-label">⏱</span>
+          <span class="info-value" id="timer">0</span>
+        </div>
+      </div>
+    </header>
+
+    <main class="game-main">
+      <div class="board" id="board">
+        <!-- Клітинки генеруються через JS -->
+        <!-- renderField() у script.js -->
+      </div>
+    </main>
+
+    <div class="game-status" id="game-status"></div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
