@@ -1,0 +1,177 @@
+.Body {
+    background-color: rgb(62, 60, 60);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.Maindiv {
+    width: 500px;
+    height: 720px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: crimson;
+    border-radius: 30px;
+    margin: 40px auto;
+    border: solid 5px rgb(60, 7, 7);
+    flex-direction: column;
+    box-shadow: 0px 10px 25px rgba(0,0,0,0.4);
+}
+
+.Head {
+    width: 440px;
+    height: 60px;
+    background-color: rgb(247, 238, 240);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 20px;
+    border: solid 2px rgb(60, 7, 7);
+    margin-top: 15px;
+}
+
+.HeadText {
+    font-size: 36px;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, sans-serif;
+    color: rgb(60, 7, 7);
+    margin: 0;
+}
+
+.Info {
+    width: 440px;
+    height: 140px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    padding: 10px 0;
+}
+
+.TimeCount {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    padding: 0 10px;
+    box-sizing: border-box;
+}
+
+.TimeNumLeft, .TimeNumRight {
+    width: 90px;
+    height: 45px;
+    display: flex;
+    border-radius: 12px;
+    color: #3d0039;
+    font-family: 'Courier New', Courier, monospace;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    background-color: #eae5e5;
+    font-weight: bold; 
+    box-shadow: inset 0px 2px 5px rgba(0,0,0,0.2);
+}
+
+.Emoji img {
+    width: 45px;
+    height: 45px;
+    object-fit: contain;
+}
+
+.FlagCount {
+    font-size: 18px;
+    font-weight: bold;
+    color: rgb(12, 9, 9);
+}
+
+.Button {
+    height: 35px;
+    width: 70px;
+    background-color: rgb(240, 171, 218);
+    border-radius: 15px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    border: 2px solid rgb(60, 7, 7);
+}
+
+.Button:active {
+    transform: scale(0.95);
+}
+
+.Game {
+    width: 440px;
+    height: 440px;
+    background-color: aliceblue;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 8px;
+    margin-bottom: 20px;
+    box-shadow: inset 0px 5px 10px rgba(0,0,0,0.15);
+    box-sizing: border-box;
+}
+
+.CellRow {
+    width: 100%;
+    height: 38px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+/* Стилі для клітинок-дивів */
+div.EmptyCell, div.BombCell, div.FlagCell, div.EmptyCellOpened {
+    width: 38px;
+    height: 38px;
+    box-sizing: border-box;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+div.EmptyCell {
+    background-color: rgb(241, 221, 224);
+    border: solid 2px red;
+}
+
+div.EmptyCell:hover {
+    background-color: rgb(225, 200, 205);
+}
+
+div.BombCell {
+    border: solid 2px red;
+    background-color: black;
+}
+
+div.FlagCell {
+    border: solid 2px red;
+    background-color: orange;
+}
+
+div.EmptyCellOpened {
+    background-color: #eae5e5;
+    border: solid 2px #3d0039;
+    cursor: default;
+}
+
+.NumCell {
+    font-size: 20px;
+    margin: 0;
+}
+
+.GameMessage {
+    text-align: center;
+    font-weight: bold;
+    font-size: 20px;
+    height: 25px;
+    margin: 5px 0;
+    color: #ffffff; 
+}
