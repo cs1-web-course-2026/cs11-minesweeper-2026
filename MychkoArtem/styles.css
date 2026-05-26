@@ -7,21 +7,17 @@
     --accent-color: #3b82f6;   /* Синій акцент (рамки) */
     --text-main: #f8fafc;      /* Білий текст */
     --danger: #ef4444;         /* Червоний для мін */
-
+    
     /* Кольори для цифр */
     --num-1: #38bdf8;          /* Блакитний */
     --num-2: #34d399;          /* Смарагдовий */
     --num-3: #f87171;          /* Червонуватий */
     --num-4: #c084fc;          /* Фіолетовий */
-
-    /* РОЗМІРИ ПОЛЯ */
-    --board-columns: 10;
-    --board-rows: 10;
 }
 
 /* =========================================
- *  БАЗОВІ НАЛАШТУВАННЯ
- *  ========================================= */
+   БАЗОВІ НАЛАШТУВАННЯ
+   ========================================= */
 * {
     box-sizing: border-box;
     margin: 0;
@@ -39,8 +35,8 @@ body {
 }
 
 /* =========================================
- *  КОНТЕЙНЕР ГРИ
- *  ========================================= */
+   КОНТЕЙНЕР ГРИ
+   ========================================= */
 .game-container {
     background-color: var(--bg-board);
     padding: 24px;
@@ -50,8 +46,8 @@ body {
 }
 
 /* =========================================
- *  ХЕДЕР (Таймер, кнопка, бомби)
- *  ========================================= */
+   ХЕДЕР (Таймер, кнопка, бомби)
+   ========================================= */
 .game-header {
     display: flex;
     justify-content: space-between;
@@ -105,21 +101,20 @@ body {
 }
 
 /* =========================================
- *  ІГРОВЕ ПОЛЕ (Grid)
- *  ========================================= */
+   ІГРОВЕ ПОЛЕ (Grid)
+   ========================================= */
 .game-board {
     display: grid;
-    /* Використовуємо змінні замість хардкоду (Виправлено за Code Review) */
-    grid-template-columns: repeat(var(--board-columns), minmax(25px, 40px));
-    grid-template-rows: repeat(var(--board-rows), minmax(25px, 40px));
+    grid-template-columns: repeat(var(--cols, 10), minmax(25px, 40px));
+    grid-template-rows: repeat(var(--rows, 10), minmax(25px, 40px));
     gap: 3px;
     max-width: 100%;
     justify-content: center;
 }
 
 /* =========================================
- *  КЛІТИНКИ
- *  ========================================= */
+   КЛІТИНКИ
+   ========================================= */
 .cell {
     width: 100%;
     height: 100%;
@@ -133,7 +128,7 @@ body {
     font-size: 20px;
     font-weight: 800;
     transition: background-color 0.15s ease, transform 0.1s ease;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); 
     color: var(--text-main);
 }
 
@@ -178,4 +173,55 @@ body {
     width: 22px;
     height: 22px;
     pointer-events: none;
+}
+
+/* ========================================== */
+/* МОДАЛЬНЕ ВІКНО (Кастомний Alert) */
+/* ========================================== */
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex; justify-content: center; align-items: center;
+    z-index: 1000;
+    backdrop-filter: blur(4px);
+}
+
+.modal-content {
+    background: var(--bg-board, #1e293b);
+    padding: 30px;
+    border-radius: 12px;
+    text-align: center;
+    color: white;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    font-family: sans-serif;
+}
+
+.modal-content--win {
+    border: 2px solid #34d399; /* Зелена рамка для перемоги */
+}
+
+.modal-content--lose {
+    border: 2px solid #ef4444; /* Червона рамка для поразки */
+}
+
+.modal-content h2 {
+    margin-top: 0;
+    margin-bottom: 15px;
+}
+
+.btn-modal {
+    margin-top: 15px;
+    padding: 10px 20px;
+    background: var(--accent-color, #3b82f6);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: opacity 0.2s;
+}
+
+.btn-modal:hover {
+    opacity: 0.9;
 }
