@@ -53,16 +53,18 @@ body {
 }
 
 .game-board {
+  display: grid;
+  grid-template-columns: repeat(var(--board-columns), var(--cell-size));
+  grid-template-rows: repeat(var(--board-columns), var(--cell-size));
   gap: 2px;
   border: 3px solid #7b7b7b;
   border-right-color: #ffffff;
   border-bottom-color: #ffffff;
-  display: grid;
-  grid-template-columns: repeat(var(--board-columns), var(--cell-size));
-  grid-template-rows: repeat(var(--board-columns), var(--cell-size));
 }
 
 .cell {
+  width: var(--cell-size);
+  height: var(--cell-size);
   background-color: #bdbdbd;
   border: 3px solid #ffffff;
   border-right-color: #7b7b7b;
@@ -74,18 +76,21 @@ body {
   font-weight: bold;
   cursor: pointer;
   box-sizing: border-box;
-  width: var(--cell-size);
-  height: var(--cell-size);
+  user-select: none; 
 }
 
-.cell--open {
+
+.cell.cell--open {
   border: 1px solid #7b7b7b;
   background-color: #d1d1d1;
+  cursor: default;
 }
 
-.cell--flag {
-  background-color: #bdbdbd;
-}
+
+.color-1 { color: blue; }
+.color-2 { color: green; }
+.color-3 { color: red; }
+.color-4 { color: rgb(200, 10, 188); }
 
 .cell--mine-exploded {
   background-color: #ff0000;
@@ -93,13 +98,21 @@ body {
 }
 
 @media (max-width: 400px) {
-  .game-board {
-    grid-template-columns: repeat(9, 25px);
-    grid-template-rows: repeat(9, 25px);
+  :root {
+    --cell-size: 25px;
   }
   .cell {
-    width: 25px;
-    height: 25px;
     font-size: 14px;
   }
+}
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
 }
