@@ -10,41 +10,19 @@
     <div class="game-container">
         
         <header class="game-header">
-            <div class="status-item timer">000</div>
-            <button type="button" class="reset-button" aria-label="Restart game">😊</button>
-            <div class="status-item flags-count">010</div>
+            <div id="timer" class="status-item timer">000</div>
+            
+            <button type="button" id="reset-btn" class="reset-button" aria-label="Restart game">😊</button>
+            
+            <div id="mines-count" class="status-item flags-count">010</div>
         </header>
-
         
-        <main class="game-board">
-            
-            <div class="cell"></div> 
-            <div class="cell cell--open">1</div> 
-            <div class="cell cell--flag">🚩</div> 
-            <div class="cell cell--mine">💣</div> 
-            <div class="cell cell--mine-exploded">💥</div> 
-
-            
-            <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
-            <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
-            <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
-            <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
-            <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
-            <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
-            <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
-            <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
-            <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
-            <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
-            <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
-            <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
-            <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
-            <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
-            <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
-            <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
-            <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
-            <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
-            <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
-        </main>
+        <main id="grid" class="game-board"></main>
+        
+        <p id="game-message" role="status" aria-live="polite" class="visually-hidden"></p>
+        
     </div>
+
+    <script src="script.js"></script>
 </body>
-</html>
+</html> 
