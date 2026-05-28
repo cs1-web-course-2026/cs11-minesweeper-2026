@@ -1,10 +1,6 @@
-// Практична робота №2 + №3 — Логіка та DOM-інтеграція Minesweeper
-// Джерело: MDN Web Docs — Array, Object, Math, setInterval, DOM Events
-// https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model
 
 // ============================================================
 // 1. КОНСТАНТИ (enum-стиль)
-// Джерело: MDN — const, Object.freeze
 // ============================================================
 
 const CELL_TYPE = Object.freeze({
@@ -38,7 +34,7 @@ const gameState = {
   field: [],
 };
 
-// Кешовані DOM-посилання (заповнюються після DOMContentLoaded)
+// Кешовані DOM-посилання ( DOMContentLoaded)
 // Джерело: MDN — getElementById
 let timerElement = null;
 let minesCountElement = null;
