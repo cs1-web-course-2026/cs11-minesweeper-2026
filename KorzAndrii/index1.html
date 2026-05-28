@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Minesweeper</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="game-wrapper">
+    <header class="game-header">
+      <div class="header-info">
+        <div class="info-block">
+          <span class="info-label">💣</span>
+          <span class="info-value" id="mines-count">15</span>
+        </div>
+        <button class="btn-start" id="btn-start">Нова гра</button>
+        <div class="info-block">
+          <span class="info-label">⏱</span>
+          <span class="info-value" id="timer">0</span>
+        </div>
+      </div>
+    </header>
+
+    <main class="game-main">
+      <div class="board" id="board">
+        <button type="button" class="cell cell--closed" aria-label="Row 1, column 1, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 1, column 2, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 1, column 3, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 1, column 4, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 1, column 5, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 1, column 6, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 1, column 7, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 1, column 8, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 1, column 9, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 1, column 10, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 2, column 1, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 2, column 2, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 2, column 3, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 2, column 4, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 2, column 5, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 2, column 6, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 2, column 7, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 2, column 8, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 2, column 9, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 2, column 10, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 3, column 1, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 3, column 2, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 3, column 3, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 3, column 4, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 3, column 5, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 3, column 6, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 3, column 7, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 3, column 8, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 3, column 9, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 3, column 10, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 4, column 1, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 4, column 2, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 4, column 3, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 4, column 4, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 4, column 5, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 4, column 6, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 4, column 7, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 4, column 8, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 4, column 9, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 4, column 10, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 5, column 1, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 5, column 2, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 5, column 3, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 5, column 4, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 5, column 5, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 5, column 6, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 5, column 7, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 5, column 8, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 5, column 9, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 5, column 10, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 6, column 1, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 6, column 2, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 6, column 3, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 6, column 4, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 6, column 5, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 6, column 6, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 6, column 7, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 6, column 8, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 6, column 9, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 6, column 10, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 7, column 1, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 7, column 2, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 7, column 3, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 7, column 4, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 7, column 5, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 7, column 6, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 7, column 7, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 7, column 8, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 7, column 9, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 7, column 10, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 8, column 1, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 8, column 2, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 8, column 3, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 8, column 4, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 8, column 5, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 8, column 6, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 8, column 7, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 8, column 8, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 8, column 9, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 8, column 10, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 9, column 1, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 9, column 2, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 9, column 3, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 9, column 4, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 9, column 5, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 9, column 6, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 9, column 7, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 9, column 8, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 9, column 9, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 9, column 10, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 10, column 1, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 10, column 2, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 10, column 3, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 10, column 4, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 10, column 5, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 10, column 6, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 10, column 7, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 10, column 8, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 10, column 9, closed"></button>
+        <button type="button" class="cell cell--closed" aria-label="Row 10, column 10, closed"></button>
+      </div>
+    </main>
+
+    <div class="game-status" id="game-status" role="status" aria-live="polite"></div>
+  </div>
+</body>
+</html>
