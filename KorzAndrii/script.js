@@ -1,23 +1,60 @@
+// Практична робота №2 + №3 — Логіка та DOM-інтеграція Minesweeper
+// Джерело: MDN Web Docs — Array, Object, Math, setInterval, DOM Events
+// https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model
 
+// ============================================================
+// 1. КОНСТАНТИ (enum-стиль)
+// Джерело: MDN — const, Object.freeze
+// ============================================================
+
+const CELL_TYPE = Object.freeze({
+  MINE: 'mine',
+  EMPTY: 'empty',
+});
+
+const CELL_STATE = Object.freeze({
+  CLOSED: 'closed',
+  OPENED: 'opened',
+  FLAGGED: 'flagged',
+});
+
+const GAME_STATUS = Object.freeze({
+  PROCESS: 'process',
+  WIN: 'win',
+  LOSE: 'lose',
+});
+
+// ============================================================
+// 2. СТРУКТУРИ ДАНИХ
+// ============================================================
 
 const gameState = {
   rows: 10,
   cols: 10,
   minesCount: 15,
-  status: 'process', 
+  status: GAME_STATUS.PROCESS,
   gameTime: 0,
   timerId: null,
+  field: [],
 };
 
-let field = [];
+// Кешовані DOM-посилання (заповнюються після DOMContentLoaded)
+// Джерело: MDN — getElementById
+let timerElement = null;
+let minesCountElement = null;
+let gameStatusElement = null;
+let boardElement = null;
 
-
+// ============================================================
+// 3. ГЕНЕРАЦІЯ ПОЛЯ
+// Джерело: MDN — Math.random(), Array.from()
+// ============================================================
 
 function generateField(rows, cols, minesCount) {
   const newField = Array.from({ length: rows }, () =>
     Array.from({ length: cols }, () => ({
-      type: 'empty',
-      state: 'closed',
+      type: CELL_TYPE.EMPTY,
+      state: CELL_STATE.CLOSED,
       neighborMines: 0,
     }))
   );
@@ -27,8 +64,8 @@ function generateField(rows, cols, minesCount) {
     const row = Math.floor(Math.random() * rows);
     const col = Math.floor(Math.random() * cols);
 
-    if (newField[row][col].type !== 'mine') {
-      newField[row][col].type = 'mine';
+    if (newField[row][col].type !== CELL_TYPE.MINE) {
+      newField[row][col].type = CELL_TYPE.MINE;
       placed++;
     }
   }
@@ -36,41 +73,47 @@ function generateField(rows, cols, minesCount) {
   return newField;
 }
 
-
+// ============================================================
+// 4. ПІДРАХУНОК СУСІДІВ
+// ============================================================
 
 function countNeighbourMines(field) {
   const rows = field.length;
   const cols = field[0].length;
 
-  for (let r = 0; r < rows; r++) {
-    for (let c = 0; c < cols; c++) {
-      if (field[r][c].type === 'mine') continue;
+  for (let row = 0; row < rows; row++) {
+    for (let col = 0; col < cols; col++) {
+      if (field[row][col].type === CELL_TYPE.MINE) continue;
 
       let count = 0;
-      for (let dr = -1; dr <= 1; dr++) {
-        for (let dc = -1; dc <= 1; dc++) {
-          if (dr === 0 && dc === 0) continue;
-          const nr = r + dr;
-          const nc = c + dc;
-          if (nr >= 0 && nr < rows && nc >= 0 && nc < cols) {
-            if (field[nr][nc].type === 'mine') count++;
+      for (let directionalRow = -1; directionalRow <= 1; directionalRow++) {
+        for (let directionalCol = -1; directionalCol <= 1; directionalCol++) {
+          if (directionalRow === 0 && directionalCol === 0) continue;
+          const neighbourRow = row + directionalRow;
+          const neighbourCol = col + directionalCol;
+          if (neighbourRow >= 0 && neighbourRow < rows && neighbourCol >= 0 && neighbourCol < cols) {
+            if (field[neighbourRow][neighbourCol].type === CELL_TYPE.MINE) count++;
           }
         }
       }
-      field[r][c].neighborMines = count;
+      field[row][col].neighborMines = count;
     }
   }
 }
 
+// ============================================================
+// 5. ЛОГІКА ВІДКРИТТЯ (рекурсія)
+// Джерело: MDN — Recursion
+// ============================================================
 
 function openCell(row, col) {
-  const cell = field[row][col];
+  const cell = gameState.field[row][col];
 
-  if (cell.state === 'opened' || cell.state === 'flagged') return;
+  if (cell.state === CELL_STATE.OPENED || cell.state === CELL_STATE.FLAGGED) return;
 
-  if (cell.type === 'mine') {
-    cell.state = 'opened';
-    gameState.status = 'lose';
+  if (cell.type === CELL_TYPE.MINE) {
+    cell.state = CELL_STATE.OPENED;
+    gameState.status = GAME_STATUS.LOSE;
     stopTimer();
     revealAllMines(row, col);
     renderField();
@@ -78,17 +121,20 @@ function openCell(row, col) {
     return;
   }
 
-  cell.state = 'opened';
+  cell.state = CELL_STATE.OPENED;
 
   if (cell.neighborMines === 0) {
-    for (let dr = -1; dr <= 1; dr++) {
-      for (let dc = -1; dc <= 1; dc++) {
-        if (dr === 0 && dc === 0) continue;
-        const nr = row + dr;
-        const nc = col + dc;
-        if (nr >= 0 && nr < gameState.rows && nc >= 0 && nc < gameState.cols) {
-          if (field[nr][nc].state === 'closed') {
-            openCell(nr, nc);
+    for (let directionalRow = -1; directionalRow <= 1; directionalRow++) {
+      for (let directionalCol = -1; directionalCol <= 1; directionalCol++) {
+        if (directionalRow === 0 && directionalCol === 0) continue;
+        const neighbourRow = row + directionalRow;
+        const neighbourCol = col + directionalCol;
+        if (
+          neighbourRow >= 0 && neighbourRow < gameState.rows &&
+          neighbourCol >= 0 && neighbourCol < gameState.cols
+        ) {
+          if (gameState.field[neighbourRow][neighbourCol].state === CELL_STATE.CLOSED) {
+            openCell(neighbourRow, neighbourCol);
           }
         }
       }
@@ -98,45 +144,54 @@ function openCell(row, col) {
   checkWin();
 }
 
+// ============================================================
+// 6. ПРАПОРЦІ
+// ============================================================
 
 function toggleFlag(row, col) {
-  const cell = field[row][col];
-  if (cell.state === 'opened') return;
+  const cell = gameState.field[row][col];
+  if (cell.state === CELL_STATE.OPENED) return;
 
-  if (cell.state === 'flagged') {
-    cell.state = 'closed';
-  } else {
-    cell.state = 'flagged';
-  }
+  cell.state = cell.state === CELL_STATE.FLAGGED ? CELL_STATE.CLOSED : CELL_STATE.FLAGGED;
 }
 
+// ============================================================
+// 7. ПЕРЕВІРКА ПЕРЕМОГИ
+// ============================================================
 
 function checkWin() {
-  const allSafeCellsOpen = field.every(row =>
-    row.every(cell => cell.type === 'mine' || cell.state === 'opened')
+  const allSafeCellsOpen = gameState.field.every(rowArr =>
+    rowArr.every(cell => cell.type === CELL_TYPE.MINE || cell.state === CELL_STATE.OPENED)
   );
 
   if (allSafeCellsOpen) {
-    gameState.status = 'win';
+    gameState.status = GAME_STATUS.WIN;
     stopTimer();
     renderField();
     showStatus();
   }
 }
 
+// ============================================================
+// 8. ВІДКРИТТЯ ВСІХ МІН ПІСЛЯ ПРОГРАШУ
+// ============================================================
 
 function revealAllMines(hitRow, hitCol) {
-  for (let r = 0; r < gameState.rows; r++) {
-    for (let c = 0; c < gameState.cols; c++) {
-      const cell = field[r][c];
-      if (cell.type === 'mine' && cell.state !== 'flagged') {
-        cell.state = 'opened';
-        cell._isHit = (r === hitRow && c === hitCol);
+  for (let row = 0; row < gameState.rows; row++) {
+    for (let col = 0; col < gameState.cols; col++) {
+      const cell = gameState.field[row][col];
+      if (cell.type === CELL_TYPE.MINE && cell.state !== CELL_STATE.FLAGGED) {
+        cell.state = CELL_STATE.OPENED;
+        cell._isHit = (row === hitRow && col === hitCol);
       }
     }
   }
 }
 
+// ============================================================
+// 9. ТАЙМЕР
+// Джерело: MDN — setInterval, clearInterval
+// ============================================================
 
 function startTimer() {
   gameState.gameTime = 0;
@@ -159,70 +214,75 @@ function stopTimer() {
   }
 }
 
+// ============================================================
+// 10. DOM — ОНОВЛЕННЯ ІНТЕРФЕЙСУ
+// Джерело: MDN — textContent
+// ============================================================
 
 function updateTimerUI() {
-  const timerEl = document.getElementById('timer');
-  if (timerEl) timerEl.textContent = gameState.gameTime;
+  if (timerElement) timerElement.textContent = gameState.gameTime;
 }
 
 function updateMinesCountUI() {
-  const minesEl = document.getElementById('mines-count');
-  if (minesEl) {
-    let flagCount = 0;
-    for (const row of field) {
-      for (const cell of row) {
-        if (cell.state === 'flagged') flagCount++;
-      }
+  if (!minesCountElement) return;
+  let flagCount = 0;
+  for (const row of gameState.field) {
+    for (const cell of row) {
+      if (cell.state === CELL_STATE.FLAGGED) flagCount++;
     }
-    minesEl.textContent = gameState.minesCount - flagCount;
   }
+  minesCountElement.textContent = gameState.minesCount - flagCount;
 }
 
 function showStatus() {
-  const statusEl = document.getElementById('game-status');
-  if (!statusEl) return;
+  if (!gameStatusElement) return;
 
-  if (gameState.status === 'win') {
-    statusEl.textContent = '🎉 Перемога! Час: ' + gameState.gameTime + ' сек';
-    statusEl.className = 'game-status game-status--win';
-  } else if (gameState.status === 'lose') {
-    statusEl.textContent = '💥 Програш! Спробуй ще раз';
-    statusEl.className = 'game-status game-status--lose';
+  if (gameState.status === GAME_STATUS.WIN) {
+    gameStatusElement.textContent = '🎉 Перемога! Час: ' + gameState.gameTime + ' сек';
+    gameStatusElement.className = 'game-status game-status--win';
+  } else if (gameState.status === GAME_STATUS.LOSE) {
+    gameStatusElement.textContent = '💥 Програш! Спробуй ще раз';
+    gameStatusElement.className = 'game-status game-status--lose';
   } else {
-    statusEl.textContent = '';
-    statusEl.className = 'game-status';
+    gameStatusElement.textContent = '';
+    gameStatusElement.className = 'game-status';
   }
 }
 
+// ============================================================
+// 11. DOM — РЕНДЕРИНГ ІГРОВОГО ПОЛЯ
+// Джерело: MDN — createElement, classList, dataset, addEventListener
+// ============================================================
 
 function renderField() {
-  const board = document.getElementById('board');
-  if (!board) return;
+  if (!boardElement) return;
 
-  board.style.gridTemplateColumns = `repeat(${gameState.cols}, var(--cell-size))`;
+  boardElement.style.gridTemplateColumns = `repeat(${gameState.cols}, var(--cell-size))`;
+  boardElement.innerHTML = '';
 
-  board.innerHTML = '';
+  for (let row = 0; row < gameState.rows; row++) {
+    for (let col = 0; col < gameState.cols; col++) {
+      const cellData = gameState.field[row][col];
 
-  for (let r = 0; r < gameState.rows; r++) {
-    for (let c = 0; c < gameState.cols; c++) {
-      const cellData = field[r][c];
-      const cellEl = document.createElement('div');
+      const cellEl = document.createElement('button');
+      cellEl.type = 'button';
       cellEl.className = 'cell';
-      cellEl.dataset.row = r;
-      cellEl.dataset.col = c;
+      cellEl.dataset.row = row;
+      cellEl.dataset.col = col;
+      cellEl.setAttribute('aria-label', `Row ${row + 1}, column ${col + 1}, ${cellData.state}`);
 
       switch (cellData.state) {
-        case 'closed':
+        case CELL_STATE.CLOSED:
           cellEl.classList.add('cell--closed');
           break;
 
-        case 'flagged':
+        case CELL_STATE.FLAGGED:
           cellEl.classList.add('cell--flagged');
           cellEl.textContent = '🚩';
           break;
 
-        case 'opened':
-          if (cellData.type === 'mine') {
+        case CELL_STATE.OPENED:
+          if (cellData.type === CELL_TYPE.MINE) {
             cellEl.classList.add('cell--mine');
             cellEl.textContent = '💣';
             if (cellData._isHit) {
@@ -239,28 +299,32 @@ function renderField() {
           break;
       }
 
-      if (gameState.status === 'process') {
+      if (gameState.status === GAME_STATUS.PROCESS) {
         cellEl.addEventListener('click', handleLeftClick);
-
         cellEl.addEventListener('contextmenu', handleRightClick);
       }
 
-      board.appendChild(cellEl);
+      boardElement.appendChild(cellEl);
     }
   }
 
   updateMinesCountUI();
 }
 
+// ============================================================
+// 12. ОБРОБНИКИ ПОДІЙ МИШІ
+// Джерело: MDN — MouseEvent, event.preventDefault()
+// ============================================================
+
 function handleLeftClick(event) {
-  if (gameState.status !== 'process') return;
+  if (gameState.status !== GAME_STATUS.PROCESS) return;
 
   const row = parseInt(event.currentTarget.dataset.row);
   const col = parseInt(event.currentTarget.dataset.col);
 
   openCell(row, col);
 
-  if (gameState.status === 'process') {
+  if (gameState.status === GAME_STATUS.PROCESS) {
     renderField();
   }
 }
@@ -268,7 +332,7 @@ function handleLeftClick(event) {
 function handleRightClick(event) {
   event.preventDefault();
 
-  if (gameState.status !== 'process') return;
+  if (gameState.status !== GAME_STATUS.PROCESS) return;
 
   const row = parseInt(event.currentTarget.dataset.row);
   const col = parseInt(event.currentTarget.dataset.col);
@@ -277,25 +341,39 @@ function handleRightClick(event) {
   renderField();
 }
 
+// ============================================================
+// 13. ІНІЦІАЛІЗАЦІЯ ГРИ
+// ============================================================
 
 function initGame() {
   gameState.rows = 10;
   gameState.cols = 10;
   gameState.minesCount = 15;
-  gameState.status = 'process';
+  gameState.status = GAME_STATUS.PROCESS;
   gameState.gameTime = 0;
 
   stopTimer();
 
-  field = generateField(gameState.rows, gameState.cols, gameState.minesCount);
-  countNeighbourMines(field);
+  gameState.field = generateField(gameState.rows, gameState.cols, gameState.minesCount);
+  countNeighbourMines(gameState.field);
 
   renderField();
   showStatus();
   startTimer();
 }
 
+// ============================================================
+// 14. КНОПКА НОВОЇ ГРИ
+// Джерело: MDN — DOMContentLoaded, querySelector
+// ============================================================
+
 document.addEventListener('DOMContentLoaded', () => {
+  // Кешуємо DOM-посилання один раз
+  timerElement = document.getElementById('timer');
+  minesCountElement = document.getElementById('mines-count');
+  gameStatusElement = document.getElementById('game-status');
+  boardElement = document.getElementById('board');
+
   const btnStart = document.getElementById('btn-start');
   if (btnStart) {
     btnStart.addEventListener('click', initGame);
