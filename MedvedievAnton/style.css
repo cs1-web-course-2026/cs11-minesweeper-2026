@@ -26,6 +26,13 @@ body {
     max-width: 500px;
 }
 
+.game-message {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+}
+
 .game-header {
     display: flex;
     justify-content: space-between;
@@ -98,6 +105,12 @@ body {
     font-size: 18px;
 
     user-select: none;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.cell:hover {
+    opacity: 0.9;
 }
 
 .closed {
@@ -108,6 +121,7 @@ body {
 .opened {
     background-color: #d1d1d1;
     color: black;
+    cursor: default;
 }
 
 .flag {
@@ -129,7 +143,7 @@ body {
 }
 
 .exploded {
-    background-color: #e53935;
+    background-color: #d32f2f;
     color: white;
 }
 

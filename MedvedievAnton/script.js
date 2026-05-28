@@ -9,51 +9,70 @@ const gameState = {
 
 let field = [];
 
+const boardElement = document.getElementById('game-board');
+const timerElement = document.getElementById('timer');
+const flagsElement = document.getElementById('flags-count');
+const restartButton = document.getElementById('restart-button');
+const messageElement = document.getElementById('game-message');
+
 function createEmptyField(rows, cols) {
+
     const newField = [];
 
     for (let row = 0; row < rows; row++) {
+
         const currentRow = [];
 
         for (let col = 0; col < cols; col++) {
+
             currentRow.push({
                 type: 'empty',
                 neighborMines: 0,
                 state: 'closed',
             });
+
         }
 
         newField.push(currentRow);
+
     }
 
     return newField;
 }
 
 function generateField(rows, cols, minesCount) {
+
     field = createEmptyField(rows, cols);
 
     let placedMines = 0;
 
     while (placedMines < minesCount) {
+
         const randomRow = Math.floor(Math.random() * rows);
         const randomCol = Math.floor(Math.random() * cols);
 
         if (field[randomRow][randomCol].type !== 'mine') {
+
             field[randomRow][randomCol].type = 'mine';
+
             placedMines++;
+
         }
+
     }
 
     countNeighbourMines();
 }
 
 function isValidCell(row, col) {
+
     return (
         row >= 0 &&
         row < gameState.rows &&
         col >= 0 &&
         col < gameState.cols
     );
+
 }
 
 function countNeighbourMines() {
@@ -112,10 +131,18 @@ function openCell(row, col) {
     cell.state = 'opened';
 
     if (cell.type === 'mine') {
+
+        cell.state = 'exploded';
+
         gameState.status = 'lose';
+
+        revealMines();
+
         stopTimer();
 
-        console.log('Гру програно');
+        renderField();
+
+        messageElement.textContent = 'Ви програли';
 
         return;
     }
@@ -139,11 +166,33 @@ function openCell(row, col) {
     }
 
     checkWin();
+
+    renderField();
+}
+
+function revealMines() {
+
+    for (let row = 0; row < gameState.rows; row++) {
+
+        for (let col = 0; col < gameState.cols; col++) {
+
+            if (field[row][col].type === 'mine') {
+
+                if (field[row][col].state !== 'exploded') {
+                    field[row][col].state = 'opened';
+                }
+
+            }
+
+        }
+
+    }
+
 }
 
 function toggleFlag(row, col) {
 
-    if (!isValidCell(row, col)) {
+    if (gameState.status !== 'process') {
         return;
     }
 
@@ -154,43 +203,144 @@ function toggleFlag(row, col) {
     }
 
     if (cell.state === 'closed') {
+
         cell.state = 'flagged';
+
     } else if (cell.state === 'flagged') {
+
         cell.state = 'closed';
+
     }
 
+    updateFlagsCounter();
+
+    renderField();
 }
 
 function checkWin() {
 
-    let closedCells = 0;
+    let openedCells = 0;
 
     for (let row = 0; row < gameState.rows; row++) {
 
         for (let col = 0; col < gameState.cols; col++) {
 
-            if (field[row][col].state !== 'opened') {
-                closedCells++;
+            if (field[row][col].state === 'opened') {
+                openedCells++;
             }
 
         }
 
     }
 
-    if (closedCells === gameState.minesCount) {
+    const safeCells =
+        (gameState.rows * gameState.cols) - gameState.minesCount;
+
+    if (openedCells === safeCells) {
+
         gameState.status = 'win';
 
         stopTimer();
 
-        console.log('Гру виграно');
+        messageElement.textContent = 'Ви перемогли';
+
+    }
+
+}
+
+function renderField() {
+
+    boardElement.innerHTML = '';
+
+    for (let row = 0; row < gameState.rows; row++) {
+
+        for (let col = 0; col < gameState.cols; col++) {
+
+            const cell = field[row][col];
+
+            const cellElement = document.createElement('div');
+
+            cellElement.classList.add('cell');
+
+            if (cell.state === 'closed') {
+
+                cellElement.classList.add('closed');
+
+            }
+
+            if (cell.state === 'flagged') {
+
+                cellElement.classList.add('flag');
+
+            }
+
+            if (cell.state === 'opened') {
+
+                if (cell.type === 'mine') {
+
+                    cellElement.classList.add('mine');
+
+                } else {
+
+                    cellElement.classList.add('opened');
+
+                    if (cell.neighborMines > 0) {
+
+                        cellElement.textContent =
+                            cell.neighborMines;
+
+                        cellElement.classList.add(
+                            `number-${cell.neighborMines}`
+                        );
+
+                    }
+
+                }
+
+            }
+
+            if (cell.state === 'exploded') {
+
+                cellElement.classList.add('exploded');
+
+                cellElement.textContent = '💣';
+
+            }
+
+            cellElement.addEventListener('click', () => {
+
+                if (gameState.status === 'process') {
+                    openCell(row, col);
+                }
+
+            });
+
+            cellElement.addEventListener('contextmenu', (event) => {
+
+                event.preventDefault();
+
+                toggleFlag(row, col);
+
+            });
+
+            boardElement.appendChild(cellElement);
+
+        }
+
     }
 
 }
 
 function startTimer() {
 
+    stopTimer();
+
     gameState.timerId = setInterval(() => {
+
         gameState.gameTime++;
+
+        timerElement.textContent = gameState.gameTime;
+
     }, 1000);
 
 }
@@ -201,10 +351,36 @@ function stopTimer() {
 
 }
 
+function updateFlagsCounter() {
+
+    let flags = 0;
+
+    for (let row = 0; row < gameState.rows; row++) {
+
+        for (let col = 0; col < gameState.cols; col++) {
+
+            if (field[row][col].state === 'flagged') {
+                flags++;
+            }
+
+        }
+
+    }
+
+    flagsElement.textContent =
+        gameState.minesCount - flags;
+
+}
+
 function startGame() {
 
     gameState.status = 'process';
+
     gameState.gameTime = 0;
+
+    timerElement.textContent = '0';
+
+    messageElement.textContent = '';
 
     generateField(
         gameState.rows,
@@ -212,15 +388,13 @@ function startGame() {
         gameState.minesCount
     );
 
+    renderField();
+
+    updateFlagsCounter();
+
     startTimer();
 }
 
+restartButton.addEventListener('click', startGame);
+
 startGame();
-
-console.log(field);
-
-openCell(0, 0);
-
-toggleFlag(1, 1);
-
-console.log(gameState);
