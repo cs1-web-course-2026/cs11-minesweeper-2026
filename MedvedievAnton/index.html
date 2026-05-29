@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minesweeper</title>
+    <script src="script.js"></script>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <main class="game-container">
+
+        <header class="game-header">
+
+            <div class="info-block">
+                <span class="label">Час</span>
+                <span class="value">001</span>
+            </div>
+
+            <button class="restart-button">
+                Нова гра
+            </button>
+
+            <div class="info-block">
+                <span class="label">Прапорці</span>
+                <span class="value">010</span>
+            </div>
+
+        </header>
+
+        <section class="game-board">
+
+            <!-- Ряд 1 -->
+            <div class="cell closed"></div>
+            <div class="cell closed"></div>
+            <div class="cell flag"></div>
+            <div class="cell closed"></div>
+            <div class="cell closed"></div>
+            <div class="cell mine"></div>
+            <div class="cell opened number-1">1</div>
+            <div class="cell opened number-2">2</div>
+
+            <!-- Ряд 2 -->
+            <div class="cell opened"></div>
+            <div class="cell opened number-3">3</div>
+            <div class="cell exploded">💣</div>
+            <div class="cell closed"></div>
+            <div class="cell flag"></div>
+            <div class="cell opened number-4">4</div>
+            <div class="cell opened number-5">5</div>
+            <div class="cell opened number-6">6</div>
+
+            <!-- Ряд 3 -->
+            <div class="cell closed"></div>
+            <div class="cell closed"></div>
+            <div class="cell opened number-7">7</div>
+            <div class="cell opened number-8">8</div>
+            <div class="cell mine"></div>
+            <div class="cell closed"></div>
+            <div class="cell flag"></div>
+            <div class="cell opened"></div>
+
+            <!-- Ряд 4 -->
+            <div class="cell opened"></div>
+            <div class="cell closed"></div>
+            <div class="cell closed"></div>
+            <div class="cell opened number-1">1</div>
+            <div class="cell opened number-2">2</div>
+            <div class="cell mine"></div>
+            <div class="cell closed"></div>
+            <div class="cell flag"></div>
+
+            <!-- Ряд 5 -->
+            <div class="cell opened number-3">3</div>
+            <div class="cell closed"></div>
+            <div class="cell opened"></div>
+            <div class="cell closed"></div>
+            <div class="cell mine"></div>
+            <div class="cell opened number-4">4</div>
+            <div class="cell closed"></div>
+            <div class="cell opened"></div>
+
+            <!-- Ряд 6 -->
+            <div class="cell closed"></div>
+            <div class="cell flag"></div>
+            <div class="cell opened number-5">5</div>
+            <div class="cell closed"></div>
+            <div class="cell opened number-6">6</div>
+            <div class="cell mine"></div>
+            <div class="cell closed"></div>
+            <div class="cell opened"></div>
+
+            <!-- Ряд 7 -->
+            <div class="cell opened"></div>
+            <div class="cell closed"></div>
+            <div class="cell mine"></div>
+            <div class="cell opened number-7">7</div>
+            <div class="cell closed"></div>
+            <div class="cell flag"></div>
+            <div class="cell opened number-8">8</div>
+            <div class="cell closed"></div>
+
+            <!-- Ряд 8 -->
+            <div class="cell closed"></div>
+            <div class="cell opened"></div>
+            <div class="cell closed"></div>
+            <div class="cell mine"></div>
+            <div class="cell opened number-1">1</div>
+            <div class="cell closed"></div>
+            <div class="cell flag"></div>
+            <div class="cell opened"></div>
+
+        </section>
+
+    </main>
+
+</body>
+</html>
