@@ -1,0 +1,151 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+  background: #f4f7fb;
+  color: #1f2933;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.mine {
+  background: #ffb3b3;
+  color: black;
+}
+.four {
+  color: purple;
+}
+.game {
+  width: min(92vw, 760px);
+  padding: 24px;
+}
+.cell:hover {
+  opacity: 0.9;
+}
+.game-header,
+.controls {
+  background: white;
+  border: 1px solid #d7dde5;
+  border-radius: 14px;
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+}
+
+.info-box {
+  font-size: 28px;
+  font-weight: 700;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.new-game,
+.control-btn {
+  background: white;
+  border: 1px solid #c8d0d9;
+  border-radius: 8px;
+  padding: 12px 20px;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.new-game:hover,
+.control-btn:hover {
+  background: #edf3fa;
+}
+
+.board {
+  width: min(92vw, 560px);
+  margin: 34px auto;
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  border: 3px solid #b7c0c9;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.cell {
+  aspect-ratio: 1 / 1;
+  border: 1px solid #c9d0d8;
+  font-size: 34px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.closed {
+  background: linear-gradient(145deg, #edf0f3, #dfe5eb);
+  box-shadow: inset 3px 3px 0 white, inset -3px -3px 0 #c5ccd3;
+}
+
+.open {
+  background: #f8fafc;
+}
+
+.one {
+  color: #1d63c8;
+}
+
+.two {
+  color: #21883b;
+}
+
+.three {
+  color: #c7302b;
+}
+
+.flag {
+  color: #d93025;
+}
+
+.controls {
+  margin-top: 20px;
+}
+
+.status {
+  min-width: 78px;
+  min-height: 68px;
+  border: 1px solid #c8d0d9;
+  border-radius: 8px;
+  background: white;
+  font-size: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.help {
+  text-align: center;
+  margin-top: 22px;
+  font-size: 17px;
+}
+
+@media (max-width: 600px) {
+  .game {
+    padding: 12px;
+  }
+
+  .game-header,
+  .controls {
+    flex-direction: column;
+  }
+
+  .info-box {
+    font-size: 24px;
+  }
+
+  .cell {
+    font-size: 24px;
+  }
+}

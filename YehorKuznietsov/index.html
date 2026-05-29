@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Minesweeper</title>
+
+  <!-- FIX: исправлен путь style.css -> styles.css -->
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <main class="game">
+    <header class="game-header">
+      <div class="info-box">⏱ <span class="timer">00:00</span></div>
+      <div class="info-box">💣 <span class="mine-count">10</span></div>
+      <button class="new-game" type="button">Нова гра</button>
+    </header>
+
+    <section class="board"></section>
+
+    <section class="controls">
+      <!-- FIX: добавлены role и aria-live -->
+      <div class="status" role="status" aria-live="polite">
+        Почніть гру
+      </div>
+
+      <button class="control-btn" type="button">Нова гра</button>
+    </section>
+
+    <p class="help">
+      Лівий клік - відкрити клітинку, правий клік - поставити або прибрати прапорець.
+    </p>
+  </main>
+
+  <script src="./script.js"></script>
+</body>
+</html>
