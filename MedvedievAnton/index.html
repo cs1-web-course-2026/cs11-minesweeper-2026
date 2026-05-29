@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minesweeper</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <main class="game-container">
+
+        <header class="game-header">
+
+            <div class="info-block">
+                <span class="label">Час</span>
+                <span class="value" id="timer">0</span>
+            </div>
+
+            <button class="restart-button" id="restart-button">
+                Нова гра
+            </button>
+
+            <div class="info-block">
+                <span class="label">Прапорці</span>
+                <span class="value" id="flags-count">15</span>
+            </div>
+
+        </header>
+
+        <section class="game-board" id="game-board"></section>
+
+        <div class="game-message" id="game-message"></div>
+
+    </main>
+
+    <script src="script.js"></script>
+
+</body>
+</html>
