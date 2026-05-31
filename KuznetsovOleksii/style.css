@@ -44,13 +44,10 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 2px outset #eee;
-    background: #bdbdbd;
 }
 
 .field {
     display: grid;
-    grid-template-columns: repeat(8, 40px);
     gap: 1px;
     background: #777;
     border: 3px inset #eee;
@@ -64,8 +61,6 @@ body {
     align-items: center;
     font-weight: bold;
     font-size: 20px;
-    padding: 0;
-    border: none;
 }
 
 .closed {
@@ -105,20 +100,9 @@ body {
 .cell[data-number="4"] { color: darkblue; }
 .cell[data-number="5"] { color: brown; }
 
-.visually-hidden {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    border: 0;
-}
-
 @media (max-width: 600px) {
     .field {
-        grid-template-columns: repeat(8, 30px);
+        grid-template-columns: repeat(8, 30px) !important;
     }
     .cell {
         width: 30px;
