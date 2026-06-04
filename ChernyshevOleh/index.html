@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Minesweeper - Chernyshev Oleh</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="game-shell">
+    <section class="game-card" aria-labelledby="game-title">
+      <header class="game-header">
+        <div>
+          <p class="eyebrow">Практична робота 2</p>
+          <h1 id="game-title">Minesweeper</h1>
+        </div>
+
+        <div class="game-controls" aria-label="Панель керування грою">
+          <div class="status-panel" aria-label="Кількість прапорців">
+            <span class="status-label">Flags</span>
+            <strong id="flags-counter">015</strong>
+          </div>
+          <button class="start-button" id="new-game-button" type="button" aria-label="Почати нову гру">
+            <span aria-hidden="true">↻</span>
+            New game
+          </button>
+          <div class="status-panel" aria-label="Таймер">
+            <span class="status-label">Time</span>
+            <strong id="timer">000</strong>
+          </div>
+        </div>
+      </header>
+
+      <p class="game-message" id="game-message" aria-live="polite">Гру почато. Відкрийте першу клітинку.</p>
+
+      <section class="board-wrap" aria-label="Ігрове поле Minesweeper">
+        <div class="board" id="game-board" role="grid" aria-label="Сітка клітинок гри Minesweeper"></div>
+      </section>
+
+      <section class="legend" aria-labelledby="legend-title">
+        <h2 id="legend-title">Стани клітинок</h2>
+        <ul class="legend-list">
+          <li><span class="cell sample is-closed"></span>Закрита</li>
+          <li><span class="cell sample is-open number-2">2</span>Відкрита</li>
+          <li><span class="cell sample is-flagged">⚑</span>Прапорець</li>
+          <li><span class="cell sample is-flagged is-mine-flag">⚑</span>Прапорець на міні</li>
+          <li><span class="cell sample is-flagged is-safe-flag">⚑</span>Прапорець без міни</li>
+          <li><span class="cell sample is-mine">✹</span>Міна</li>
+          <li><span class="cell sample is-mine is-triggered">✹</span>Натиснута міна</li>
+        </ul>
+      </section>
+    </section>
+  </main>
+  <script src="script.js"></script>
+</body>
+</html>
