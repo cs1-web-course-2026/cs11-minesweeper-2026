@@ -171,6 +171,16 @@ h2 {
   background: #9aa9ba;
 }
 
+.board[data-status="win"] {
+  border-color: #15803d;
+  box-shadow: 0 0 0 3px rgba(21, 128, 61, 0.16);
+}
+
+.board[data-status="lose"] {
+  border-color: var(--danger-dark);
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.18);
+}
+
 .cell {
   width: var(--cell-size);
   aspect-ratio: 1;

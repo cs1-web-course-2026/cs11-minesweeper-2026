@@ -1,13 +1,35 @@
-const gameState = {
+const CELL_TYPE = {
+  EMPTY: 'empty',
+  MINE: 'mine',
+};
+
+const CELL_STATE = {
+  CLOSED: 'closed',
+  OPENED: 'opened',
+  FLAGGED: 'flagged',
+};
+
+const GAME_STATUS = {
+  PROCESS: 'process',
+  WIN: 'win',
+  LOSE: 'lose',
+};
+
+const GAME_CONFIG = {
   rows: 10,
   cols: 10,
   minesCount: 15,
-  status: 'process',
-  gameTime: 0,
-  timerId: null,
 };
 
-let field = [];
+const gameState = {
+  rows: GAME_CONFIG.rows,
+  cols: GAME_CONFIG.cols,
+  minesCount: GAME_CONFIG.minesCount,
+  status: GAME_STATUS.PROCESS,
+  gameTime: 0,
+  timerId: null,
+  field: [],
+};
 
 const boardElement = document.querySelector('#game-board');
 const flagsCounterElement = document.querySelector('#flags-counter');
@@ -17,9 +39,10 @@ const newGameButton = document.querySelector('#new-game-button');
 
 function createCell() {
   return {
-    type: 'empty',
+    type: CELL_TYPE.EMPTY,
     neighborMines: 0,
-    state: 'closed',
+    state: CELL_STATE.CLOSED,
+    triggered: false,
   };
 }
 
@@ -52,6 +75,10 @@ function getNeighborPositions(row, col) {
   return positions;
 }
 
+function getCell(row, col) {
+  return gameState.field[row][col];
+}
+
 function placeMines(minesCount) {
   const minePositions = new Set();
 
@@ -63,13 +90,13 @@ function placeMines(minesCount) {
 
   minePositions.forEach((position) => {
     const [row, col] = position.split(':').map(Number);
-    field[row][col].type = 'mine';
+    getCell(row, col).type = CELL_TYPE.MINE;
   });
 }
 
 function countNeighbourMines(row, col) {
   return getNeighborPositions(row, col).filter(([neighborRow, neighborCol]) => {
-    return field[neighborRow][neighborCol].type === 'mine';
+    return getCell(neighborRow, neighborCol).type === CELL_TYPE.MINE;
   }).length;
 }
 
@@ -80,8 +107,10 @@ function countNeighborMines(row, col) {
 function fillNeighborCounts() {
   for (let row = 0; row < gameState.rows; row += 1) {
     for (let col = 0; col < gameState.cols; col += 1) {
-      if (field[row][col].type === 'empty') {
-        field[row][col].neighborMines = countNeighbourMines(row, col);
+      const cell = getCell(row, col);
+
+      if (cell.type === CELL_TYPE.EMPTY) {
+        cell.neighborMines = countNeighbourMines(row, col);
       }
     }
   }
@@ -91,22 +120,26 @@ function generateField(rows, cols, minesCount) {
   gameState.rows = rows;
   gameState.cols = cols;
   gameState.minesCount = minesCount;
+  gameState.field = createEmptyField(rows, cols);
 
-  field = createEmptyField(rows, cols);
   placeMines(minesCount);
   fillNeighborCounts();
 
-  return field;
+  return gameState.field;
 }
 
 function getFlagsCount() {
-  return field.flat().filter((cell) => cell.state === 'flagged').length;
+  return gameState.field.flat().filter((cell) => cell.state === CELL_STATE.FLAGGED).length;
 }
 
 function getClosedSafeCellsCount() {
-  return field.flat().filter((cell) => {
-    return cell.type !== 'mine' && cell.state !== 'opened';
+  return gameState.field.flat().filter((cell) => {
+    return cell.type !== CELL_TYPE.MINE && cell.state !== CELL_STATE.OPENED;
   }).length;
+}
+
+function formatCounter(value) {
+  return String(value).padStart(3, '0');
 }
 
 function startTimer() {
@@ -115,7 +148,7 @@ function startTimer() {
   }
 
   gameState.timerId = setInterval(() => {
-    if (gameState.status !== 'process') {
+    if (gameState.status !== GAME_STATUS.PROCESS) {
       stopTimer();
       return;
     }
@@ -133,12 +166,12 @@ function stopTimer() {
 }
 
 function updateTimer() {
-  timerElement.textContent = String(gameState.gameTime).padStart(3, '0');
+  timerElement.textContent = formatCounter(gameState.gameTime);
 }
 
 function updateFlagsCounter() {
   const flagsLeft = gameState.minesCount - getFlagsCount();
-  flagsCounterElement.textContent = String(flagsLeft).padStart(3, '0');
+  flagsCounterElement.textContent = formatCounter(flagsLeft);
 }
 
 function updateMessage(text, statusClass = '') {
@@ -150,9 +183,14 @@ function updateMessage(text, statusClass = '') {
   }
 }
 
+function updateBoardStatus() {
+  boardElement.dataset.status = gameState.status;
+  boardElement.setAttribute('aria-disabled', String(gameState.status !== GAME_STATUS.PROCESS));
+}
+
 function checkWin() {
-  if (gameState.status === 'process' && getClosedSafeCellsCount() === 0) {
-    gameState.status = 'win';
+  if (gameState.status === GAME_STATUS.PROCESS && getClosedSafeCellsCount() === 0) {
+    gameState.status = GAME_STATUS.WIN;
     stopTimer();
     updateMessage('Перемога! Усі безпечні клітинки відкрито.', 'is-win');
   }
@@ -161,43 +199,41 @@ function checkWin() {
 function revealAllMines(triggeredRow, triggeredCol) {
   for (let row = 0; row < gameState.rows; row += 1) {
     for (let col = 0; col < gameState.cols; col += 1) {
-      const cell = field[row][col];
+      const cell = getCell(row, col);
 
-      if (cell.type === 'mine') {
-        cell.state = 'opened';
+      if (cell.type === CELL_TYPE.MINE) {
+        cell.state = CELL_STATE.OPENED;
       }
 
-      if (row === triggeredRow && col === triggeredCol) {
-        cell.triggered = true;
-      }
+      cell.triggered = row === triggeredRow && col === triggeredCol;
     }
   }
 }
 
 function openCell(row, col) {
-  if (gameState.status !== 'process' || !isInsideField(row, col)) {
+  if (gameState.status !== GAME_STATUS.PROCESS || !isInsideField(row, col)) {
     return;
   }
 
-  const cell = field[row][col];
+  const cell = getCell(row, col);
 
-  if (cell.state === 'opened' || cell.state === 'flagged') {
+  if (cell.state === CELL_STATE.OPENED || cell.state === CELL_STATE.FLAGGED) {
     return;
   }
 
   startTimer();
 
-  if (cell.type === 'mine') {
-    cell.state = 'opened';
-    gameState.status = 'lose';
+  if (cell.type === CELL_TYPE.MINE) {
+    cell.state = CELL_STATE.OPENED;
+    gameState.status = GAME_STATUS.LOSE;
     revealAllMines(row, col);
     stopTimer();
     updateMessage('Поразка. Ви натиснули на міну.', 'is-lose');
-    renderField();
+    renderGame();
     return;
   }
 
-  cell.state = 'opened';
+  cell.state = CELL_STATE.OPENED;
 
   if (cell.neighborMines === 0) {
     getNeighborPositions(row, col).forEach(([neighborRow, neighborCol]) => {
@@ -206,45 +242,46 @@ function openCell(row, col) {
   }
 
   checkWin();
-  renderField();
+  renderGame();
 }
 
 function toggleFlag(row, col) {
-  if (gameState.status !== 'process' || !isInsideField(row, col)) {
+  if (gameState.status !== GAME_STATUS.PROCESS || !isInsideField(row, col)) {
     return;
   }
 
-  const cell = field[row][col];
+  const cell = getCell(row, col);
 
-  if (cell.state === 'opened') {
+  if (cell.state === CELL_STATE.OPENED) {
     return;
   }
 
   startTimer();
-  cell.state = cell.state === 'flagged' ? 'closed' : 'flagged';
-  updateFlagsCounter();
-  renderField();
+  cell.state = cell.state === CELL_STATE.FLAGGED ? CELL_STATE.CLOSED : CELL_STATE.FLAGGED;
+  renderGame();
 }
 
 function getCellClasses(cell) {
   const classes = ['cell'];
 
-  if (cell.state === 'closed') {
+  if (cell.state === CELL_STATE.CLOSED) {
     classes.push('is-closed');
   }
 
-  if (cell.state === 'flagged') {
+  if (cell.state === CELL_STATE.FLAGGED) {
     classes.push('is-flagged');
   }
 
-  if (cell.state === 'opened') {
-    if (cell.type === 'mine') {
+  if (cell.state === CELL_STATE.OPENED) {
+    if (cell.type === CELL_TYPE.MINE) {
       classes.push('is-mine');
+
       if (cell.triggered) {
         classes.push('is-triggered');
       }
     } else {
       classes.push('is-open');
+
       if (cell.neighborMines > 0) {
         classes.push(`number-${cell.neighborMines}`);
       }
@@ -255,15 +292,15 @@ function getCellClasses(cell) {
 }
 
 function getCellText(cell) {
-  if (cell.state === 'flagged') {
+  if (cell.state === CELL_STATE.FLAGGED) {
     return '⚑';
   }
 
-  if (cell.state === 'opened' && cell.type === 'mine') {
+  if (cell.state === CELL_STATE.OPENED && cell.type === CELL_TYPE.MINE) {
     return '✹';
   }
 
-  if (cell.state === 'opened' && cell.neighborMines > 0) {
+  if (cell.state === CELL_STATE.OPENED && cell.neighborMines > 0) {
     return String(cell.neighborMines);
   }
 
@@ -271,15 +308,15 @@ function getCellText(cell) {
 }
 
 function getCellLabel(row, col, cell) {
-  if (cell.state === 'flagged') {
+  if (cell.state === CELL_STATE.FLAGGED) {
     return `Клітинка ${row + 1}, ${col + 1}: прапорець`;
   }
 
-  if (cell.state === 'closed') {
+  if (cell.state === CELL_STATE.CLOSED) {
     return `Клітинка ${row + 1}, ${col + 1}: закрита`;
   }
 
-  if (cell.type === 'mine') {
+  if (cell.type === CELL_TYPE.MINE) {
     return `Клітинка ${row + 1}, ${col + 1}: міна`;
   }
 
@@ -290,55 +327,97 @@ function getCellLabel(row, col, cell) {
   return `Клітинка ${row + 1}, ${col + 1}: ${cell.neighborMines} мін поруч`;
 }
 
+function createCellButton(row, col, cell) {
+  const cellButton = document.createElement('button');
+  cellButton.type = 'button';
+  cellButton.className = getCellClasses(cell);
+  cellButton.textContent = getCellText(cell);
+  cellButton.dataset.row = String(row);
+  cellButton.dataset.col = String(col);
+  cellButton.setAttribute('role', 'gridcell');
+  cellButton.setAttribute('aria-label', getCellLabel(row, col, cell));
+  cellButton.disabled = gameState.status !== GAME_STATUS.PROCESS;
+
+  return cellButton;
+}
+
 function renderField() {
   boardElement.style.setProperty('--board-cols', gameState.cols);
   boardElement.innerHTML = '';
 
-  field.forEach((rowCells, row) => {
+  gameState.field.forEach((rowCells, row) => {
     rowCells.forEach((cell, col) => {
-      const cellButton = document.createElement('button');
-      cellButton.type = 'button';
-      cellButton.className = getCellClasses(cell);
-      cellButton.textContent = getCellText(cell);
-      cellButton.setAttribute('role', 'gridcell');
-      cellButton.setAttribute('aria-label', getCellLabel(row, col, cell));
-      cellButton.disabled = gameState.status !== 'process';
-
-      cellButton.addEventListener('click', () => openCell(row, col));
-      cellButton.addEventListener('contextmenu', (event) => {
-        event.preventDefault();
-        toggleFlag(row, col);
-      });
-
-      boardElement.append(cellButton);
+      boardElement.append(createCellButton(row, col, cell));
     });
   });
 }
 
-function resetGame() {
-  stopTimer();
-  gameState.status = 'process';
-  gameState.gameTime = 0;
-  generateField(10, 10, 15);
+function renderGame() {
   updateTimer();
   updateFlagsCounter();
-  updateMessage('Гру почато. Відкрийте першу клітинку.');
+  updateBoardStatus();
   renderField();
 }
 
+function getCellPositionFromEvent(event) {
+  const cellButton = event.target.closest('.cell');
+
+  if (!cellButton || !boardElement.contains(cellButton)) {
+    return null;
+  }
+
+  return {
+    row: Number(cellButton.dataset.row),
+    col: Number(cellButton.dataset.col),
+  };
+}
+
+function handleBoardClick(event) {
+  const position = getCellPositionFromEvent(event);
+
+  if (position) {
+    openCell(position.row, position.col);
+  }
+}
+
+function handleBoardContextMenu(event) {
+  event.preventDefault();
+
+  const position = getCellPositionFromEvent(event);
+
+  if (position) {
+    toggleFlag(position.row, position.col);
+  }
+}
+
+function resetGame() {
+  stopTimer();
+  gameState.status = GAME_STATUS.PROCESS;
+  gameState.gameTime = 0;
+  generateField(GAME_CONFIG.rows, GAME_CONFIG.cols, GAME_CONFIG.minesCount);
+  updateMessage('Гру почато. Відкрийте першу клітинку.');
+  renderGame();
+}
+
+boardElement.addEventListener('click', handleBoardClick);
+boardElement.addEventListener('contextmenu', handleBoardContextMenu);
 newGameButton.addEventListener('click', resetGame);
 
 resetGame();
 
 window.minesweeperGame = {
+  CELL_STATE,
+  CELL_TYPE,
+  GAME_STATUS,
   gameState,
   get field() {
-    return field;
+    return gameState.field;
   },
   generateField,
   countNeighbourMines,
   countNeighborMines,
   openCell,
   toggleFlag,
+  renderField,
   resetGame,
 };
