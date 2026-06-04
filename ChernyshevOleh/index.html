@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Minesweeper UI - Chernyshev Oleh</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="game-shell">
+    <section class="game-card" aria-labelledby="game-title">
+      <header class="game-header">
+        <div>
+          <p class="eyebrow">Практична робота 1</p>
+          <h1 id="game-title">Minesweeper</h1>
+        </div>
+
+        <div class="game-controls" aria-label="Панель керування грою">
+          <div class="status-panel" aria-label="Кількість прапорців">
+            <span class="status-label">Flags</span>
+            <strong>012</strong>
+          </div>
+          <button class="start-button" type="button" aria-label="Почати нову гру">
+            <span aria-hidden="true">↻</span>
+            New game
+          </button>
+          <div class="status-panel" aria-label="Таймер">
+            <span class="status-label">Time</span>
+            <strong>083</strong>
+          </div>
+        </div>
+      </header>
+
+      <section class="board-wrap" aria-label="Ігрове поле Minesweeper">
+        <div class="board" role="grid" aria-label="Сітка клітинок гри Minesweeper">
+          <button class="cell is-open number-1" role="gridcell" type="button" aria-label="Відкрита клітинка з числом 1">1</button>
+          <button class="cell is-open number-2" role="gridcell" type="button" aria-label="Відкрита клітинка з числом 2">2</button>
+          <button class="cell is-closed" role="gridcell" type="button" aria-label="Закрита клітинка"></button>
+          <button class="cell is-flagged" role="gridcell" type="button" aria-label="Клітинка з прапорцем">⚑</button>
+          <button class="cell is-closed" role="gridcell" type="button" aria-label="Закрита клітинка"></button>
+          <button class="cell is-open number-3" role="gridcell" type="button" aria-label="Відкрита клітинка з числом 3">3</button>
+          <button class="cell is-closed" role="gridcell" type="button" aria-label="Закрита клітинка"></button>
+          <button class="cell is-mine" role="gridcell" type="button" aria-label="Клітинка з міною">✹</button>
+
+          <button class="cell is-open" role="gridcell" type="button" aria-label="Відкрита порожня клітинка"></button>
+          <button class="cell is-open number-1" role="gridcell" type="button" aria-label="Відкрита клітинка з числом 1">1</button>
+          <button class="cell is-open number-2" role="gridcell" type="button" aria-label="Відкрита клітинка з числом 2">2</button>
+          <button class="cell is-closed" role="gridcell" type="button" aria-label="Закрита клітинка"></button>
+          <button class="cell is-closed" role="gridcell" type="button" aria-label="Закрита клітинка"></button>
+          <button class="cell is-flagged is-safe-flag" role="gridcell" type="button" aria-label="Прапорець без міни">⚑</button>
+          <button class="cell is-open number-2" role="gridcell" type="button" aria-label="Відкрита клітинка з числом 2">2</button>
+          <button class="cell is-open number-1" role="gridcell" type="button" aria-label="Відкрита клітинка з числом 1">1</button>
+
+          <button class="cell is-open" role="gridcell" type="button" aria-label="Відкрита порожня клітинка"></button>
+          <button class="cell is-open" role="gridcell" type="button" aria-label="Відкрита порожня клітинка"></button>
+          <button class="cell is-open number-1" role="gridcell" type="button" aria-label="Відкрита клітинка з числом 1">1</button>
+          <button class="cell is-closed" role="gridcell" type="button" aria-label="Закрита клітинка"></button>
+          <button class="cell is-open number-4" role="gridcell" type="button" aria-label="Відкрита клітинка з числом 4">4</button>
+          <button class="cell is-flagged is-mine-flag" role="gridcell" type="button" aria-label="Прапорець на міні">⚑</button>
+          <button class="cell is-open number-3" role="gridcell" type="button" aria-label="Відкрита клітинка з числом 3">3</button>
+          <button class="cell is-closed" role="gridcell" type="button" aria-label="Закрита клітинка"></button>
+
+          <button class="cell is-open" role="gridcell" type="button" aria-label="Відкрита порожня клітинка"></button>
+          <button class="cell is-open number-1" role="gridcell" type="button" aria-label="Відкрита клітинка з числом 1">1</button>
+          <button class="cell is-open number-2" role="gridcell" type="button" aria-label="Відкрита клітинка з числом 2">2</button>
+          <button class="cell is-closed" role="gridcell" type="button" aria-label="Закрита клітинка"></button>
+          <button class="cell is-open number-3" role="gridcell" type="button" aria-label="Відкрита клітинка з числом 3">3</button>
+          <button class="cell is-mine is-triggered" role="gridcell" type="button" aria-label="Міна, на яку натиснув користувач">✹</button>
+          <button class="cell is-open number-2" role="gridcell" type="button" aria-label="Відкрита клітинка з числом 2">2</button>
+          <button class="cell is-open" role="gridcell" type="button" aria-label="Відкрита порожня клітинка"></button>
+
+          <button class="cell is-closed" role="gridcell" type="button" aria-label="Закрита клітинка"></button>
+          <button class="cell is-open number-2" role="gridcell" type="button" aria-label="Відкрита клітинка з числом 2">2</button>
+          <button class="cell is-flagged" role="gridcell" type="button" aria-label="Клітинка з прапорцем">⚑</button>
+          <button class="cell is-closed" role="gridcell" type="button" aria-label="Закрита клітинка"></button>
+          <button class="cell is-open number-2" role="gridcell" type="button" aria-label="Відкрита клітинка з числом 2">2</button>
+          <button class="cell is-open number-1" role="gridcell" type="button" aria-label="Відкрита клітинка з числом 1">1</button>
+          <button class="cell is-open" role="gridcell" type="button" aria-label="Відкрита порожня клітинка"></button>
+          <button class="cell is-closed" role="gridcell" type="button" aria-label="Закрита клітинка"></button>
+        </div>
+      </section>
+
+      <section class="legend" aria-labelledby="legend-title">
+        <h2 id="legend-title">Стани клітинок</h2>
+        <ul class="legend-list">
+          <li><span class="cell sample is-closed"></span>Закрита</li>
+          <li><span class="cell sample is-open number-2">2</span>Відкрита</li>
+          <li><span class="cell sample is-flagged">⚑</span>Прапорець</li>
+          <li><span class="cell sample is-flagged is-mine-flag">⚑</span>Прапорець на міні</li>
+          <li><span class="cell sample is-flagged is-safe-flag">⚑</span>Прапорець без міни</li>
+          <li><span class="cell sample is-mine">✹</span>Міна</li>
+          <li><span class="cell sample is-mine is-triggered">✹</span>Натиснута міна</li>
+        </ul>
+      </section>
+    </section>
+  </main>
+</body>
+</html>
