@@ -1,0 +1,69 @@
+:root {
+    --bg: #111827;
+    --panel: #1f2937;
+    --accent: #10b981;
+    --cell-closed: #374151;
+    --cell-opened: #9ca3af;
+}
+
+body {
+    background-color: var(--bg);
+    color: white;
+    font-family: 'Segoe UI', sans-serif;
+    display: flex; justify-content: center; align-items: center;
+    min-height: 100vh; margin: 0;
+}
+
+.game-container {
+    background: var(--panel);
+    padding: 20px; border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.game-header {
+    display: flex; justify-content: space-between; margin-bottom: 20px;
+}
+
+.stat {
+    background: #000; color: #00ff00;
+    padding: 5px 12px; border-radius: 6px;
+    font-family: monospace; font-size: 20px;
+}
+
+.reset-btn {
+    background: var(--accent); color: white; border: none;
+    padding: 8px 16px; border-radius: 8px; cursor: pointer;
+    font-weight: bold;
+}
+
+/* Сітка та адаптивність (п. 5) */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(10, 35px);
+    gap: 4px;
+}
+
+@media (max-width: 450px) {
+    .grid { grid-template-columns: repeat(10, 28px); gap: 2px; }
+    .cell { width: 28px !important; height: 28px !important; font-size: 14px !important; }
+}
+
+.cell {
+    width: 35px; height: 35px;
+    background: var(--cell-closed);
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 4px; cursor: pointer; font-weight: bold;
+}
+
+/* Стани клітинок (п. 4) */
+.cell.opened { background: var(--cell-opened); color: #111827; cursor: default; }
+.cell.flag::after { content: "🚩"; }
+.cell.mine::after { content: "💣"; }
+.cell.exploded { background: #ef4444 !important; }
+.cell.wrong-flag { position: relative; }
+.cell.wrong-flag::after { content: "❌"; position: absolute; color: red; font-size: 18px; }
+
+/* Кольори цифр */
+.cell[data-v="1"] { color: blue; }
+.cell[data-v="2"] { color: green; }
+.cell[data-v="3"] { color: red; }
