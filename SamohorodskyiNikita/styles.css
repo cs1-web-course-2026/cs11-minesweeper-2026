@@ -1,0 +1,61 @@
+/* Палітра кольорів гри */
+:root {
+    --bg-main: #bdbdbd;       /* Класичний сірий */
+    --bg-dark: #7b7b7b;       /* Темно-сірий для тіней */
+    --border-light: #ffffff;  /* Білий для бліку */
+    --display-bg: #000000;    /* Чорний фон екранів */
+    --timer-color: #ff0000;   /* Червоні цифри */
+}
+
+.mines-count,
+.game-timer {
+    background-color: var(--display-bg);
+    color: var(--timer-color);
+    font-size: 22px;
+    font-weight: bold;
+    padding: 2px 6px;
+    border: 1px solid var(--bg-dark);
+}
+
+.restart-btn {
+    font-size: 22px;
+    background-color: var(--bg-main);
+    width: 36px;
+    height: 36px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 3px solid;
+    border-color: var(--border-light) var(--bg-dark) var(--bg-dark) var(--border-light);
+    cursor: pointer;
+}
+
+.restart-btn:active {
+    border-color: var(--bg-dark) var(--border-light) var(--border-light) var(--bg-dark);
+}
+
+/* Сітка поля */
+.game-board {
+    display: grid;
+    grid-template-columns: repeat(4, 40px);
+    grid-template-rows: repeat(4, 40px);
+    gap: 2px;
+    background-color: var(--bg-dark);
+    border: 3px solid;
+    border-color: var(--bg-dark) var(--border-light) var(--border-light) var(--bg-dark);
+}
+
+/* Базова клітинка */
+.cell {
+    width: 100%;
+    height: 100%;
+    background-color: var(--bg-main);
+    border: 3px solid;
+    border-color: var(--border-light) var(--bg-dark) var(--bg-dark) var(--border-light);
+    font-size: 18px;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
