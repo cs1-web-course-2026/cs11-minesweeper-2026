@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minesweeper UI - Практичная №1</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <div class="game-container">
+        <header class="game-header">
+            <div class="status-panel counter" id="mines-counter" title="Залишилось мін/прапорців">010</div>
+            <button class="reset-button" aria-label="Почати нову гру">🙂</button>
+            <div class="status-panel timer" id="timer" title="Час гри">000</div>
+        </header>
+
+        <main class="game-field">
+            <div class="cell"></div>
+            <div class="cell"></div>
+            
+            <div class="cell opened cell-1">1</div>
+            <div class="cell opened cell-2">2</div>
+            <div class="cell opened cell-3">3</div>
+            <div class="cell opened-empty"></div>
+            <div class="cell flagged">🚩</div>
+            <div class="cell flagged flagged-correct">🚩</div> 
+
+            
+            
+            <div class="cell mine">💣</div>
+            <div class="cell mine mine-exploded">💣</div>
+            
+            
+            <div class="cell flagged flagged-wrong">❌</div>
+            
+        
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+        </main>
+    </div>
+
+</body>
+</html>
